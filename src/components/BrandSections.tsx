@@ -140,91 +140,11 @@ export function Flavours() {
 }
 
 /* ----------------------------------------------------
-   2. WHY PIO? SECTION (Lush Forest Green Banner)
+   2. WHY PIO? SECTION — Re-exported from dedicated 3D component
 ---------------------------------------------------- */
-const whyPioBadges = [
-  { 
-    number: '₹10',
-    title: 'Just ₹10', 
-    desc: 'Pocket-friendly price point for everyday pocket money, school recesses, and afternoon refreshment.' 
-  },
-  { 
-    number: '100%',
-    title: 'Made with Real Fruit', 
-    desc: 'Pure fruit pulp blend delivering authentic taste, natural aroma, and rich fruit mouthfeel.' 
-  },
-  { 
-    number: '0%',
-    title: 'No Added Preservatives', 
-    desc: 'Protected naturally through state-of-the-art aseptic multilayer carton processing.' 
-  },
-  { 
-    number: '★',
-    title: 'Refreshing Taste', 
-    desc: 'Perfect balance of vibrant fruit tanginess and gentle sweetness that quenches thirst instantly.' 
-  },
-];
+export { WhyPIO } from './WhyPIO';
 
-export function WhyPIO() {
-  return (
-    <section id="why-pio" className="relative overflow-hidden bg-[#07582f] py-20 lg:py-28 text-white">
-      {/* Decorative radial glows */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(252,181,44,.18),transparent_35%),radial-gradient(circle_at_10%_90%,rgba(255,255,255,.08),transparent_30%)]" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
-        <motion.div {...reveal} className="grid gap-12 lg:grid-cols-12 lg:items-center">
-          
-          {/* Left Column */}
-          <div className="lg:col-span-5 space-y-4">
-            <span className="inline-block text-xs font-black uppercase tracking-[0.25em] text-[#fde047] bg-white/10 px-3.5 py-1.5 rounded-full border border-white/15">
-              Why PIO?
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-black leading-tight tracking-tight text-white">
-              More than just a drink.
-            </h2>
-            <p className="text-base sm:text-lg text-white/80 leading-relaxed font-medium">
-              It’s a refreshing experience for everyone. Born in Assam, crafted with food-grade purity, and designed to bring a big smile in every small sip.
-            </p>
-
-            <div className="pt-2">
-              <button 
-                onClick={() => go('inside')}
-                className="inline-flex items-center gap-2 rounded-full bg-[#fde047] hover:bg-[#facc15] text-[#07582f] px-6 py-3 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 transition-all"
-              >
-                See What's Inside <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Right Column: 4 Circular Badge Cards */}
-          <div className="lg:col-span-7 grid gap-4 sm:grid-cols-2">
-            {whyPioBadges.map((badge, idx) => (
-              <motion.div
-                key={badge.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
-                className="rounded-3xl border border-white/15 bg-white/10 p-6 backdrop-blur-md hover:bg-white/15 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#07582f] font-black text-lg shadow-xs">
-                    {badge.number}
-                  </div>
-                  <h3 className="text-lg font-black text-white">{badge.title}</h3>
-                </div>
-                <p className="mt-3 text-sm text-white/75 leading-relaxed font-medium">
-                  {badge.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-
-        </motion.div>
-      </div>
-    </section>
-  );
-}
 
 // Re-export dedicated cinematic FlavorStories component
 export { FlavorStories } from './FlavorStories';
