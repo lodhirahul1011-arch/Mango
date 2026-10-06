@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Droplets, Leaf, ShieldCheck, Sparkles, MapPin, School, Users, Plane, Check, Info } from 'lucide-react';
+import { ArrowRight, Droplets, Leaf, ShieldCheck, Sparkles, MapPin, School, Users, Plane, Check, Info, Zap, Wheat, Box } from 'lucide-react';
 
 const reveal = {
   initial: { opacity: 0, y: 28 },
@@ -250,38 +250,188 @@ export function FlavorStories() {
 
         <div className="grid gap-8 lg:grid-cols-2 items-stretch">
           
-          {/* THE MANGO STORY CARD */}
-          <motion.div 
+          {/* 1. THE MANGO STORY CARD */}
+          <motion.article 
             id="mango-story"
             {...reveal}
-            onClick={() => go('where-to-buy')}
-            className="group relative cursor-pointer overflow-hidden rounded-[32px] sm:rounded-[38px] border border-[#fde68a] bg-gradient-to-br from-[#fffdf5] via-[#fef7df] to-[#fdebb8] shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+            className="group relative overflow-hidden rounded-[32px] sm:rounded-[38px] border border-[#fde68a] bg-gradient-to-br from-[#fffdf5] via-[#fef7df] to-[#fdebb8] p-7 sm:p-9 lg:p-10 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between min-h-[440px]"
           >
-            <img
-              src="/images/mango-story-card-2x.png"
-              alt="The Mango Story - A burst of tropical freshness in every sip"
-              className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.015]"
-            />
-            {/* Clickable Action button hotspot on bottom-left */}
-            <div className="absolute left-[5.5%] bottom-[8.5%] w-[42%] sm:w-[38%] h-[12%] rounded-full opacity-0 group-hover:opacity-100 bg-white/20 transition-opacity flex items-center justify-center pointer-events-none" />
-          </motion.div>
+            {/* Left Content Area (Live HTML Text & UI) */}
+            <div className="relative z-10 max-w-full sm:max-w-[60%] lg:max-w-[62%] space-y-4">
+              
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-amber-300/70 shadow-xs backdrop-blur-xs">
+                <span className="text-sm">🥭</span>
+                <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#92400e]">
+                  THE MANGO STORY
+                </span>
+              </div>
 
-          {/* THE LYCHEE STORY CARD */}
-          <motion.div 
+              {/* Headline */}
+              <h3 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#301704] tracking-tight leading-[1.1]">
+                A burst of tropical freshness in every sip.
+              </h3>
+
+              {/* Description */}
+              <p className="text-xs sm:text-sm text-[#6b380f]/90 font-medium leading-relaxed">
+                Picked at peak harvest, our sun-kissed mangoes bring that authentic, velvety orchard thickness everyone loves. Smooth, rich, and deeply satisfying.
+              </p>
+
+              {/* Nutrition Facts Card (Per 100ml) */}
+              <div className="rounded-2xl bg-white/95 p-3.5 sm:p-4 border border-amber-200/70 shadow-xs backdrop-blur-xs">
+                <div className="text-[11px] sm:text-xs font-black text-slate-800 mb-2.5">
+                  Nutrition Facts (Per 100ml)
+                </div>
+                <div className="grid grid-cols-3 divide-x divide-slate-100">
+                  {/* Energy */}
+                  <div className="flex items-center gap-2 pr-2">
+                    <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full bg-[#fef3c7] text-[#d97706]">
+                      <Zap className="h-4 w-4 fill-[#d97706]" />
+                    </div>
+                    <div>
+                      <div className="text-xs sm:text-sm font-black text-slate-900 leading-none">50 kcal</div>
+                      <div className="text-[10px] font-bold text-slate-400 mt-0.5">Energy</div>
+                    </div>
+                  </div>
+
+                  {/* Carbs */}
+                  <div className="flex items-center gap-2 px-2">
+                    <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full bg-[#fef3c7] text-[#d97706]">
+                      <Wheat className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs sm:text-sm font-black text-slate-900 leading-none">12 g</div>
+                      <div className="text-[10px] font-bold text-slate-400 mt-0.5">Carbs</div>
+                    </div>
+                  </div>
+
+                  {/* Sugar */}
+                  <div className="flex items-center gap-2 pl-2">
+                    <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full bg-[#fef3c7] text-[#d97706]">
+                      <Box className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs sm:text-sm font-black text-slate-900 leading-none">10 g</div>
+                      <div className="text-[10px] font-bold text-slate-400 mt-0.5">Sugar</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-2">
+                <button
+                  onClick={() => go('where-to-buy')}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#78350f] via-[#632a0a] to-[#451a03] hover:from-[#8d3e12] hover:to-[#572205] active:scale-95 text-white px-7 py-3 text-xs font-black uppercase tracking-wider shadow-md shadow-amber-950/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  <span>BUY MANGO NOW</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+            </div>
+
+            {/* Right 3D Pack & Fruit Splash Art */}
+            <div className="sm:absolute sm:right-0 sm:bottom-0 sm:top-0 sm:w-[48%] lg:w-[46%] pointer-events-none flex items-end justify-end mt-6 sm:mt-0">
+              <img
+                src="/images/mango-story-art.png"
+                alt="PIO Mango 3D visual"
+                className="max-h-[380px] sm:max-h-full w-auto sm:w-full object-contain sm:object-cover sm:object-left drop-shadow-xl transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          </motion.article>
+
+          {/* 2. THE LYCHEE STORY CARD */}
+          <motion.article 
             id="lychee-story"
             {...reveal}
             transition={{ ...reveal.transition, delay: 0.1 }}
-            onClick={() => go('where-to-buy')}
-            className="group relative cursor-pointer overflow-hidden rounded-[32px] sm:rounded-[38px] border border-[#fbcfe8] bg-gradient-to-br from-[#fff7f9] via-[#fdf0f4] to-[#fcd9e2] shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+            className="group relative overflow-hidden rounded-[32px] sm:rounded-[38px] border border-[#fbcfe8] bg-gradient-to-br from-[#fff7f9] via-[#fdf0f4] to-[#fcd9e2] p-7 sm:p-9 lg:p-10 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between min-h-[440px]"
           >
-            <img
-              src="/images/lychee-story-card-2x.png"
-              alt="The Lychee Story - A deliciously refreshing taste you'll love"
-              className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.015]"
-            />
-            {/* Clickable Action button hotspot on bottom-left */}
-            <div className="absolute left-[5.5%] bottom-[8.5%] w-[42%] sm:w-[38%] h-[12%] rounded-full opacity-0 group-hover:opacity-100 bg-white/20 transition-opacity flex items-center justify-center pointer-events-none" />
-          </motion.div>
+            {/* Left Content Area (Live HTML Text & UI) */}
+            <div className="relative z-10 max-w-full sm:max-w-[60%] lg:max-w-[62%] space-y-4">
+              
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-rose-300/70 shadow-xs backdrop-blur-xs">
+                <span className="text-sm">🍓</span>
+                <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#9f1239]">
+                  THE LYCHEE STORY
+                </span>
+              </div>
+
+              {/* Headline */}
+              <h3 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#5c061d] tracking-tight leading-[1.1]">
+                A deliciously refreshing taste you'll love.
+              </h3>
+
+              {/* Description */}
+              <p className="text-xs sm:text-sm text-[#881337]/90 font-medium leading-relaxed">
+                Crisp, sweet, and imbued with delicate floral fragrance. Lychee offers a crisp burst of thirst-quenching coolness that revitalizes body and spirit.
+              </p>
+
+              {/* Nutrition Facts Card (Per 100ml) */}
+              <div className="rounded-2xl bg-white/95 p-3.5 sm:p-4 border border-rose-200/70 shadow-xs backdrop-blur-xs">
+                <div className="text-[11px] sm:text-xs font-black text-slate-800 mb-2.5">
+                  Nutrition Facts (Per 100ml)
+                </div>
+                <div className="grid grid-cols-3 divide-x divide-slate-100">
+                  {/* Energy */}
+                  <div className="flex items-center gap-2 pr-2">
+                    <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full bg-[#ffe4e6] text-[#e11d48]">
+                      <Zap className="h-4 w-4 fill-[#e11d48]" />
+                    </div>
+                    <div>
+                      <div className="text-xs sm:text-sm font-black text-slate-900 leading-none">54 kcal</div>
+                      <div className="text-[10px] font-bold text-slate-400 mt-0.5">Energy</div>
+                    </div>
+                  </div>
+
+                  {/* Carbs */}
+                  <div className="flex items-center gap-2 px-2">
+                    <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full bg-[#ffe4e6] text-[#e11d48]">
+                      <Wheat className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs sm:text-sm font-black text-slate-900 leading-none">14 g</div>
+                      <div className="text-[10px] font-bold text-slate-400 mt-0.5">Carbs</div>
+                    </div>
+                  </div>
+
+                  {/* Sugar */}
+                  <div className="flex items-center gap-2 pl-2">
+                    <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full bg-[#ffe4e6] text-[#e11d48]">
+                      <Box className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs sm:text-sm font-black text-slate-900 leading-none">14 g</div>
+                      <div className="text-[10px] font-bold text-slate-400 mt-0.5">Sugar</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-2">
+                <button
+                  onClick={() => go('where-to-buy')}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#9f1239] via-[#881337] to-[#700c25] hover:from-[#b91c1c] hover:to-[#881337] active:scale-95 text-white px-7 py-3 text-xs font-black uppercase tracking-wider shadow-md shadow-rose-950/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  <span>BUY LYCHEE NOW</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+            </div>
+
+            {/* Right 3D Pack & Fruit Splash Art */}
+            <div className="sm:absolute sm:right-0 sm:bottom-0 sm:top-0 sm:w-[48%] lg:w-[46%] pointer-events-none flex items-end justify-end mt-6 sm:mt-0">
+              <img
+                src="/images/lychee-story-art.png"
+                alt="PIO Lychee 3D visual"
+                className="max-h-[380px] sm:max-h-full w-auto sm:w-full object-contain sm:object-cover sm:object-left drop-shadow-xl transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          </motion.article>
 
         </div>
       </div>
