@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
+import { ArrowRight, Leaf, Droplets, ShieldCheck, Play } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -53,7 +53,7 @@ export function ScrollHero() {
     };
 
     const preload = (center: number) => {
-      const radius = innerWidth < 768 ? 10 : 20;
+      const radius = innerWidth < 768 ? 12 : 24;
       for (let i = Math.max(0, center - radius); i <= Math.min(FRAME_COUNT - 1, center + radius); i++) {
         load(i);
       }
@@ -68,7 +68,7 @@ export function ScrollHero() {
       draw(frameRef.current);
     };
 
-    // Initial priority frames
+    // Initial keyframes
     [0, 15, 30, 60, 90, 120, 150, 180, 210, 239].forEach((i) => load(i, i === 0));
     preload(0);
     resize();
@@ -88,18 +88,18 @@ export function ScrollHero() {
         },
       });
 
-      gsap.fromTo('.scroll-hero-copy', 
-        { y: 25, opacity: 0 }, 
-        { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
+      gsap.fromTo('.scroll-hero-left', 
+        { y: 30, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out' }
       );
-      
-      gsap.to('.scroll-hero-copy', {
+
+      gsap.to('.scroll-hero-left', {
         y: -60,
-        opacity: 0.1,
+        opacity: 0.15,
         scrollTrigger: {
           trigger: section,
-          start: '20% top',
-          end: '50% top',
+          start: '18% top',
+          end: '48% top',
           scrub: true,
         },
       });
@@ -115,63 +115,129 @@ export function ScrollHero() {
     };
   }, []);
 
-  const go = () => document.getElementById('product-showcase')?.scrollIntoView({ behavior: 'smooth' });
+  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   return (
     <section ref={sectionRef} id="home" className="relative h-[320vh] bg-white">
       <div className="sticky top-0 h-screen overflow-hidden bg-white">
-        {/* Fullscreen scrub canvas */}
+        
+        {/* Fullscreen 3D Canvas Frame Scrubbing */}
         <canvas
           ref={canvasRef}
           className="absolute inset-0 h-full w-full bg-white object-cover"
-          aria-label="PIO 3D scrolling animation"
+          aria-label="PIO 3D animated cans and fruit splash"
         />
 
-        {/* Soft gradient mask for text readability */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent sm:w-2/3" />
+        {/* Soft atmospheric gradient wash on left for text legibility */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-full lg:w-[58%] bg-gradient-to-r from-white/95 via-white/80 to-transparent" />
 
-        {/* Overlay Copy */}
-        <div className="scroll-hero-copy relative z-10 mx-auto flex h-full max-w-7xl items-center px-5 sm:px-8">
-          <div className="max-w-xl space-y-5 rounded-3xl bg-white/80 p-6 sm:p-10 backdrop-blur-md border border-emerald-900/10 shadow-lg">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#eef8f1] border border-emerald-900/10 text-[#07582f] text-xs font-black tracking-wide">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>3D Interactive Scroll Experience</span>
+        {/* Hero Overlay Copy matching user's exact uploaded image */}
+        <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-5 sm:px-8">
+          <div className="scroll-hero-left max-w-xl space-y-6 pt-12 sm:pt-0">
+            
+            {/* 1. Eyebrow */}
+            <div className="text-[11px] sm:text-xs font-black uppercase tracking-[0.28em] text-[#0b542e]">
+              BORN IN ASSAM &bull; ₹10 REFRESHMENT
             </div>
 
-            <div className="space-y-1">
-              <span className="font-serif italic text-3xl sm:text-4xl text-[#0b8043] font-bold block">
-                Small Sip
+            {/* 2. Main Headline: Har Sip PIO! */}
+            <div className="space-y-0 select-none">
+              <span className="block font-['Caveat',cursive] text-6xl sm:text-7xl lg:text-8xl font-black text-[#084c2a] leading-[0.85] -rotate-2 transform origin-left">
+                Har Sip
               </span>
-              <h1 className="text-4xl sm:text-6xl font-black text-[#083b20] tracking-tight leading-[0.95]">
-                Big Refreshment
-              </h1>
+              <div className="flex items-center gap-2 font-['Space_Grotesk',sans-serif] text-6xl sm:text-7xl lg:text-8xl font-black text-[#084c2a] tracking-tight leading-[0.9]">
+                <span>PIO!</span>
+                <Leaf className="w-9 h-9 sm:w-11 sm:h-11 text-[#22c55e] fill-[#22c55e] -rotate-12 inline-block transform" />
+              </div>
             </div>
 
-            <p className="text-base sm:text-lg text-slate-700 font-medium leading-relaxed">
-              Real Fruit. Real Fun. Just ₹10. Scroll down to experience the 3D pack journey and pure fruit explosion.
-            </p>
+            {/* 3. Subheadline: Mango sunshine. Lychee attitude. */}
+            <div className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
+              <div>
+                <span className="text-[#f59e0b] font-black">Mango</span>{' '}
+                <span className="text-[#0d2a1a]">sunshine.</span>
+              </div>
+              <div>
+                <span className="text-[#e11d48] font-black">Lychee</span>{' '}
+                <span className="text-[#0d2a1a]">attitude.</span>
+              </div>
+            </div>
 
-            <div className="flex items-center gap-3 pt-2">
+            {/* 4. Four Circular Badges in a Row matching reference image */}
+            <div className="flex items-start gap-4 sm:gap-6 pt-1">
+              {/* Badge 1: Real Fruit Goodness */}
+              <div className="flex flex-col items-center text-center max-w-[70px]">
+                <div className="w-12 h-12 rounded-full border border-emerald-900/15 bg-white/95 backdrop-blur-xs flex items-center justify-center text-[#07582f] shadow-xs">
+                  <Leaf className="w-5 h-5 text-[#07582f]" />
+                </div>
+                <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0d2a1a] leading-tight">
+                  Real<br />Fruit Goodness
+                </span>
+              </div>
+
+              {/* Badge 2: Refreshing Taste */}
+              <div className="flex flex-col items-center text-center max-w-[70px]">
+                <div className="w-12 h-12 rounded-full border border-emerald-900/15 bg-white/95 backdrop-blur-xs flex items-center justify-center text-[#07582f] shadow-xs">
+                  <Droplets className="w-5 h-5 text-[#07582f]" />
+                </div>
+                <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0d2a1a] leading-tight">
+                  Refreshing<br />Taste
+                </span>
+              </div>
+
+              {/* Badge 3: No Added Preservatives */}
+              <div className="flex flex-col items-center text-center max-w-[70px]">
+                <div className="w-12 h-12 rounded-full border border-emerald-900/15 bg-white/95 backdrop-blur-xs flex items-center justify-center text-[#07582f] shadow-xs">
+                  <ShieldCheck className="w-5 h-5 text-[#07582f]" />
+                </div>
+                <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0d2a1a] leading-tight">
+                  No Added<br />Preservatives
+                </span>
+              </div>
+
+              {/* Badge 4: Just ₹10 */}
+              <div className="flex flex-col items-center text-center max-w-[70px]">
+                <div className="w-12 h-12 rounded-full border border-emerald-900/15 bg-white/95 backdrop-blur-xs flex items-center justify-center text-[#07582f] shadow-xs font-black text-lg">
+                  ₹
+                </div>
+                <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0d2a1a] leading-tight">
+                  Just<br />₹10
+                </span>
+              </div>
+            </div>
+
+            {/* 5. Action Buttons matching reference image */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-2">
               <button
-                onClick={go}
-                className="inline-flex items-center gap-2 rounded-full bg-[#07582f] hover:bg-[#0a6d3b] text-white px-7 py-3.5 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 transition-all"
+                onClick={() => go('flavours')}
+                className="inline-flex items-center gap-2 rounded-full bg-[#07582f] hover:bg-[#096d3a] active:scale-95 text-white px-7 py-3.5 text-xs font-black uppercase tracking-wider shadow-lg hover:-translate-y-0.5 transition-all"
               >
-                <span>Explore Showcase</span>
-                <ArrowRight className="h-4 w-4" />
+                <span>EXPLORE FLAVOURS</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => go('story')}
+                className="inline-flex items-center gap-2 rounded-full bg-white hover:bg-emerald-50/70 border-2 border-[#07582f] text-[#07582f] px-7 py-3 text-xs font-black uppercase tracking-wider shadow-xs hover:-translate-y-0.5 transition-all"
+              >
+                <Play className="w-3.5 h-3.5 fill-[#07582f]" />
+                <span>OUR STORY</span>
               </button>
             </div>
+
           </div>
         </div>
 
-        {/* Bottom Scroll Cue */}
+        {/* Subtle scroll cue indicator */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none z-20">
-          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/90 px-3 py-1 rounded-full border border-emerald-900/10 shadow-xs">
-            Scroll To Animate 3D
+          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/90 px-3 py-1 rounded-full border border-emerald-900/10 shadow-2xs">
+            Scroll To Animate
           </span>
           <div className="w-5 h-8 rounded-full border-2 border-emerald-800/40 flex items-start justify-center p-1 bg-white/60">
             <div className="w-1.5 h-2 rounded-full bg-emerald-800 animate-bounce" />
           </div>
         </div>
+
       </div>
     </section>
   );
