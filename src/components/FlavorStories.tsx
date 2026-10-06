@@ -5,13 +5,20 @@ import { ArrowRight, Zap, Wheat, Box } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const MANGO_FRAME_COUNT = 192;
-const mangoFrameSrc = (index: number) =>
-  `/pio_jpg_Mongo/pio_jpg_sequence/frame_${String(index + 1).padStart(4, '0')}.jpg`;
+// Skip the first 14 over-zoomed frames: start from frame 15 (natural, pleasant scale)
+const START_FRAME = 15;
+const END_FRAME = 192;
+const TOTAL_ACTIVE_FRAMES = END_FRAME - START_FRAME + 1; // 178 active frames
 
-const LYCHEE_FRAME_COUNT = 192;
-const lycheeFrameSrc = (index: number) =>
-  `/pio_jpg_Lichhey/generated_video_jpg_sequence/frame_${String(index + 1).padStart(4, '0')}.jpg`;
+const mangoFrameSrc = (index: number) => {
+  const frameNum = START_FRAME + index;
+  return `/pio_jpg_Mongo/pio_jpg_sequence/frame_${String(frameNum).padStart(4, '0')}.jpg`;
+};
+
+const lycheeFrameSrc = (index: number) => {
+  const frameNum = START_FRAME + index;
+  return `/pio_jpg_Lichhey/generated_video_jpg_sequence/frame_${String(frameNum).padStart(4, '0')}.jpg`;
+};
 
 export function FlavorStories() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,8 +70,6 @@ export function FlavorStories() {
   };
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-
     /* ====================================================
        1. MANGO CANVAS INITIALIZATION & PRELOADING
        ==================================================== */
@@ -78,14 +83,13 @@ export function FlavorStories() {
 
       if (mangoRafRef.current) cancelAnimationFrame(mangoRafRef.current);
       mangoRafRef.current = requestAnimationFrame(() => {
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
         const w = mangoCanvas.width;
         const h = mangoCanvas.height;
         mangoCtx.clearRect(0, 0, w, h);
 
         const imgRatio = img.naturalWidth / img.naturalHeight;
         const canvasRatio = w / h;
-        let renderW, renderH, renderX, renderY;
+        let renderW: number, renderH: number, renderX: number, renderY: number;
 
         if (canvasRatio > imgRatio) {
           renderW = w;
@@ -95,7 +99,11 @@ export function FlavorStories() {
         } else {
           renderH = h;
           renderW = h * imgRatio;
-          renderX = (w - renderW) / 2;
+          // Desktop: bias renderX towards right (+18% width shift) so the product carton sits gracefully in the right half
+          const isWide = window.innerWidth >= 1024;
+          const isMed = window.innerWidth >= 768 && window.innerWidth < 1024;
+          const shiftRight = isWide ? renderW * 0.16 : isMed ? renderW * 0.08 : 0;
+          renderX = (w - renderW) / 2 + shiftRight;
           renderY = 0;
         }
 
@@ -117,10 +125,9 @@ export function FlavorStories() {
       mangoImagesRef.current[i] = img;
     };
 
-    // Load initial batch
-    for (let i = 0; i < Math.min(25, MANGO_FRAME_COUNT); i++) loadMango(i);
+    for (let i = 0; i < Math.min(25, TOTAL_ACTIVE_FRAMES); i++) loadMango(i);
     const idleMangoTimer = setTimeout(() => {
-      for (let i = 25; i < MANGO_FRAME_COUNT; i++) loadMango(i);
+      for (let i = 25; i < TOTAL_ACTIVE_FRAMES; i++) loadMango(i);
     }, 600);
 
     /* ====================================================
@@ -142,7 +149,7 @@ export function FlavorStories() {
 
         const imgRatio = img.naturalWidth / img.naturalHeight;
         const canvasRatio = w / h;
-        let renderW, renderH, renderX, renderY;
+        let renderW: number, renderH: number, renderX: number, renderY: number;
 
         if (canvasRatio > imgRatio) {
           renderW = w;
@@ -152,7 +159,11 @@ export function FlavorStories() {
         } else {
           renderH = h;
           renderW = h * imgRatio;
-          renderX = (w - renderW) / 2;
+          // Desktop: bias renderX towards right (+18% width shift) so the product carton sits gracefully in the right half
+          const isWide = window.innerWidth >= 1024;
+          const isMed = window.innerWidth >= 768 && window.innerWidth < 1024;
+          const shiftRight = isWide ? renderW * 0.16 : isMed ? renderW * 0.08 : 0;
+          renderX = (w - renderW) / 2 + shiftRight;
           renderY = 0;
         }
 
@@ -174,13 +185,12 @@ export function FlavorStories() {
       lycheeImagesRef.current[i] = img;
     };
 
-    // Load initial batch
-    for (let i = 0; i < Math.min(25, LYCHEE_FRAME_COUNT); i++) loadLychee(i);
+    for (let i = 0; i < Math.min(25, TOTAL_ACTIVE_FRAMES); i++) loadLychee(i);
     const idleLycheeTimer = setTimeout(() => {
-      for (let i = 25; i < LYCHEE_FRAME_COUNT; i++) loadLychee(i);
+      for (let i = 25; i < TOTAL_ACTIVE_FRAMES; i++) loadLychee(i);
     }, 800);
 
-    // Handle canvas resizing for crisp high-DPI rendering
+    // High-DPI Canvas Resizing
     const resizeCanvases = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       if (mangoCanvas && mangoCanvas.parentElement) {
@@ -205,7 +215,6 @@ export function FlavorStories() {
     const ctx = gsap.context(() => {
       // MANGO SCROLLTRIGGER
       if (mangoSectionRef.current) {
-        const mangoObj = { frame: 0 };
         ScrollTrigger.create({
           trigger: mangoSectionRef.current,
           start: 'top top',
@@ -215,15 +224,13 @@ export function FlavorStories() {
           anticipatePin: 1,
           onUpdate: (self) => {
             const frameIndex = Math.min(
-              Math.floor(self.progress * (MANGO_FRAME_COUNT - 1)),
-              MANGO_FRAME_COUNT - 1
+              Math.floor(self.progress * (TOTAL_ACTIVE_FRAMES - 1)),
+              TOTAL_ACTIVE_FRAMES - 1
             );
-            mangoObj.frame = frameIndex;
             drawMango(frameIndex);
           },
         });
 
-        // Headline & UI reveal
         const mangoTL = gsap.timeline({
           scrollTrigger: {
             trigger: mangoSectionRef.current,
@@ -259,7 +266,6 @@ export function FlavorStories() {
 
       // LYCHEE SCROLLTRIGGER
       if (lycheeSectionRef.current) {
-        const lycheeObj = { frame: 0 };
         ScrollTrigger.create({
           trigger: lycheeSectionRef.current,
           start: 'top top',
@@ -269,15 +275,13 @@ export function FlavorStories() {
           anticipatePin: 1,
           onUpdate: (self) => {
             const frameIndex = Math.min(
-              Math.floor(self.progress * (LYCHEE_FRAME_COUNT - 1)),
-              LYCHEE_FRAME_COUNT - 1
+              Math.floor(self.progress * (TOTAL_ACTIVE_FRAMES - 1)),
+              TOTAL_ACTIVE_FRAMES - 1
             );
-            lycheeObj.frame = frameIndex;
             drawLychee(frameIndex);
           },
         });
 
-        // Headline & UI reveal
         const lycheeTL = gsap.timeline({
           scrollTrigger: {
             trigger: lycheeSectionRef.current,
@@ -348,7 +352,7 @@ export function FlavorStories() {
       </div>
 
       {/* ====================================================
-          SECTION 1: MANGO STORY (Cinematic 192-Frame Scroll Canvas)
+          SECTION 1: MANGO STORY (Cinematic Scroll Canvas)
           ==================================================== */}
       <section
         id="mango-story"
@@ -361,15 +365,15 @@ export function FlavorStories() {
             ref={mangoCanvasRef}
             className="w-full h-full object-cover select-none"
           />
-          {/* Subtle side gradient so text is effortlessly readable */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fdfaf2]/90 via-[#fdfaf2]/40 to-transparent w-full sm:w-[60%] pointer-events-none" />
+          {/* Gentle left side gradient to make live text crystal clear without covering product on right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fdfaf2]/90 via-[#fdfaf2]/40 to-transparent w-full md:w-[50%] lg:w-[45%] pointer-events-none" />
         </div>
 
-        {/* Floating Content Overlay */}
-        <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 w-full pointer-events-auto">
-          <div className="max-w-xl space-y-5">
+        {/* Content Overlay Grid: Text cleanly anchored on the left */}
+        <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-14 w-full pointer-events-auto">
+          <div className="max-w-lg lg:max-w-xl space-y-5">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 border border-amber-300 shadow-xs backdrop-blur-md">
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/95 border border-amber-300/80 shadow-xs backdrop-blur-md">
               <span className="text-base">🥭</span>
               <span className="text-xs font-black uppercase tracking-[0.2em] text-[#92400e]">
                 MANGO STORY
@@ -378,7 +382,7 @@ export function FlavorStories() {
 
             {/* Headline with clip-path line reveal */}
             <div className="overflow-hidden">
-              <h3 className="text-3xl sm:text-5xl lg:text-[3.25rem] font-black text-[#301704] tracking-tight leading-[1.08]">
+              <h3 className="text-3xl sm:text-4xl lg:text-[2.85rem] font-black text-[#301704] tracking-tight leading-[1.12]">
                 <span ref={mangoH2Line1Ref} className="block overflow-hidden pb-1">
                   A Burst of Tropical
                 </span>
@@ -389,7 +393,7 @@ export function FlavorStories() {
             </div>
 
             {/* Supporting Copy */}
-            <p ref={mangoCopyRef} className="text-sm sm:text-base text-[#6b380f]/90 font-medium leading-relaxed">
+            <p ref={mangoCopyRef} className="text-sm sm:text-base text-[#6b380f]/90 font-medium leading-relaxed max-w-md">
               Picked at peak harvest, our sun-kissed Alphonso-style mangoes bring that authentic, velvety orchard thickness everyone loves. Golden mango liquid, sunlit vibrancy, and a burst of genuine fruit excitement.
             </p>
 
@@ -440,7 +444,7 @@ export function FlavorStories() {
             </div>
 
             {/* Magnetic Interactive CTA Button */}
-            <div ref={mangoCtaRef} className="pt-2">
+            <div ref={mangoCtaRef} className="pt-1">
               <button
                 onClick={() => go('where-to-buy')}
                 className="group relative inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#78350f] via-[#632a0a] to-[#451a03] hover:from-[#92400e] hover:to-[#572205] text-white px-8 py-3.5 text-xs sm:text-sm font-black uppercase tracking-wider shadow-lg shadow-amber-950/25 transition-all duration-300"
@@ -479,7 +483,7 @@ export function FlavorStories() {
       </div>
 
       {/* ====================================================
-          SECTION 2: LYCHEE STORY (Cinematic 192-Frame Scroll Canvas)
+          SECTION 2: LYCHEE STORY (Cinematic Scroll Canvas)
           ==================================================== */}
       <section
         id="lychee-story"
@@ -492,15 +496,15 @@ export function FlavorStories() {
             ref={lycheeCanvasRef}
             className="w-full h-full object-cover select-none"
           />
-          {/* Subtle side gradient so text is effortlessly readable */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fff1f2]/90 via-[#fff1f2]/40 to-transparent w-full sm:w-[60%] pointer-events-none" />
+          {/* Gentle left side gradient to make live text crystal clear without covering product on right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fff1f2]/90 via-[#fff1f2]/40 to-transparent w-full md:w-[50%] lg:w-[45%] pointer-events-none" />
         </div>
 
-        {/* Floating Content Overlay */}
-        <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 w-full pointer-events-auto">
-          <div className="max-w-xl space-y-5">
+        {/* Content Overlay Grid: Text cleanly anchored on the left */}
+        <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-14 w-full pointer-events-auto">
+          <div className="max-w-lg lg:max-w-xl space-y-5">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 border border-rose-300 shadow-xs backdrop-blur-md">
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/95 border border-rose-300/80 shadow-xs backdrop-blur-md">
               <span className="text-base">🍓</span>
               <span className="text-xs font-black uppercase tracking-[0.2em] text-[#9f1239]">
                 LYCHEE STORY
@@ -509,7 +513,7 @@ export function FlavorStories() {
 
             {/* Headline with clip-path bottom-to-top reveal */}
             <div className="overflow-hidden">
-              <h3 className="text-3xl sm:text-5xl lg:text-[3.25rem] font-black text-[#5c061d] tracking-tight leading-[1.08]">
+              <h3 className="text-3xl sm:text-4xl lg:text-[2.85rem] font-black text-[#5c061d] tracking-tight leading-[1.12]">
                 <span ref={lycheeH2Line1Ref} className="block overflow-hidden pb-1">
                   A Deliciously Refreshing
                 </span>
@@ -520,7 +524,7 @@ export function FlavorStories() {
             </div>
 
             {/* Supporting Copy */}
-            <p ref={lycheeCopyRef} className="text-sm sm:text-base text-[#881337]/90 font-medium leading-relaxed">
+            <p ref={lycheeCopyRef} className="text-sm sm:text-base text-[#881337]/90 font-medium leading-relaxed max-w-md">
               Crisp, sweet, and imbued with delicate floral fragrance. Lychee offers an invigorating burst of thirst-quenching coolness that revitalizes both body and spirit. Bright, chilled, and exquisitely balanced.
             </p>
 
@@ -571,7 +575,7 @@ export function FlavorStories() {
             </div>
 
             {/* Magnetic Interactive CTA Button */}
-            <div ref={lycheeCtaRef} className="pt-2">
+            <div ref={lycheeCtaRef} className="pt-1">
               <button
                 onClick={() => go('where-to-buy')}
                 className="group relative inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#9f1239] via-[#881337] to-[#700c25] hover:from-[#be123c] hover:to-[#881337] text-white px-8 py-3.5 text-xs sm:text-sm font-black uppercase tracking-wider shadow-lg shadow-rose-950/25 transition-all duration-300"
