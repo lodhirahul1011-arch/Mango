@@ -4,7 +4,6 @@ import { Navbar } from '@/components/Navbar';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { MouseProvider } from '@/components/MouseProvider';
 import { ScrollHero } from '@/components/ScrollHero';
-import { Hero } from '@/components/Hero';
 import { OurStory } from '@/components/OurStory';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
@@ -26,40 +25,37 @@ function App() {
         <ScrollProgress />
         <Navbar />
         <main>
-          {/* 1. 3D Scrolling Frame Animation Hero */}
+          {/* Main 3D Hero Section matching reference exactly */}
           <ScrollHero />
           
-          {/* 2. Interactive Product Showcase Hero */}
-          <Hero />
-          
-          {/* 3. Flavours with Standalone Packs */}
+          {/* Flavours Section */}
           <Flavours />
           
-          {/* 4. Why PIO Forest Green Section */}
+          {/* Why PIO Section */}
           <WhyPIO />
           
-          {/* 5. Dedicated Flavour Stories */}
+          {/* Flavour Stories */}
           <FlavorStories />
           
-          {/* 6. Big Refreshment Just ₹10 */}
+          {/* Big Refreshment Just ₹10 Banner */}
           <PriceBanner />
           
-          {/* 7. What's Inside Ingredients */}
+          {/* What's Inside Ingredients */}
           <Ingredients />
           
-          {/* 8. SipOhh! Moments */}
+          {/* SipOhh! Moments */}
           <Moments />
           
-          {/* 9. Where to Buy */}
+          {/* Where to Buy */}
           <WhereToBuy />
           
-          {/* 10. Our Story */}
+          {/* Our Story */}
           <OurStory />
           
-          {/* 11. Partner With Us */}
+          {/* Partner With Us */}
           <Partner />
           
-          {/* 12. Contact & FAQs */}
+          {/* Contact & FAQs */}
           <Contact />
         </main>
         <Footer />
