@@ -230,7 +230,7 @@ export function WhyPIO() {
    3. FLAVOR STORIES (Mango Story & Lychee Story)
 ---------------------------------------------------- */
 export function FlavorStories() {
-  const [selectedNutrition, setSelectedNutrition] = useState<'mango' | 'lychee' | null>(null);
+  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   return (
     <section id="stories" className="py-20 lg:py-28 bg-[#ffffff]">
@@ -248,69 +248,22 @@ export function FlavorStories() {
           </p>
         </motion.div>
 
-        <div className="grid gap-10 lg:grid-cols-2">
+        <div className="grid gap-8 lg:grid-cols-2 items-stretch">
           
           {/* THE MANGO STORY CARD */}
           <motion.div 
             id="mango-story"
             {...reveal}
-            className="rounded-[36px] border border-amber-200 bg-gradient-to-br from-[#fffbeb] via-[#fef3c7] to-[#fde68a] p-8 sm:p-12 relative overflow-hidden flex flex-col justify-between"
+            onClick={() => go('where-to-buy')}
+            className="group relative cursor-pointer overflow-hidden rounded-[32px] sm:rounded-[38px] border border-[#fde68a] bg-gradient-to-br from-[#fffdf5] via-[#fef7df] to-[#fdebb8] shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
           >
-            <div className="relative z-10 max-w-md">
-              <span className="text-xs font-black uppercase tracking-widest text-amber-900/80 bg-white/70 px-3 py-1 rounded-full">
-                The Mango Story
-              </span>
-              <h3 className="mt-4 text-3xl sm:text-4xl font-black text-amber-950 tracking-tight">
-                A burst of tropical freshness in every sip.
-              </h3>
-              <p className="mt-4 text-sm sm:text-base text-amber-900/85 leading-relaxed font-medium">
-                Picked at peak harvest, our sun-kissed mangoes bring that authentic, velvety orchard thickness everyone loves. Smooth, rich, and deeply satisfying.
-              </p>
-
-              {/* Nutrition Facts Highlight */}
-              <div className="mt-6 rounded-2xl bg-white/85 p-4 border border-amber-300/60 backdrop-blur-xs">
-                <div className="flex items-center justify-between text-xs font-black text-amber-950 mb-2 border-b border-amber-200 pb-1.5">
-                  <span>Nutrition Facts (Per 100ml)</span>
-                  <span className="text-amber-700">₹10 Pack</span>
-                </div>
-                <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                  <div>
-                    <div className="font-extrabold text-amber-900">50 kcal</div>
-                    <div className="text-[10px] text-amber-700">Energy</div>
-                  </div>
-                  <div>
-                    <div className="font-extrabold text-amber-900">12 g</div>
-                    <div className="text-[10px] text-amber-700">Carbs</div>
-                  </div>
-                  <div>
-                    <div className="font-extrabold text-amber-900">10 g</div>
-                    <div className="text-[10px] text-amber-700">Sugar</div>
-                  </div>
-                  <div>
-                    <div className="font-extrabold text-emerald-800">9 Mo</div>
-                    <div className="text-[10px] text-emerald-700">Shelf Life</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 flex items-center gap-3">
-                <button 
-                  onClick={() => go('where-to-buy')}
-                  className="rounded-full bg-amber-900 hover:bg-amber-950 text-white px-6 py-3 text-xs font-black uppercase tracking-wider shadow-sm transition-all"
-                >
-                  Buy Mango Now
-                </button>
-              </div>
-            </div>
-
-            {/* Mango Pack Graphic */}
-            <div className="mt-8 sm:mt-0 sm:absolute sm:right-4 sm:bottom-6 sm:top-auto flex justify-center">
-              <img 
-                src="/images/pio-mango.png" 
-                alt="PIO Mango Pack" 
-                className="h-56 sm:h-72 w-auto object-contain drop-shadow-xl"
-              />
-            </div>
+            <img
+              src="/images/mango-story-card-2x.png"
+              alt="The Mango Story - A burst of tropical freshness in every sip"
+              className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.015]"
+            />
+            {/* Clickable Action button hotspot on bottom-left */}
+            <div className="absolute left-[5.5%] bottom-[8.5%] w-[42%] sm:w-[38%] h-[12%] rounded-full opacity-0 group-hover:opacity-100 bg-white/20 transition-opacity flex items-center justify-center pointer-events-none" />
           </motion.div>
 
           {/* THE LYCHEE STORY CARD */}
@@ -318,63 +271,16 @@ export function FlavorStories() {
             id="lychee-story"
             {...reveal}
             transition={{ ...reveal.transition, delay: 0.1 }}
-            className="rounded-[36px] border border-rose-200 bg-gradient-to-br from-[#fff1f2] via-[#ffe4e6] to-[#fecdd3] p-8 sm:p-12 relative overflow-hidden flex flex-col justify-between"
+            onClick={() => go('where-to-buy')}
+            className="group relative cursor-pointer overflow-hidden rounded-[32px] sm:rounded-[38px] border border-[#fbcfe8] bg-gradient-to-br from-[#fff7f9] via-[#fdf0f4] to-[#fcd9e2] shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
           >
-            <div className="relative z-10 max-w-md">
-              <span className="text-xs font-black uppercase tracking-widest text-rose-900/80 bg-white/70 px-3 py-1 rounded-full">
-                The Lychee Story
-              </span>
-              <h3 className="mt-4 text-3xl sm:text-4xl font-black text-rose-950 tracking-tight">
-                A deliciously refreshing taste you'll love.
-              </h3>
-              <p className="mt-4 text-sm sm:text-base text-rose-900/85 leading-relaxed font-medium">
-                Crisp, sweet, and imbued with delicate floral fragrance. Lychee offers a crisp burst of thirst-quenching cool that revitalizes body and spirit.
-              </p>
-
-              {/* Nutrition Facts Highlight */}
-              <div className="mt-6 rounded-2xl bg-white/85 p-4 border border-rose-300/60 backdrop-blur-xs">
-                <div className="flex items-center justify-between text-xs font-black text-rose-950 mb-2 border-b border-rose-200 pb-1.5">
-                  <span>Nutrition Facts (Per 100ml)</span>
-                  <span className="text-rose-700">₹10 Pack</span>
-                </div>
-                <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                  <div>
-                    <div className="font-extrabold text-rose-900">54 kcal</div>
-                    <div className="text-[10px] text-rose-700">Energy</div>
-                  </div>
-                  <div>
-                    <div className="font-extrabold text-rose-900">14 g</div>
-                    <div className="text-[10px] text-rose-700">Carbs</div>
-                  </div>
-                  <div>
-                    <div className="font-extrabold text-rose-900">14 g</div>
-                    <div className="text-[10px] text-rose-700">Sugar</div>
-                  </div>
-                  <div>
-                    <div className="font-extrabold text-emerald-800">6 Mo</div>
-                    <div className="text-[10px] text-emerald-700">Shelf Life</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 flex items-center gap-3">
-                <button 
-                  onClick={() => go('where-to-buy')}
-                  className="rounded-full bg-rose-900 hover:bg-rose-950 text-white px-6 py-3 text-xs font-black uppercase tracking-wider shadow-sm transition-all"
-                >
-                  Buy Lychee Now
-                </button>
-              </div>
-            </div>
-
-            {/* Lychee Pack Graphic */}
-            <div className="mt-8 sm:mt-0 sm:absolute sm:right-4 sm:bottom-6 sm:top-auto flex justify-center">
-              <img 
-                src="/images/pio-lychee.png" 
-                alt="PIO Lychee Pack" 
-                className="h-56 sm:h-72 w-auto object-contain drop-shadow-xl"
-              />
-            </div>
+            <img
+              src="/images/lychee-story-card-2x.png"
+              alt="The Lychee Story - A deliciously refreshing taste you'll love"
+              className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.015]"
+            />
+            {/* Clickable Action button hotspot on bottom-left */}
+            <div className="absolute left-[5.5%] bottom-[8.5%] w-[42%] sm:w-[38%] h-[12%] rounded-full opacity-0 group-hover:opacity-100 bg-white/20 transition-opacity flex items-center justify-center pointer-events-none" />
           </motion.div>
 
         </div>
