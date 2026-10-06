@@ -27,7 +27,6 @@ export function ScrollHero() {
       if (!img || !loadedRef.current.has(index)) return;
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
-        // High resolution covering full screen
         const scale = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
         const w = img.naturalWidth * scale;
         const h = img.naturalHeight * scale;
@@ -69,7 +68,7 @@ export function ScrollHero() {
       draw(frameRef.current);
     };
 
-    // Preload frame 0 with immediate high priority
+    // Preload frame 0 immediately
     load(0, true);
     [10, 25, 50, 75, 100, 130, 160, 190, 220, 239].forEach((i) => load(i));
     preload(0);
@@ -77,8 +76,8 @@ export function ScrollHero() {
 
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
-      // 1. Scroll-driven frame scrub
-      const trigger = ScrollTrigger.create({
+      // 1. Frame scrub on scroll
+      ScrollTrigger.create({
         trigger: section,
         start: 'top top',
         end: 'bottom bottom',
@@ -91,28 +90,31 @@ export function ScrollHero() {
         },
       });
 
-      // 2. Initial entrance animation
+      // 2. Bidirectional Text Animation: fades out on scroll down, FADES BACK IN on scroll up!
       gsap.fromTo(
         '.hero-text-content',
-        { y: 35, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
+        { y: 0, opacity: 1 },
+        {
+          y: -40,
+          opacity: 0,
+          ease: 'power1.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: '18% top',
+            scrub: 0.2,
+            onLeaveBack: () => {
+              // Ensure 100% visibility when user returns to top
+              gsap.to('.hero-text-content', { opacity: 1, y: 0, duration: 0.2, overwrite: 'auto' });
+            },
+            onEnterBack: () => {
+              gsap.to('.hero-text-content', { opacity: 1, y: 0, duration: 0.2, overwrite: 'auto' });
+            },
+          },
+        }
       );
 
-      // 3. Cleanly disappear on scroll as user explores the 3D pack animation
-      gsap.to('.hero-text-content', {
-        y: -50,
-        opacity: 0,
-        pointerEvents: 'none',
-        ease: 'power2.inOut',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '22% top',
-          scrub: true,
-        },
-      });
-
-      return () => trigger.kill();
+      return () => ScrollTrigger.getAll().forEach((t) => t.kill());
     });
 
     window.addEventListener('resize', resize);
@@ -138,21 +140,21 @@ export function ScrollHero() {
           aria-label="PIO 3D animated cans and fruit splash"
         />
 
-        {/* Hero Overlay: Exact Typography & Badges from Reference Image */}
-        <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-6 sm:px-10 lg:px-12 pointer-events-none">
-          <div className="hero-text-content pointer-events-auto max-w-lg lg:max-w-xl space-y-6 pt-16 sm:pt-0">
+        {/* Hero Overlay: Anchored to the LEFT with comfortable breathing space */}
+        <div className="relative z-10 w-full h-full flex items-center px-6 sm:px-12 lg:px-16 xl:px-24 pointer-events-none">
+          <div className="hero-text-content pointer-events-auto max-w-md lg:max-w-lg space-y-6 pt-16 sm:pt-0">
             
             {/* 1. Eyebrow */}
             <div className="text-xs sm:text-[13px] font-black uppercase tracking-[0.25em] text-[#0a4827] drop-shadow-xs">
               BORN IN ASSAM &bull; ₹10 REFRESHMENT
             </div>
 
-            {/* 2. Main Title: Har Sip PIO! */}
+            {/* 2. Main Title: Har Sip PIO! in authentic cursive brush */}
             <div className="space-y-0 select-none">
-              <span className="block font-['Permanent_Marker','Caveat',cursive] text-6xl sm:text-7xl lg:text-[5.5rem] font-bold text-[#074c2a] leading-[0.88] -rotate-2 origin-left tracking-tight">
+              <span className="block font-['Caveat',cursive] text-6xl sm:text-7xl lg:text-8xl font-black text-[#074c2a] leading-[0.85] -rotate-2 origin-left tracking-tight">
                 Har Sip
               </span>
-              <div className="flex items-center gap-1.5 font-['Space_Grotesk',sans-serif] text-6xl sm:text-7xl lg:text-[5.5rem] font-black text-[#074c2a] tracking-tight leading-[0.9]">
+              <div className="flex items-center gap-1.5 font-['Space_Grotesk',sans-serif] text-6xl sm:text-7xl lg:text-8xl font-black text-[#074c2a] tracking-tight leading-[0.9]">
                 <span>PIO!</span>
                 <Leaf className="w-10 h-10 sm:w-12 sm:h-12 text-[#16a34a] fill-[#16a34a] -rotate-12 inline-block shrink-0" />
               </div>
@@ -237,7 +239,7 @@ export function ScrollHero() {
 
         {/* Subtle scroll cue indicator */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none z-20">
-          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/90 px-3 py-1 rounded-full border border-emerald-900/10 shadow-xs">
+          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/90 px-3 py-1 rounded-full border border-emerald-900/10 shadow-2xs">
             Scroll To Animate 3D
           </span>
           <div className="w-5 h-8 rounded-full border-2 border-emerald-800/40 flex items-start justify-center p-1 bg-white/60">
