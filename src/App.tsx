@@ -9,6 +9,7 @@ import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
 import { Flavours, WhyPIO, FlavorStories, PriceBanner, Ingredients, Moments, WhereToBuy } from '@/components/BrandSections';
+import { FinalCTA } from '@/components/FinalCTA';
 
 function App() {
   useEffect(() => {
@@ -57,6 +58,9 @@ function App() {
           
           {/* Contact & FAQs */}
           <Contact />
+
+          {/* Final 3D Cinematic Finale CTA */}
+          <FinalCTA />
         </main>
         <Footer />
       </div>
