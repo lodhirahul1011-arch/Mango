@@ -331,13 +331,17 @@ export function FlavorStories() {
 
             </div>
 
-            {/* Right 3D Pack & Fruit Splash Art */}
-            <div className="sm:absolute sm:right-0 sm:bottom-0 sm:top-0 sm:w-[48%] lg:w-[46%] pointer-events-none flex items-end justify-end mt-6 sm:mt-0">
-              <img
-                src="/images/mango-story-art.png"
-                alt="PIO Mango 3D visual"
-                className="max-h-[380px] sm:max-h-full w-auto sm:w-full object-contain sm:object-cover sm:object-left drop-shadow-xl transition-transform duration-500 group-hover:scale-105"
-              />
+            {/* Right 3D Product Pack Display */}
+            <div className="sm:absolute sm:right-2 sm:bottom-0 sm:top-4 sm:w-[44%] lg:w-[42%] flex items-end justify-center pointer-events-none mt-6 sm:mt-0">
+              <div className="relative h-full w-full flex items-end justify-center">
+                {/* Soft ambient fruit glow behind pack */}
+                <div className="absolute bottom-6 w-48 h-48 sm:w-56 sm:h-56 rounded-full bg-amber-400/35 blur-2xl -z-10" />
+                <img
+                  src="/images/pio-mango.png"
+                  alt="PIO Mango 100ml pack"
+                  className="max-h-[320px] sm:max-h-[380px] lg:max-h-[420px] w-auto object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-2"
+                />
+              </div>
             </div>
           </motion.article>
 
@@ -423,13 +427,17 @@ export function FlavorStories() {
 
             </div>
 
-            {/* Right 3D Pack & Fruit Splash Art */}
-            <div className="sm:absolute sm:right-0 sm:bottom-0 sm:top-0 sm:w-[48%] lg:w-[46%] pointer-events-none flex items-end justify-end mt-6 sm:mt-0">
-              <img
-                src="/images/lychee-story-art.png"
-                alt="PIO Lychee 3D visual"
-                className="max-h-[380px] sm:max-h-full w-auto sm:w-full object-contain sm:object-cover sm:object-left drop-shadow-xl transition-transform duration-500 group-hover:scale-105"
-              />
+            {/* Right 3D Product Pack Display */}
+            <div className="sm:absolute sm:right-2 sm:bottom-0 sm:top-4 sm:w-[44%] lg:w-[42%] flex items-end justify-center pointer-events-none mt-6 sm:mt-0">
+              <div className="relative h-full w-full flex items-end justify-center">
+                {/* Soft ambient fruit glow behind pack */}
+                <div className="absolute bottom-6 w-48 h-48 sm:w-56 sm:h-56 rounded-full bg-rose-400/35 blur-2xl -z-10" />
+                <img
+                  src="/images/pio-lychee.png"
+                  alt="PIO Lychee 100ml pack"
+                  className="max-h-[320px] sm:max-h-[380px] lg:max-h-[420px] w-auto object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-2"
+                />
+              </div>
             </div>
           </motion.article>
 
