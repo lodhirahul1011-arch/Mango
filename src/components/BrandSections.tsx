@@ -198,92 +198,10 @@ export function PriceBanner() {
 }
 
 /* ----------------------------------------------------
-   5. WHAT'S INSIDE? (INGREDIENTS)
+   5. WHAT'S INSIDE? (INGREDIENTS) — Re-exported from dedicated 3D component
 ---------------------------------------------------- */
-const ingredientsList = [
-  {
-    icon: Sparkles,
-    name: 'Real Fruit Pulp',
-    detail: 'Authentic Mango & Lychee fruit puree for true natural flavour and goodness.',
-    tag: 'Fruit-First'
-  },
-  {
-    icon: Droplets,
-    name: 'Purified Water',
-    detail: 'Multi-stage RO filtered pure water ensuring crisp, safe thirst refreshment.',
-    tag: 'Ultra-Pure'
-  },
-  {
-    icon: Leaf,
-    name: 'Natural Flavours',
-    detail: 'Nature-identical aromatics that capture the essence of fresh fruit blossoms.',
-    tag: 'Wholesome'
-  },
-  {
-    icon: ShieldCheck,
-    name: 'Zero Preservatives',
-    detail: 'Multi-barrier aseptic packaging protects freshness without added preservatives.',
-    tag: 'Clean Label'
-  },
-];
+export { Ingredients } from './Ingredients';
 
-export function Ingredients() {
-  return (
-    <section id="inside" className="py-20 lg:py-28 bg-[#ffffff]">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        
-        <motion.div {...reveal} className="mb-14 text-center max-w-2xl mx-auto">
-          <span className="text-xs font-black uppercase tracking-[0.25em] text-[#0b8043] bg-[#eef8f1] px-4 py-1.5 rounded-full">
-            What's Inside?
-          </span>
-          <h2 className="mt-4 text-3xl sm:text-5xl font-black text-[#083b20] tracking-tight">
-            Simple ingredients. Real goodness.
-          </h2>
-          <p className="mt-3 text-base text-[#3b5e48]">
-            Transparency in every sip. Here is exactly what goes into every pack of PIO.
-          </p>
-        </motion.div>
-
-        {/* Reference Banner Visual */}
-        <motion.div {...reveal} className="mb-10 overflow-hidden rounded-[28px] border border-emerald-900/10 shadow-sm">
-          <img 
-            src="/images/whats-inside-banner.jpg" 
-            alt="What's Inside Ingredients Illustration" 
-            className="w-full h-auto object-cover max-h-72"
-          />
-        </motion.div>
-
-        {/* 4 Feature Cards */}
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {ingredientsList.map((item, idx) => (
-            <motion.div
-              key={item.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="rounded-3xl border border-emerald-900/10 bg-[#f8fbf9] p-6 text-center hover:bg-white hover:shadow-md transition-all duration-300"
-            >
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#e8f6ed] text-[#07582f] shadow-2xs">
-                <item.icon className="h-7 w-7" />
-              </div>
-              <span className="mt-4 inline-block text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100/60 px-2.5 py-0.5 rounded-md">
-                {item.tag}
-              </span>
-              <h3 className="mt-2 text-lg font-black text-[#083b20]">
-                {item.name}
-              </h3>
-              <p className="mt-2 text-xs sm:text-sm text-[#456852] leading-relaxed">
-                {item.detail}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-
-      </div>
-    </section>
-  );
-}
 
 /* ----------------------------------------------------
    6. SIPOHH! MOMENTS
