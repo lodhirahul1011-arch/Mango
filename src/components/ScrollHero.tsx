@@ -218,10 +218,10 @@ export function ScrollHero() {
             {/* 5. Action Buttons */}
             <div className="flex flex-wrap items-center gap-3.5 pt-2">
               <button
-                onClick={() => go('flavours')}
+                onClick={() => go('story')}
                 className="inline-flex items-center gap-2 rounded-full bg-[#07582f] hover:bg-[#096d3a] active:scale-95 text-white px-7 py-3.5 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-900/20 hover:-translate-y-0.5 transition-all"
               >
-                <span>EXPLORE FLAVOURS</span>
+                <span>OUR STORY</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 

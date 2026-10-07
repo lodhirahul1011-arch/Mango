@@ -3,12 +3,10 @@ import Lenis from 'lenis';
 import { Navbar } from '@/components/Navbar';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { MouseProvider } from '@/components/MouseProvider';
-import { ScrollHero } from '@/components/ScrollHero';
 import { OurStory } from '@/components/OurStory';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
-import { Flavours, Moments } from '@/components/BrandSections';
 import { FinalCTA } from '@/components/FinalCTA';
 
 function App() {
@@ -27,10 +25,10 @@ function App() {
         <Navbar />
         <main>
           {/* Main 3D Hero Section matching reference exactly */}
-          <ScrollHero />
+          {/* <ScrollHero /> */}
           
           {/* Flavours Section */}
-          <Flavours />
+          {/* <Flavours /> */}
           
           {/* Why PIO Section */}
           {/* <WhyPIO /> */}
@@ -45,7 +43,7 @@ function App() {
           {/* <Ingredients /> */}
           
           {/* SipOhh! Moments */}
-          <Moments />
+          {/* <Moments /> */}
           
           {/* Where to Buy */}
           {/* <WhereToBuy /> */}

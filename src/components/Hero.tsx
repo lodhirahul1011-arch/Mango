@@ -50,10 +50,10 @@ export function Hero() {
             {/* CTAs & Action buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
-                onClick={() => scrollToSection('flavours')}
+                onClick={() => scrollToSection('story')}
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#07582f] hover:bg-[#0a6d3b] text-white font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-emerald-900/15 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
               >
-                <span>Explore Flavours</span>
+                <span>Our Story</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 

@@ -3,10 +3,7 @@ import { Menu, X, ArrowRight } from 'lucide-react';
 import { useScrolled, useActiveSection } from '@/hooks/useScrollReveal';
 
 const NAV_LINKS = [
-  { id: 'home', label: 'Home' },
   { id: 'story', label: 'Our Story' },
-  { id: 'flavours', label: 'Products' },
-  { id: 'inside', label: 'Quality' },
   { id: 'partner', label: 'Partner' },
   { id: 'contact', label: 'Contact' },
 ];
@@ -30,7 +27,7 @@ export function Navbar() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8">
         
         {/* Brand Logo matching original */}
-        <button onClick={() => go('home')} className="flex items-center gap-2 group" aria-label="Go to PIO home">
+        <button onClick={() => go('story')} className="flex items-center gap-2 group" aria-label="Go to PIO home">
           <span className="font-black text-3xl sm:text-4xl tracking-tighter text-[#0b6b3a] lowercase flex items-center">
             P<span className="inline-block relative">i<span className="absolute -top-1 left-0.5 w-1.5 h-1.5 rounded-full bg-[#10b981]" /></span>o
           </span>

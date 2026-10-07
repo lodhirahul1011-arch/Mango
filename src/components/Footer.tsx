@@ -2,12 +2,9 @@ import { Instagram, Facebook, Youtube, MapPin, Phone, Heart, Sparkles } from 'lu
 
 const LINKS = {
   quick: [
-    { label: 'Home', id: 'home' },
-    { label: 'Flavours', id: 'flavours' },
-    { label: 'Why PIO', id: 'why-pio' },
-    { label: 'Flavor Stories', id: 'stories' },
-    { label: 'Where to Buy', id: 'where-to-buy' },
     { label: 'Our Story', id: 'story' },
+    { label: 'Partner', id: 'partner' },
+    { label: 'Contact', id: 'contact' },
   ],
   support: [
     { label: 'Frequently Asked Questions', id: 'contact' },

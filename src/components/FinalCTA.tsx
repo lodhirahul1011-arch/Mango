@@ -295,12 +295,12 @@ export function FinalCTA() {
             ref={buttonsRef}
             className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto"
           >
-            {/* Primary Action Button: Explore Flavours */}
+            {/* Primary Action Button */}
             <button
-              onClick={() => go('flavours')}
+              onClick={() => go('story')}
               className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-[#07582f] hover:bg-[#0a6d3b] text-white px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-wider shadow-lg shadow-emerald-950/25 transition-all duration-300 hover:scale-[1.03] active:scale-95 w-full sm:w-auto"
             >
-              <span>EXPLORE FLAVOURS</span>
+              <span>OUR STORY</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
             </button>
 
