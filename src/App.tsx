@@ -8,7 +8,7 @@ import { OurStory } from '@/components/OurStory';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
-import { Flavours, WhyPIO, FlavorStories, PriceBanner, Ingredients, Moments, WhereToBuy } from '@/components/BrandSections';
+import { Flavours, Moments } from '@/components/BrandSections';
 import { FinalCTA } from '@/components/FinalCTA';
 
 function App() {
@@ -33,22 +33,22 @@ function App() {
           <Flavours />
           
           {/* Why PIO Section */}
-          <WhyPIO />
+          {/* <WhyPIO /> */}
           
           {/* Flavour Stories */}
-          <FlavorStories />
+          {/* <FlavorStories /> */}
           
           {/* Big Refreshment Just ₹10 Banner */}
-          <PriceBanner />
+          {/* <PriceBanner /> */}
           
           {/* What's Inside Ingredients */}
-          <Ingredients />
+          {/* <Ingredients /> */}
           
           {/* SipOhh! Moments */}
           <Moments />
           
           {/* Where to Buy */}
-          <WhereToBuy />
+          {/* <WhereToBuy /> */}
           
           {/* Our Story */}
           <OurStory />

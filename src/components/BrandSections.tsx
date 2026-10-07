@@ -274,5 +274,3 @@ export function Moments() {
 /* ----------------------------------------------------
    7. WHERE TO BUY SECTION — Re-exported from dedicated 3D component
 ---------------------------------------------------- */
-export { WhereToBuy } from './WhereToBuy';
-
