@@ -366,7 +366,7 @@ export function OurStory() {
     <section
       id="story"
       ref={sectionRef}
-      className="relative py-20 lg:py-28 bg-[#fdfdfd] border-t border-emerald-900/10 overflow-hidden"
+      className="relative py-16 lg:py-24 bg-[#f7f4ea] border-t border-emerald-900/10 overflow-hidden"
     >
       <div className="pointer-events-none absolute inset-0">
         <img
@@ -375,51 +375,53 @@ export function OurStory() {
           aria-hidden="true"
           className="h-full w-full object-cover opacity-80 saturate-125 contrast-105"
         />
-        <div className="absolute inset-0 bg-[#fff8ed]/15" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.58)_36%,rgba(255,255,255,0.16)_70%,rgba(255,255,255,0.42)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_38%,rgba(255,255,255,0.72),transparent_36%),radial-gradient(circle_at_78%_32%,rgba(255,241,214,0.28),transparent_34%)]" />
+        <div className="absolute inset-0 bg-[#fff8ed]/25" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.78)_36%,rgba(255,255,255,0.28)_70%,rgba(255,255,255,0.56)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_34%,rgba(255,255,255,0.86),transparent_34%),radial-gradient(circle_at_78%_30%,rgba(255,241,214,0.34),transparent_34%)]" />
       </div>
 
-      {/* Background ambient lighting */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_40%,rgba(217,119,6,0.06),transparent_60%),radial-gradient(circle_at_20%_80%,rgba(7,88,47,0.06),transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_40%,rgba(217,119,6,0.08),transparent_60%),radial-gradient(circle_at_20%_80%,rgba(7,88,47,0.09),transparent_50%)]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-12">
-          
-          {/* Left Text Story Column */}
-          <div ref={textColRef} className="lg:col-span-6 space-y-6 rounded-[28px] border border-white/70 bg-white/48 p-5 shadow-[0_24px_80px_rgba(7,88,47,0.12)] backdrop-blur-[3px] sm:p-7">
-            <span className="inline-block text-xs font-black uppercase tracking-[0.25em] text-[#0b8043] bg-[#eef8f1] px-4 py-1.5 rounded-full border border-emerald-200/60 shadow-xs">
+        <div className="grid items-center gap-10 lg:grid-cols-12">
+          <div ref={textColRef} className="lg:col-span-6 space-y-6 rounded-[30px] border border-white/80 bg-white/62 p-5 shadow-[0_30px_90px_rgba(7,88,47,0.16)] backdrop-blur-md sm:p-7 lg:p-8">
+            <span className="inline-block text-xs font-black uppercase tracking-[0.28em] text-[#064b29] bg-[#ecfff4] px-5 py-2 rounded-full border border-emerald-300/70 shadow-[0_10px_28px_rgba(7,88,47,0.08)]">
               Our Story
             </span>
 
-            <h2 className="text-3xl sm:text-5xl font-black text-[#083b20] tracking-tight leading-tight">
-              FROM A TEA STALL IN MANGALDAI<br />
-              <span className="text-[#07582f]">TO A NEW GENERATION OF REFRESHMENT.</span>
+            <h2 className="max-w-[620px] text-4xl sm:text-5xl lg:text-6xl font-black text-[#031b12] tracking-tight leading-[0.92] drop-shadow-[0_2px_0_rgba(255,255,255,0.72)]">
+              FROM TEA STALL ROOTS<br />
+              <span className="text-[#064b29]">TO FRESH REFRESHMENT.</span>
             </h2>
 
-            <p className="text-base sm:text-lg text-[#325340] leading-relaxed font-medium">
-              In 1931, our journey began at a humble roadside tea stall in Mangaldai, Assam. Guided by hard work, unwavering community trust, and food-grade excellence under the SRD Group, that single stall grew across decades. Today, PIO brings that same heritage into modern tetra-pack refreshment.
+            <div className="h-1.5 w-56 rounded-full bg-[linear-gradient(90deg,#07582f,#8abf3d,transparent)]" />
+
+            <p className="max-w-xl text-base sm:text-lg text-[#17392c] leading-relaxed font-semibold">
+              Born from a humble 1931 tea stall in Mangaldai, PIO carries the same trust, quality, and refreshing spirit into every modern sip.
             </p>
 
-            {/* Heritage Highlights */}
             <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="rounded-2xl bg-white/70 border border-emerald-900/10 p-4 shadow-sm backdrop-blur-sm">
-                <Building2 className="w-5 h-5 text-[#07582f]" />
-                <h4 className="mt-2 text-sm font-black text-[#083b20]">1931 Assam Roots</h4>
-                <p className="mt-1 text-xs text-slate-500">From a roadside tea kettle to state-of-the-art aseptic food plants.</p>
+              <div className="group rounded-2xl bg-white/78 border border-emerald-900/10 p-4 shadow-[0_16px_40px_rgba(7,88,47,0.09)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_54px_rgba(7,88,47,0.14)]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#07582f] text-white shadow-[0_10px_22px_rgba(7,88,47,0.24)]">
+                  <Building2 className="w-4 h-4" />
+                </div>
+                <h4 className="mt-3 text-sm font-black text-[#062316]">1931 Assam Roots</h4>
+                <p className="mt-1 text-xs font-medium text-[#50665d]">From roadside tea to trusted refreshment.</p>
               </div>
 
-              <div className="rounded-2xl bg-white/70 border border-emerald-900/10 p-4 shadow-sm backdrop-blur-sm">
-                <Award className="w-5 h-5 text-[#07582f]" />
-                <h4 className="mt-2 text-sm font-black text-[#083b20]">Repose Excellence</h4>
-                <p className="mt-1 text-xs text-slate-500">Multilayer packaging preserving authentic taste at ₹10.</p>
+              <div className="group rounded-2xl bg-white/78 border border-emerald-900/10 p-4 shadow-[0_16px_40px_rgba(7,88,47,0.09)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_54px_rgba(7,88,47,0.14)]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#07582f] text-white shadow-[0_10px_22px_rgba(7,88,47,0.24)]">
+                  <Award className="w-4 h-4" />
+                </div>
+                <h4 className="mt-3 text-sm font-black text-[#062316]">Repose Excellence</h4>
+                <p className="mt-1 text-xs font-medium text-[#50665d]">Food-grade quality at Rs 10.</p>
               </div>
             </div>
 
             <div className="pt-2">
               <button 
                 onClick={() => go('contact')}
-                className="group inline-flex items-center gap-2 rounded-full bg-[#07582f] hover:bg-[#0a6d3b] text-white px-7 py-3.5 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 transition-all"
+                className="group inline-flex items-center gap-3 rounded-full bg-[linear-gradient(180deg,#108944,#034f29)] hover:bg-[#0a6d3b] text-white px-8 py-4 text-xs font-black uppercase tracking-wider shadow-[0_18px_36px_rgba(7,88,47,0.28)] hover:-translate-y-1 hover:shadow-[0_24px_46px_rgba(7,88,47,0.34)] transition-all"
               >
                 Know Our Story 
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -427,28 +429,27 @@ export function OurStory() {
             </div>
           </div>
 
-          {/* Right Scroll Sequence Showcase */}
-          <div className="lg:col-span-6 relative w-full h-[400px] sm:h-[480px] lg:h-[540px] overflow-hidden rounded-[30px] border border-white/70 bg-white/40 shadow-[0_28px_90px_rgba(7,88,47,0.24)] backdrop-blur-md">
+          <div className="lg:col-span-6 relative w-full h-[380px] sm:h-[470px] lg:h-[540px] overflow-hidden rounded-[32px] border border-white/80 bg-white/46 shadow-[0_32px_100px_rgba(7,88,47,0.26)] backdrop-blur-md transition-transform duration-500 hover:-translate-y-1">
             <div className="pointer-events-none absolute inset-0">
               <img
                 src={getStoryFrameSrc(sequenceFrame)}
                 alt=""
                 aria-hidden="true"
-                className="h-full w-full object-cover opacity-100 saturate-125 contrast-105"
+                className="h-full w-full object-cover opacity-100 saturate-125 contrast-110"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0)_48%,rgba(7,88,47,0.1)_100%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_38%_18%,rgba(255,255,255,0.28),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0)_48%,rgba(7,88,47,0.14)_100%)]" />
               <div className="absolute inset-x-10 bottom-7 h-16 rounded-full bg-emerald-950/16 blur-2xl" />
             </div>
-            <div className="pointer-events-none absolute left-5 top-5 z-10 rounded-full border border-emerald-700/15 bg-white/75 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#07582f] shadow-sm backdrop-blur">
+            <div className="pointer-events-none absolute left-5 top-5 z-10 rounded-full border border-emerald-700/15 bg-white/82 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#064b29] shadow-[0_10px_28px_rgba(7,88,47,0.12)] backdrop-blur">
               1931 to Today
             </div>
-            <div className="pointer-events-none absolute bottom-5 left-5 right-5 z-10 flex items-center justify-between rounded-2xl border border-white/65 bg-white/70 px-5 py-4 shadow-lg backdrop-blur-md">
+            <div className="pointer-events-none absolute bottom-5 left-5 right-5 z-10 flex items-center justify-between rounded-2xl border border-white/70 bg-white/78 px-5 py-4 shadow-[0_16px_44px_rgba(7,88,47,0.18)] backdrop-blur-md">
               <div>
                 <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#0b8043]">
                   PIO Journey
                 </p>
                 <p className="mt-1 text-sm font-bold text-[#083b20]">
-                  Scroll to reveal the story frame by frame
+                  Scroll the heritage journey
                 </p>
               </div>
               <div className="h-2 w-24 overflow-hidden rounded-full bg-emerald-100">
@@ -459,7 +460,6 @@ export function OurStory() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
