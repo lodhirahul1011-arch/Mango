@@ -8,6 +8,13 @@ import { ArrowRight, Building2, Award } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const STORY_SEQUENCE_PATH = '/pio_website_jpg_sequence_24fps/pio_website_jpg_sequence';
+const STORY_SEQUENCE_FRAME_COUNT = 121;
+
+function getStoryFrameSrc(frame: number) {
+  return `${STORY_SEQUENCE_PATH}/frame_${String(frame).padStart(4, '0')}.jpg`;
+}
+
 // ---------------------------------------------------------------------------
 // 3D HERITAGE SCENE (1931 Mangaldai Tea Stall -> Modern PIO)
 // ---------------------------------------------------------------------------
@@ -296,20 +303,32 @@ export function OurStory() {
   const sectionRef = useRef<HTMLElement>(null!);
   const scrollProgress = useRef(0);
   const textColRef = useRef<HTMLDivElement>(null!);
+  const [sequenceFrame, setSequenceFrame] = React.useState(1);
 
   const prefersReduced =
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
-    if (prefersReduced) return;
+    if (prefersReduced || !sectionRef.current) return;
 
-    ScrollTrigger.create({
+    const sequenceImages = Array.from({ length: STORY_SEQUENCE_FRAME_COUNT }, (_, index) => {
+      const image = new Image();
+      image.src = getStoryFrameSrc(index + 1);
+      return image;
+    });
+
+    const sequenceTrigger = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: 'top 80%',
       end: 'bottom 20%',
       onUpdate: (self) => {
         scrollProgress.current = self.progress;
+        const nextFrame = Math.min(
+          STORY_SEQUENCE_FRAME_COUNT,
+          Math.max(1, Math.round(self.progress * (STORY_SEQUENCE_FRAME_COUNT - 1)) + 1)
+        );
+        setSequenceFrame((current) => (current === nextFrame ? current : nextFrame));
       },
     });
 
@@ -334,7 +353,11 @@ export function OurStory() {
       }
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      sequenceTrigger.kill();
+      sequenceImages.length = 0;
+      ctx.revert();
+    };
   }, []);
 
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -345,6 +368,18 @@ export function OurStory() {
       ref={sectionRef}
       className="relative py-20 lg:py-28 bg-[#fdfdfd] border-t border-emerald-900/10 overflow-hidden"
     >
+      <div className="pointer-events-none absolute inset-0">
+        <img
+          src={getStoryFrameSrc(sequenceFrame)}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover opacity-80 saturate-125 contrast-105"
+        />
+        <div className="absolute inset-0 bg-[#fff8ed]/15" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.58)_36%,rgba(255,255,255,0.16)_70%,rgba(255,255,255,0.42)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_38%,rgba(255,255,255,0.72),transparent_36%),radial-gradient(circle_at_78%_32%,rgba(255,241,214,0.28),transparent_34%)]" />
+      </div>
+
       {/* Background ambient lighting */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_40%,rgba(217,119,6,0.06),transparent_60%),radial-gradient(circle_at_20%_80%,rgba(7,88,47,0.06),transparent_50%)]" />
 
@@ -352,7 +387,7 @@ export function OurStory() {
         <div className="grid items-center gap-12 lg:grid-cols-12">
           
           {/* Left Text Story Column */}
-          <div ref={textColRef} className="lg:col-span-6 space-y-6">
+          <div ref={textColRef} className="lg:col-span-6 space-y-6 rounded-[28px] border border-white/70 bg-white/48 p-5 shadow-[0_24px_80px_rgba(7,88,47,0.12)] backdrop-blur-[3px] sm:p-7">
             <span className="inline-block text-xs font-black uppercase tracking-[0.25em] text-[#0b8043] bg-[#eef8f1] px-4 py-1.5 rounded-full border border-emerald-200/60 shadow-xs">
               Our Story
             </span>
@@ -368,13 +403,13 @@ export function OurStory() {
 
             {/* Heritage Highlights */}
             <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="rounded-2xl bg-[#f4faf5] border border-emerald-900/10 p-4">
+              <div className="rounded-2xl bg-white/70 border border-emerald-900/10 p-4 shadow-sm backdrop-blur-sm">
                 <Building2 className="w-5 h-5 text-[#07582f]" />
                 <h4 className="mt-2 text-sm font-black text-[#083b20]">1931 Assam Roots</h4>
                 <p className="mt-1 text-xs text-slate-500">From a roadside tea kettle to state-of-the-art aseptic food plants.</p>
               </div>
 
-              <div className="rounded-2xl bg-[#f4faf5] border border-emerald-900/10 p-4">
+              <div className="rounded-2xl bg-white/70 border border-emerald-900/10 p-4 shadow-sm backdrop-blur-sm">
                 <Award className="w-5 h-5 text-[#07582f]" />
                 <h4 className="mt-2 text-sm font-black text-[#083b20]">Repose Excellence</h4>
                 <p className="mt-1 text-xs text-slate-500">Multilayer packaging preserving authentic taste at ₹10.</p>
@@ -392,31 +427,37 @@ export function OurStory() {
             </div>
           </div>
 
-          {/* Right 3D Cinematic Scroll Canvas */}
-          <div className="lg:col-span-6 relative w-full h-[400px] sm:h-[480px] lg:h-[540px] rounded-[36px] overflow-hidden border border-emerald-900/10 bg-gradient-to-b from-[#fffbf5] via-[#f7f5ed] to-[#effaf3] shadow-xl">
-            {!prefersReduced ? (
-              <Canvas
-                dpr={[1, Math.min(window.devicePixelRatio || 1, 2)]}
-                camera={{ position: [0, 0.8, 5.8], fov: 42 }}
-                gl={{ antialias: true, alpha: true }}
-                style={{ background: 'transparent' }}
-              >
-                <ambientLight intensity={0.7} />
-                <directionalLight position={[4, 6, 4]} intensity={1.2} color="#fffbeb" castShadow />
-                <directionalLight position={[-4, 2, -2]} intensity={0.4} color="#86efac" />
-                <pointLight position={[0, 2, 2]} intensity={0.5} color="#fed7aa" />
-                <Environment preset="apartment" />
-                <StoryScene scrollProgress={scrollProgress} />
-              </Canvas>
-            ) : (
-              <div className="w-full h-full flex items-center justify-center p-6">
-                <img 
-                  src="/images/our-story-card.jpg" 
-                  alt="Our Story 1931 illustration" 
-                  className="w-full h-full object-cover rounded-2xl"
+          {/* Right Scroll Sequence Showcase */}
+          <div className="lg:col-span-6 relative w-full h-[400px] sm:h-[480px] lg:h-[540px] overflow-hidden rounded-[30px] border border-white/70 bg-white/40 shadow-[0_28px_90px_rgba(7,88,47,0.24)] backdrop-blur-md">
+            <div className="pointer-events-none absolute inset-0">
+              <img
+                src={getStoryFrameSrc(sequenceFrame)}
+                alt=""
+                aria-hidden="true"
+                className="h-full w-full object-cover opacity-100 saturate-125 contrast-105"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0)_48%,rgba(7,88,47,0.1)_100%)]" />
+              <div className="absolute inset-x-10 bottom-7 h-16 rounded-full bg-emerald-950/16 blur-2xl" />
+            </div>
+            <div className="pointer-events-none absolute left-5 top-5 z-10 rounded-full border border-emerald-700/15 bg-white/75 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#07582f] shadow-sm backdrop-blur">
+              1931 to Today
+            </div>
+            <div className="pointer-events-none absolute bottom-5 left-5 right-5 z-10 flex items-center justify-between rounded-2xl border border-white/65 bg-white/70 px-5 py-4 shadow-lg backdrop-blur-md">
+              <div>
+                <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#0b8043]">
+                  PIO Journey
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#083b20]">
+                  Scroll to reveal the story frame by frame
+                </p>
+              </div>
+              <div className="h-2 w-24 overflow-hidden rounded-full bg-emerald-100">
+                <div
+                  className="h-full rounded-full bg-[#07582f] transition-[width] duration-150"
+                  style={{ width: `${(sequenceFrame / STORY_SEQUENCE_FRAME_COUNT) * 100}%` }}
                 />
               </div>
-            )}
+            </div>
           </div>
 
         </div>
