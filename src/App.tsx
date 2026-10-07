@@ -3,11 +3,11 @@ import Lenis from 'lenis';
 import { Navbar } from '@/components/Navbar';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { MouseProvider } from '@/components/MouseProvider';
+import { ScrollHero } from '@/components/ScrollHero';
 import { OurStory } from '@/components/OurStory';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
-import { FinalCTA } from '@/components/FinalCTA';
 
 function App() {
   useEffect(() => {
@@ -25,7 +25,7 @@ function App() {
         <Navbar />
         <main>
           {/* Main 3D Hero Section matching reference exactly */}
-          {/* <ScrollHero /> */}
+          <ScrollHero />
           
           {/* Flavours Section */}
           {/* <Flavours /> */}
@@ -58,7 +58,7 @@ function App() {
           <Contact />
 
           {/* Final 3D Cinematic Finale CTA */}
-          <FinalCTA />
+          {/* <FinalCTA /> */}
         </main>
         <Footer />
       </div>
