@@ -3,6 +3,7 @@ import { Instagram, Facebook, Youtube, MapPin, Phone, Heart, Sparkles } from 'lu
 const LINKS = {
   quick: [
     { label: 'Home', id: 'home' },
+    { label: 'Flavours', id: 'flavours' },
     { label: 'Our Story', id: 'story' },
     { label: 'Partner', id: 'partner' },
     { label: 'Contact', id: 'contact' },

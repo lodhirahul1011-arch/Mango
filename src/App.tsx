@@ -8,6 +8,7 @@ import { OurStory } from '@/components/OurStory';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
+import { Flavours } from '@/components/BrandSections';
 
 function App() {
   useEffect(() => {
@@ -28,7 +29,7 @@ function App() {
           <ScrollHero />
           
           {/* Flavours Section */}
-          {/* <Flavours /> */}
+          <Flavours />
           
           {/* Why PIO Section */}
           {/* <WhyPIO /> */}

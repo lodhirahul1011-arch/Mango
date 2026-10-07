@@ -5,6 +5,7 @@ import { useScrolled, useActiveSection } from '@/hooks/useScrollReveal';
 const NAV_LINKS = [
   { id: 'home', label: 'Home' },
   { id: 'story', label: 'Our Story' },
+  { id: 'flavours', label: 'Products' },
   { id: 'partner', label: 'Partner' },
   { id: 'contact', label: 'Contact' },
 ];
