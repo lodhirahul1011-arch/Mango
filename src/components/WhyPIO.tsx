@@ -484,6 +484,7 @@ export function WhyPIO() {
           
           {/* LEFT SIDE: Text Content & 4 Benefits List */}
           <div className="lg:col-span-5 space-y-6">
+            {/*
             <span className="inline-block text-xs font-black uppercase tracking-[0.25em] text-[#07582f] bg-[#eef8f1] px-4 py-1.5 rounded-full border border-emerald-200/60 shadow-xs">
               Why PIO?
             </span>
@@ -498,6 +499,7 @@ export function WhyPIO() {
             <p ref={subRef} className="text-base sm:text-lg text-[#325340] leading-relaxed font-medium">
               It’s a refreshing experience for everyone. Born in Assam, crafted with food-grade purity, and designed to bring a big smile in every small sip.
             </p>
+            */}
 
             {/* 4 Minimalist Supporting Benefits List */}
             <div ref={benefitsListRef} className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
