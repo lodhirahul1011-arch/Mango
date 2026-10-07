@@ -1,415 +1,318 @@
-import React, { useRef, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, ContactShadows, Environment } from '@react-three/drei';
-import * as THREE from 'three';
+import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ---------------------------------------------------------------------------
-// 3D FINALE SCENE: LIQUID HALO + TWO CARTONS + FLOATING FRUITS/ICE
-// ---------------------------------------------------------------------------
+const TOTAL_FRAMES = 192;
+const frameSrc = (index: number) => {
+  const frameNum = index + 1;
+  return `/final-cta-sequence/frame_${String(frameNum).padStart(4, '0')}.jpg`;
+};
 
-// 3D Mango Carton (Exact Tetra Pack Geometry)
-function FinalMangoCarton({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position} rotation={[0, 0.05, 0]}>
-      <mesh castShadow receiveShadow>
-        <boxGeometry args={[0.62, 1.1, 0.38]} />
-        <meshStandardMaterial color="#f59e0b" roughness={0.16} metalness={0.06} />
-      </mesh>
-      {/* Top Gable Seal */}
-      <mesh position={[0, 0.58, 0]} castShadow>
-        <boxGeometry args={[0.62, 0.07, 0.38]} />
-        <meshStandardMaterial color="#d97706" roughness={0.25} />
-      </mesh>
-      {/* Front Face Details */}
-      <mesh position={[0, 0.04, 0.191]}>
-        <boxGeometry args={[0.58, 0.32, 0.001]} />
-        <meshStandardMaterial color="#fef3c7" roughness={0.3} />
-      </mesh>
-      <mesh position={[0, 0.22, 0.192]}>
-        <boxGeometry args={[0.3, 0.18, 0.001]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.2} />
-      </mesh>
-      {/* Rs 10 badge */}
-      <mesh position={[-0.18, 0.42, 0.192]}>
-        <boxGeometry args={[0.16, 0.12, 0.001]} />
-        <meshStandardMaterial color="#07582f" roughness={0.3} />
-      </mesh>
-      {/* Bottom label */}
-      <mesh position={[0, -0.38, 0.192]}>
-        <boxGeometry args={[0.58, 0.2, 0.001]} />
-        <meshStandardMaterial color="#92400e" roughness={0.3} />
-      </mesh>
-    </group>
-  );
-}
-
-// 3D Lychee Carton (Exact Tetra Pack Geometry)
-function FinalLycheeCarton({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position} rotation={[0, -0.05, 0]}>
-      <mesh castShadow receiveShadow>
-        <boxGeometry args={[0.62, 1.1, 0.38]} />
-        <meshStandardMaterial color="#f43f5e" roughness={0.16} metalness={0.06} />
-      </mesh>
-      {/* Top Gable Seal */}
-      <mesh position={[0, 0.58, 0]} castShadow>
-        <boxGeometry args={[0.62, 0.07, 0.38]} />
-        <meshStandardMaterial color="#e11d48" roughness={0.25} />
-      </mesh>
-      {/* Front Face Details */}
-      <mesh position={[0, 0.04, 0.191]}>
-        <boxGeometry args={[0.58, 0.32, 0.001]} />
-        <meshStandardMaterial color="#ffe4e6" roughness={0.3} />
-      </mesh>
-      <mesh position={[0, 0.22, 0.192]}>
-        <boxGeometry args={[0.3, 0.18, 0.001]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.2} />
-      </mesh>
-      {/* Rs 10 badge */}
-      <mesh position={[-0.18, 0.42, 0.192]}>
-        <boxGeometry args={[0.16, 0.12, 0.001]} />
-        <meshStandardMaterial color="#07582f" roughness={0.3} />
-      </mesh>
-      {/* Bottom label */}
-      <mesh position={[0, -0.38, 0.192]}>
-        <boxGeometry args={[0.58, 0.2, 0.001]} />
-        <meshStandardMaterial color="#9f1239" roughness={0.3} />
-      </mesh>
-    </group>
-  );
-}
-
-// Giant Liquid Halo behind products (Half Mango Golden, Half Lychee Pink)
-function LiquidHalo({ scale }: { scale: number }) {
-  const haloRef = useRef<THREE.Group>(null!);
-
-  useFrame((_, delta) => {
-    if (haloRef.current) {
-      haloRef.current.rotation.z += delta * 0.25;
-    }
-  });
-
-  return (
-    <group ref={haloRef} position={[0, 0.1, -0.6]} scale={scale}>
-      {/* Left Golden Mango Liquid Half Torus */}
-      <mesh rotation={[0, 0, Math.PI / 2]}>
-        <torusGeometry args={[1.75, 0.16, 24, 48, Math.PI]} />
-        <meshPhysicalMaterial
-          color="#f59e0b"
-          roughness={0.08}
-          transmission={0.82}
-          thickness={0.8}
-          ior={1.42}
-          clearcoat={1}
-        />
-      </mesh>
-      {/* Right Pink Lychee Liquid Half Torus */}
-      <mesh rotation={[0, 0, -Math.PI / 2]}>
-        <torusGeometry args={[1.75, 0.16, 24, 48, Math.PI]} />
-        <meshPhysicalMaterial
-          color="#fb7185"
-          roughness={0.08}
-          transmission={0.82}
-          thickness={0.8}
-          ior={1.42}
-          clearcoat={1}
-        />
-      </mesh>
-    </group>
-  );
-}
-
-// Floating Accents: Mango cube, lychee fruit, ice crystals, glass spheres
-function FloatingFinaleAccents() {
-  return (
-    <group>
-      {/* Mango cube - top left */}
-      <Float speed={1.8} floatIntensity={0.35} rotationIntensity={0.2}>
-        <mesh position={[-2.1, 1.2, 0.2]} castShadow>
-          <boxGeometry args={[0.26, 0.26, 0.26]} />
-          <meshStandardMaterial color="#f59e0b" roughness={0.3} />
-        </mesh>
-      </Float>
-
-      {/* Lychee fruit - top right */}
-      <Float speed={1.6} floatIntensity={0.3} rotationIntensity={0.15}>
-        <mesh position={[2.1, 1.1, 0.3]} castShadow>
-          <sphereGeometry args={[0.2, 20, 16]} />
-          <meshStandardMaterial color="#f43f5e" roughness={0.4} />
-        </mesh>
-      </Float>
-
-      {/* Ice Crystal - bottom left */}
-      <Float speed={2.0} floatIntensity={0.4} rotationIntensity={0.25}>
-        <mesh position={[-1.8, -0.8, 0.4]} rotation={[0.4, 0.4, 0.2]} castShadow>
-          <boxGeometry args={[0.28, 0.28, 0.28]} />
-          <meshPhysicalMaterial
-            color="#e0f2fe"
-            transparent
-            opacity={0.55}
-            roughness={0.0}
-            transmission={0.9}
-            thickness={0.6}
-            ior={1.45}
-            clearcoat={1}
-          />
-        </mesh>
-      </Float>
-
-      {/* Refracting Glass Droplet - bottom right */}
-      <Float speed={1.9} floatIntensity={0.35}>
-        <mesh position={[1.8, -0.7, 0.5]} castShadow>
-          <sphereGeometry args={[0.22, 24, 20]} />
-          <meshPhysicalMaterial
-            color="#ffffff"
-            transparent
-            opacity={0.4}
-            roughness={0.0}
-            transmission={0.92}
-            thickness={0.7}
-            ior={1.48}
-            clearcoat={1}
-          />
-        </mesh>
-      </Float>
-
-      {/* Natural Green Leaves */}
-      <Float speed={2.2} floatIntensity={0.25} rotationIntensity={0.3}>
-        <mesh position={[0, 1.6, -0.2]} rotation={[0.3, 0.2, 0.5]}>
-          <cylinderGeometry args={[0.02, 0.16, 0.35, 12]} />
-          <meshStandardMaterial color="#16a34a" roughness={0.4} />
-        </mesh>
-      </Float>
-    </group>
-  );
-}
-
-// Master Scene for Final CTA
-function FinaleScene({
-  scrollProgress,
-  pointer,
-}: {
-  scrollProgress: React.MutableRefObject<number>;
-  pointer: React.MutableRefObject<{ x: number; y: number }>;
-}) {
-  const groupRef = useRef<THREE.Group>(null!);
-  const mangoRef = useRef<THREE.Group>(null!);
-  const lycheeRef = useRef<THREE.Group>(null!);
-  const [haloScale, setHaloScale] = React.useState(0);
-
-  useFrame((state) => {
-    const p = scrollProgress.current; // 0 to 1
-
-    // Camera moves forward into scene
-    state.camera.position.z = THREE.MathUtils.lerp(5.4, 4.4, p);
-
-    // 0-40%: Mango rises from lower-left, Lychee from lower-right
-    if (mangoRef.current) {
-      const targetMangoY = THREE.MathUtils.lerp(-1.6, 0, Math.min(1, p * 2.5));
-      const targetMangoX = THREE.MathUtils.lerp(-1.2, -0.55, Math.min(1, p * 2.2));
-      mangoRef.current.position.y = THREE.MathUtils.lerp(mangoRef.current.position.y, targetMangoY, 0.08);
-      mangoRef.current.position.x = THREE.MathUtils.lerp(mangoRef.current.position.x, targetMangoX, 0.08);
-    }
-
-    if (lycheeRef.current) {
-      const targetLycheeY = THREE.MathUtils.lerp(-1.6, 0, Math.min(1, p * 2.5));
-      const targetLycheeX = THREE.MathUtils.lerp(1.2, 0.55, Math.min(1, p * 2.2));
-      lycheeRef.current.position.y = THREE.MathUtils.lerp(lycheeRef.current.position.y, targetLycheeY, 0.08);
-      lycheeRef.current.position.x = THREE.MathUtils.lerp(lycheeRef.current.position.x, targetLycheeX, 0.08);
-    }
-
-    // 40-80%: Liquid halo forms behind products
-    if (p > 0.35) {
-      const scaleProg = Math.min(1, (p - 0.35) * 2.2);
-      setHaloScale(scaleProg);
-    } else {
-      setHaloScale(0);
-    }
-
-    // 80-100%: Motion settles, products front-facing lockup
-    if (groupRef.current) {
-      const isMobile = window.innerWidth < 768;
-      // Pointer reaction max 4 degrees
-      if (!isMobile && p > 0.4) {
-        groupRef.current.rotation.y = THREE.MathUtils.lerp(
-          groupRef.current.rotation.y,
-          pointer.current.x * 0.06,
-          0.05
-        );
-        groupRef.current.rotation.x = THREE.MathUtils.lerp(
-          groupRef.current.rotation.x,
-          -pointer.current.y * 0.05,
-          0.05
-        );
-      }
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={[0, 0, 0]}>
-      {/* Two Center Floating Cartons */}
-      <group ref={mangoRef} position={[-1.2, -1.6, 0]}>
-        <Float speed={1.3} floatIntensity={0.15}>
-          <FinalMangoCarton position={[0, 0, 0]} />
-        </Float>
-      </group>
-
-      <group ref={lycheeRef} position={[1.2, -1.6, 0]}>
-        <Float speed={1.4} floatIntensity={0.16}>
-          <FinalLycheeCarton position={[0, 0, 0]} />
-        </Float>
-      </group>
-
-      {/* 3D Liquid Halo behind */}
-      <LiquidHalo scale={haloScale} />
-
-      {/* Floating Accents */}
-      <FloatingFinaleAccents />
-
-      {/* Ground Contact Shadow */}
-      <ContactShadows position={[0, -0.75, 0]} opacity={0.35} scale={5} blur={2.2} far={2.5} />
-    </group>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// MAIN FINAL CTA COMPONENT
-// ---------------------------------------------------------------------------
 export function FinalCTA() {
-  const sectionRef = useRef<HTMLElement>(null!);
-  const textRef = useRef<HTMLDivElement>(null!);
-  const scrollProgress = useRef(0);
-  const pointer = useRef({ x: 0, y: 0 });
+  const sectionRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasWrapperRef = useRef<HTMLDivElement>(null);
 
-  const prefersReduced =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Text refs for cinematic line reveals
+  const badgeRef = useRef<HTMLSpanElement>(null);
+  const h2Line1Ref = useRef<HTMLSpanElement>(null);
+  const h2Line2Ref = useRef<HTMLSpanElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const descRef = useRef<HTMLParagraphElement>(null);
+  const buttonsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (prefersReduced) return;
-
-    ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: 'top 80%',
-      end: 'bottom 20%',
-      onUpdate: (self) => {
-        scrollProgress.current = self.progress;
-      },
-    });
-
-    const handlePointer = (e: MouseEvent) => {
-      pointer.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
-      pointer.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener('mousemove', handlePointer);
-
-    const ctx = gsap.context(() => {
-      if (textRef.current) {
-        gsap.fromTo(
-          textRef.current.children,
-          { opacity: 0, y: 26 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            stagger: 0.12,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: textRef.current,
-              start: 'top 75%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => {
-      window.removeEventListener('mousemove', handlePointer);
-      ctx.revert();
-    };
-  }, []);
+  // Animation frame and image cache refs (no React state re-renders while scrolling)
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const loadedSetRef = useRef<Set<number>>(new Set());
+  const currentFrameRef = useRef<number>(0);
+  const rafRef = useRef<number>();
+  const pointerPosRef = useRef({ x: 0, y: 0 });
 
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 768;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Draw frame function with cover-style centering & zero distortion
+    const drawFrame = (index: number) => {
+      currentFrameRef.current = index;
+
+      // Find best available loaded frame if current isn't ready
+      let img = imagesRef.current[index];
+      if (!img || !loadedSetRef.current.has(index)) {
+        for (let offset = 1; offset < 20; offset++) {
+          if (index - offset >= 0 && loadedSetRef.current.has(index - offset)) {
+            img = imagesRef.current[index - offset];
+            break;
+          }
+          if (index + offset < TOTAL_FRAMES && loadedSetRef.current.has(index + offset)) {
+            img = imagesRef.current[index + offset];
+            break;
+          }
+        }
+      }
+
+      if (!img || img.naturalWidth === 0) return;
+
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const imgW = img.naturalWidth;
+        const imgH = img.naturalHeight;
+        const scale = Math.max(w / imgW, h / imgH);
+        const renderW = imgW * scale;
+        const renderH = imgH * scale;
+        const renderX = (w - renderW) / 2;
+        const renderY = (h - renderH) / 2;
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, renderX, renderY, renderW, renderH);
+      });
+    };
+
+    // Preloading strategy
+    const loadFrame = (i: number, onLoaded?: () => void) => {
+      if (imagesRef.current[i]) return;
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = frameSrc(i);
+      img.onload = () => {
+        loadedSetRef.current.add(i);
+        if (onLoaded) onLoaded();
+        if (i === currentFrameRef.current) {
+          drawFrame(i);
+        }
+      };
+      img.onerror = () => {
+        // Soft fallback: continue using closest available frame
+      };
+      imagesRef.current[i] = img;
+    };
+
+    // 1. Immediately load frame 0 (frame_0001.jpg)
+    loadFrame(0, () => drawFrame(0));
+
+    // 2. Preload first 20 frames
+    for (let i = 1; i < 24; i++) {
+      loadFrame(i);
+    }
+
+    // 3. Progressively load rest in background chunks
+    const timer1 = setTimeout(() => {
+      for (let i = 24; i < 90; i++) loadFrame(i);
+    }, 400);
+
+    const timer2 = setTimeout(() => {
+      for (let i = 90; i < TOTAL_FRAMES; i++) loadFrame(i);
+    }, 1000);
+
+    // Canvas resizing with high-DPI support (capped DPR: 2 on desktop, 1.5 on mobile)
+    const handleResize = () => {
+      if (!canvas || !canvas.parentElement) return;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      drawFrame(currentFrameRef.current);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    // If reduced motion, load final frame and display without scrubbing
+    if (prefersReducedMotion) {
+      loadFrame(TOTAL_FRAMES - 1, () => drawFrame(TOTAL_FRAMES - 1));
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
+    }
+
+    // GSAP ScrollTrigger for 300vh sticky sequence scrub
+    const ctxTimeline = gsap.context(() => {
+      if (!sectionRef.current) return;
+
+      // 1. Scroll-driven frame scrubber
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.6,
+        onUpdate: (self) => {
+          const frameIndex = Math.min(
+            Math.floor(self.progress * (TOTAL_FRAMES - 1)),
+            TOTAL_FRAMES - 1
+          );
+          if (frameIndex !== currentFrameRef.current) {
+            drawFrame(frameIndex);
+          }
+        },
+      });
+
+      // 2. Text reveal animation linked to section scroll progress
+      // 0-15%: badge / supporting label
+      // 15-35%: "TWO FLAVOURS."
+      // 25-45%: "ONE PIO."
+      // 45-65%: "Small Sip. Big Refreshment."
+      // 70-85%: CTA buttons appear
+      const textTL = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.5,
+        },
+      });
+
+      textTL
+        .fromTo(badgeRef.current, { opacity: 0, y: -12 }, { opacity: 1, y: 0, ease: 'power2.out' }, 0.0)
+        .fromTo(h2Line1Ref.current, { y: '110%', opacity: 0 }, { y: '0%', opacity: 1, ease: 'power3.out' }, 0.12)
+        .fromTo(h2Line2Ref.current, { y: '110%', opacity: 0 }, { y: '0%', opacity: 1, ease: 'power3.out' }, 0.22)
+        .fromTo(subtitleRef.current, { opacity: 0, y: 18 }, { opacity: 1, y: 0, ease: 'power2.out' }, 0.38)
+        .fromTo(descRef.current, { opacity: 0, y: 15 }, { opacity: 1, y: 0, ease: 'power2.out' }, 0.48)
+        .fromTo(buttonsRef.current, { opacity: 0, y: 22, scale: 0.95 }, { opacity: 1, y: 0, scale: 1, ease: 'power2.out' }, 0.65);
+    }, sectionRef);
+
+    // Desktop subtle pointer parallax (max translateX: 4px, translateY: 3px)
+    let pointerCleanup: (() => void) | undefined;
+    if (!isMobile) {
+      const handlePointerMove = (e: MouseEvent) => {
+        const normX = (e.clientX / window.innerWidth - 0.5) * 2;
+        const normY = (e.clientY / window.innerHeight - 0.5) * 2;
+        pointerPosRef.current.x = normX * 4;
+        pointerPosRef.current.y = normY * 3;
+
+        if (canvasWrapperRef.current) {
+          gsap.to(canvasWrapperRef.current, {
+            x: pointerPosRef.current.x,
+            y: pointerPosRef.current.y,
+            duration: 0.6,
+            ease: 'power1.out',
+            overwrite: 'auto',
+          });
+        }
+      };
+
+      window.addEventListener('mousemove', handlePointerMove);
+      pointerCleanup = () => window.removeEventListener('mousemove', handlePointerMove);
+    }
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      window.removeEventListener('resize', handleResize);
+      pointerCleanup?.();
+      ctxTimeline.revert(); // kills ScrollTrigger cleanly on unmount
+    };
+  }, []);
 
   return (
     <section
       id="final-cta"
       ref={sectionRef}
-      className="relative py-24 lg:py-32 bg-[#ffffff] overflow-hidden border-t border-emerald-900/10"
+      className="final-cta-section relative w-full h-[320vh] sm:h-[360vh] bg-[#ffffff] border-t border-emerald-900/10"
     >
-      {/* Soft Ambient Glow backdrop */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(7,88,47,0.06),transparent_65%),radial-gradient(circle_at_25%_65%,rgba(245,158,11,0.08),transparent_50%),radial-gradient(circle_at_75%_65%,rgba(244,63,94,0.08),transparent_50%)]" />
+      {/* Sticky 100vh viewport window */}
+      <div
+        ref={stickyRef}
+        className="final-cta-sticky sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between"
+      >
+        {/* Fullscreen Canvas Background with zero white haze */}
+        <div
+          ref={canvasWrapperRef}
+          className="absolute inset-0 z-0 w-full h-full pointer-events-none overflow-hidden select-none"
+        >
+          <canvas
+            ref={canvasRef}
+            className="final-cta-canvas w-full h-full object-cover"
+          />
+        </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
-        
-        {/* Top Text Brand Lockup */}
-        <div ref={textRef} className="text-center max-w-3xl mx-auto space-y-4 mb-10">
-          <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.25em] text-[#0b8043] bg-[#eef8f1] px-4 py-1.5 rounded-full border border-emerald-200/60 shadow-xs">
-            <Sparkles className="w-3.5 h-3.5" />
-            The PIO Experience
-          </span>
+        {/* Top/Center Local Text Readability Tint (applied only subtly behind text, never covering whole canvas) */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-gradient-to-b from-white/90 via-white/40 to-transparent z-10" />
 
-          <h2 className="text-4xl sm:text-6xl font-black text-[#083b20] tracking-tight leading-tight">
-            TWO FLAVOURS.<br />
-            <span className="text-[#07582f]">ONE PIO.</span>
-          </h2>
+        {/* Foreground Content: HTML Text & Interactive Buttons */}
+        <div className="final-cta-copy relative z-20 mx-auto max-w-7xl px-5 sm:px-8 w-full pt-16 sm:pt-20 lg:pt-24 flex flex-col items-center text-center pointer-events-auto">
+          
+          {/* Subtle Label Badge */}
+          <div className="mb-3">
+            <span
+              ref={badgeRef}
+              className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.25em] text-[#0b8043] bg-white/90 border border-emerald-200/70 px-4 py-1.5 rounded-full shadow-xs backdrop-blur-xs"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              The PIO Experience
+            </span>
+          </div>
 
-          <p className="text-lg sm:text-xl font-bold text-[#325340]">
+          {/* Headline with clip-path line reveals */}
+          <div className="overflow-hidden">
+            <h2 className="text-4xl sm:text-6xl lg:text-[4.2rem] font-black text-[#083b20] tracking-tight leading-[1.05]">
+              <span ref={h2Line1Ref} className="block overflow-hidden pb-1">
+                TWO FLAVOURS.
+              </span>
+              <span ref={h2Line2Ref} className="block text-[#07582f] overflow-hidden">
+                ONE PIO.
+              </span>
+            </h2>
+          </div>
+
+          {/* Supporting Subtitle */}
+          <p
+            ref={subtitleRef}
+            className="mt-3 text-lg sm:text-2xl font-black text-[#1e3d2b] tracking-tight"
+          >
             Small Sip. Big Refreshment.
           </p>
 
-          <p className="text-sm sm:text-base text-[#4b6d57] max-w-md mx-auto font-medium">
+          {/* Supporting Paragraph */}
+          <p
+            ref={descRef}
+            className="mt-2 text-xs sm:text-sm text-[#3b5e48] max-w-md mx-auto font-medium leading-relaxed"
+          >
             Whether you crave golden tropical mango or crisp floral lychee, refreshment is always just ₹10 away.
           </p>
         </div>
 
-        {/* 3D Liquid Halo Finale Canvas */}
-        <div className="relative w-full h-[400px] sm:h-[480px] lg:h-[520px] rounded-3xl overflow-hidden bg-gradient-to-b from-[#fbfdfc] via-[#f4faf6] to-[#edf7f1] border border-emerald-900/10 shadow-lg flex items-center justify-center mb-10">
-          {!prefersReduced ? (
-            <Canvas
-              dpr={[1, Math.min(window.devicePixelRatio || 1, 2)]}
-              camera={{ position: [0, 0.4, 5.0], fov: 42 }}
-              gl={{ antialias: true, alpha: true }}
-              style={{ background: 'transparent' }}
+        {/* Bottom CTA Buttons Bar */}
+        <div className="relative z-20 mx-auto max-w-7xl px-5 sm:px-8 w-full pb-10 sm:pb-14 flex items-center justify-center pointer-events-auto">
+          <div
+            ref={buttonsRef}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto"
+          >
+            {/* Primary Action Button: Explore Flavours */}
+            <button
+              onClick={() => go('flavours')}
+              className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-[#07582f] hover:bg-[#0a6d3b] text-white px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-wider shadow-lg shadow-emerald-950/25 transition-all duration-300 hover:scale-[1.03] active:scale-95 w-full sm:w-auto"
             >
-              <ambientLight intensity={0.8} />
-              <directionalLight position={[4, 8, 5]} intensity={1.3} color="#ffffff" castShadow />
-              <directionalLight position={[-4, 2, -2]} intensity={0.4} color="#86efac" />
-              <pointLight position={[0, 4, 3]} intensity={0.5} color="#fde68a" />
-              <Environment preset="studio" />
-              <FinaleScene scrollProgress={scrollProgress} pointer={pointer} />
-            </Canvas>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center gap-8">
-              <img src="/images/pio-mango.png" alt="PIO Mango" className="h-52 object-contain drop-shadow-2xl" />
-              <img src="/images/pio-lychee.png" alt="PIO Lychee" className="h-52 object-contain drop-shadow-2xl" />
-            </div>
-          )}
-        </div>
+              <span>EXPLORE FLAVOURS</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+            </button>
 
-        {/* Interactive Dual CTA Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-          <button
-            onClick={() => go('flavours')}
-            className="group inline-flex items-center gap-2.5 rounded-full bg-[#07582f] hover:bg-[#0a6d3b] text-white px-8 py-4 text-xs sm:text-sm font-black uppercase tracking-wider shadow-lg shadow-emerald-950/20 hover:-translate-y-0.5 transition-all"
-          >
-            <span>EXPLORE FLAVOURS</span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-          </button>
-
-          <button
-            onClick={() => go('where-to-buy')}
-            className="group inline-flex items-center gap-2.5 rounded-full bg-white hover:bg-slate-50 text-[#07582f] border-2 border-[#07582f] px-8 py-4 text-xs sm:text-sm font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 transition-all"
-          >
-            <span>FIND NEAR YOU</span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 text-[#07582f]" />
-          </button>
+            {/* Secondary Action Button: Find Near You */}
+            <button
+              onClick={() => go('where-to-buy')}
+              className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-white/95 hover:bg-[#eef8f1] text-[#07582f] border-2 border-[#07582f] px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-wider shadow-md transition-all duration-300 hover:scale-[1.03] active:scale-95 backdrop-blur-xs w-full sm:w-auto"
+            >
+              <span>FIND NEAR YOU</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5 text-[#07582f]" />
+            </button>
+          </div>
         </div>
 
       </div>
