@@ -1,377 +1,437 @@
-import React, { useRef, useEffect, useMemo, Suspense, lazy } from 'react';
+import React, { useRef, useEffect, useMemo, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Float, ContactShadows, Environment, MeshTransmissionMaterial } from '@react-three/drei';
-import { useSpring, animated } from '@react-spring/three';
+import { Float, ContactShadows, Environment, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 // ---------------------------------------------------------------------------
-// 3D SCENE ELEMENTS (inside Canvas)
+// 3D REAL PRODUCT PACKS (MAPPED WITH REAL UPLOADED ARTWORK)
 // ---------------------------------------------------------------------------
 
-// Product carton: textured box with correct branding colors
-function MangoCarton({ position, rotation }: { position: [number, number, number]; rotation?: [number, number, number] }) {
-  const meshRef = useRef<THREE.Mesh>(null!);
+// Real PIO Mango Carton: Front-facing 3D Tetra Pack with real pack texture
+function RealMangoCarton({ position, rotation }: { position: [number, number, number]; rotation?: [number, number, number] }) {
+  const texture = useTexture('/images/pio-mango.png');
+  texture.generateMipmaps = true;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-  // Mango golden carton color scheme
-  const cartonColor = '#f59e0b';
-  const accentColor = '#78350f';
+  // Real 100ml tetra pack aspect ratio (width: 1.0, height: 1.45, depth: 0.52)
+  const width = 1.05;
+  const height = 1.52;
+  const depth = 0.54;
 
   return (
-    <group position={position} rotation={rotation as [number, number, number] ?? [0, -0.15, 0]}>
-      {/* Main carton body */}
-      <mesh ref={meshRef} castShadow receiveShadow>
-        <boxGeometry args={[0.55, 1.0, 0.35]} />
-        <meshStandardMaterial color={cartonColor} roughness={0.18} metalness={0.06} />
+    <group position={position} rotation={rotation || [0, 0, 0]}>
+      {/* 3D Tetra Pack Body with realistic side/top colors */}
+      <mesh castShadow receiveShadow>
+        <boxGeometry args={[width, height, depth]} />
+        {/* Six face materials: [right, left, top, bottom, front, back] */}
+        <meshStandardMaterial attach="material-0" color="#eab308" roughness={0.25} metalness={0.05} />
+        <meshStandardMaterial attach="material-1" color="#ca8a04" roughness={0.25} metalness={0.05} />
+        <meshStandardMaterial attach="material-2" color="#a16207" roughness={0.3} metalness={0.08} />
+        <meshStandardMaterial attach="material-3" color="#78350f" roughness={0.4} />
+        {/* Front panel with high-res real PIO packaging art */}
+        <meshStandardMaterial
+          attach="material-4"
+          map={texture}
+          transparent={true}
+          roughness={0.2}
+          metalness={0.03}
+        />
+        <meshStandardMaterial attach="material-5" color="#d97706" roughness={0.3} />
       </mesh>
-      {/* Top sealed part (darker gold) */}
-      <mesh position={[0, 0.52, 0]} castShadow>
-        <boxGeometry args={[0.55, 0.08, 0.35]} />
-        <meshStandardMaterial color="#d97706" roughness={0.3} metalness={0.04} />
+
+      {/* Top Gable Straw Port & Seal Bar for realistic tetra-pack feel */}
+      <mesh position={[0, height / 2 + 0.04, 0]} castShadow>
+        <boxGeometry args={[width * 0.98, 0.08, depth * 0.9]} />
+        <meshStandardMaterial color="#b45309" roughness={0.35} metalness={0.1} />
       </mesh>
-      {/* Straw port accent */}
-      <mesh position={[0.1, 0.52, 0]} castShadow>
-        <cylinderGeometry args={[0.025, 0.025, 0.14, 12]} />
-        <meshStandardMaterial color="#92400e" roughness={0.4} metalness={0.15} />
-      </mesh>
-      {/* Front face color band */}
-      <mesh position={[0, 0, 0.176]} castShadow>
-        <boxGeometry args={[0.54, 0.28, 0.001]} />
-        <meshStandardMaterial color="#fde68a" roughness={0.5} metalness={0.02} />
-      </mesh>
-      {/* PIO logo area (bright white) */}
-      <mesh position={[0, 0.16, 0.177]} castShadow>
-        <boxGeometry args={[0.28, 0.18, 0.001]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.5} metalness={0.02} />
-      </mesh>
-      {/* Rs 10 badge (green) */}
-      <mesh position={[-0.16, 0.36, 0.177]} castShadow>
-        <boxGeometry args={[0.14, 0.12, 0.001]} />
-        <meshStandardMaterial color="#07582f" roughness={0.4} metalness={0.06} />
-      </mesh>
-      {/* Bottom label */}
-      <mesh position={[0, -0.34, 0.177]} castShadow>
-        <boxGeometry args={[0.54, 0.18, 0.001]} />
-        <meshStandardMaterial color="#92400e" roughness={0.5} />
+      {/* Attached Straw Detail */}
+      <mesh position={[width * 0.3, height / 2 + 0.05, 0]} rotation={[0, 0, -0.2]} castShadow>
+        <cylinderGeometry args={[0.022, 0.022, 0.16, 16]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.2} metalness={0.05} />
       </mesh>
     </group>
   );
 }
 
-function LycheeCarton({ position, rotation }: { position: [number, number, number]; rotation?: [number, number, number] }) {
-  const meshRef = useRef<THREE.Mesh>(null!);
+// Real PIO Lychee Carton: Front-facing 3D Tetra Pack with real pack texture
+function RealLycheeCarton({ position, rotation }: { position: [number, number, number]; rotation?: [number, number, number] }) {
+  const texture = useTexture('/images/pio-lychee.png');
+  texture.generateMipmaps = true;
+  texture.minFilter = THREE.LinearMipmapLinearFilter;
+
+  const width = 1.05;
+  const height = 1.52;
+  const depth = 0.54;
 
   return (
-    <group position={position} rotation={rotation as [number, number, number] ?? [0, 0.15, 0]}>
-      {/* Main carton body */}
-      <mesh ref={meshRef} castShadow receiveShadow>
-        <boxGeometry args={[0.55, 1.0, 0.35]} />
-        <meshStandardMaterial color="#f43f5e" roughness={0.18} metalness={0.06} />
+    <group position={position} rotation={rotation || [0, 0, 0]}>
+      {/* 3D Tetra Pack Body with realistic side/top colors */}
+      <mesh castShadow receiveShadow>
+        <boxGeometry args={[width, height, depth]} />
+        {/* Six face materials: [right, left, top, bottom, front, back] */}
+        <meshStandardMaterial attach="material-0" color="#f43f5e" roughness={0.25} metalness={0.05} />
+        <meshStandardMaterial attach="material-1" color="#e11d48" roughness={0.25} metalness={0.05} />
+        <meshStandardMaterial attach="material-2" color="#be123c" roughness={0.3} metalness={0.08} />
+        <meshStandardMaterial attach="material-3" color="#881337" roughness={0.4} />
+        {/* Front panel with high-res real PIO packaging art */}
+        <meshStandardMaterial
+          attach="material-4"
+          map={texture}
+          transparent={true}
+          roughness={0.2}
+          metalness={0.03}
+        />
+        <meshStandardMaterial attach="material-5" color="#9f1239" roughness={0.3} />
       </mesh>
-      {/* Top sealed part */}
-      <mesh position={[0, 0.52, 0]} castShadow>
-        <boxGeometry args={[0.55, 0.08, 0.35]} />
-        <meshStandardMaterial color="#e11d48" roughness={0.3} metalness={0.04} />
+
+      {/* Top Gable Straw Port & Seal Bar */}
+      <mesh position={[0, height / 2 + 0.04, 0]} castShadow>
+        <boxGeometry args={[width * 0.98, 0.08, depth * 0.9]} />
+        <meshStandardMaterial color="#9f1239" roughness={0.35} metalness={0.1} />
       </mesh>
-      {/* Straw port */}
-      <mesh position={[0.1, 0.52, 0]} castShadow>
-        <cylinderGeometry args={[0.025, 0.025, 0.14, 12]} />
-        <meshStandardMaterial color="#881337" roughness={0.4} metalness={0.15} />
-      </mesh>
-      {/* Front face color band */}
-      <mesh position={[0, 0, 0.176]} castShadow>
-        <boxGeometry args={[0.54, 0.28, 0.001]} />
-        <meshStandardMaterial color="#fda4af" roughness={0.5} metalness={0.02} />
-      </mesh>
-      {/* PIO logo area */}
-      <mesh position={[0, 0.16, 0.177]} castShadow>
-        <boxGeometry args={[0.28, 0.18, 0.001]} />
-        <meshStandardMaterial color="#ffffff" roughness={0.5} metalness={0.02} />
-      </mesh>
-      {/* Rs 10 badge */}
-      <mesh position={[-0.16, 0.36, 0.177]} castShadow>
-        <boxGeometry args={[0.14, 0.12, 0.001]} />
-        <meshStandardMaterial color="#07582f" roughness={0.4} metalness={0.06} />
-      </mesh>
-      {/* Bottom label */}
-      <mesh position={[0, -0.34, 0.177]} castShadow>
-        <boxGeometry args={[0.54, 0.18, 0.001]} />
-        <meshStandardMaterial color="#9f1239" roughness={0.5} />
+      {/* Attached Straw Detail */}
+      <mesh position={[width * 0.3, height / 2 + 0.05, 0]} rotation={[0, 0, -0.2]} castShadow>
+        <cylinderGeometry args={[0.022, 0.022, 0.16, 16]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.2} metalness={0.05} />
       </mesh>
     </group>
   );
 }
 
-// Glass water droplet
-function GlassDroplet({ position, scale = 1 }: { position: [number, number, number]; scale?: number }) {
+// ---------------------------------------------------------------------------
+// 4 BRAND-CONNECTED 3D BENEFIT ELEMENTS
+// ---------------------------------------------------------------------------
+
+// 1. ₹10 VALUE — Bold, glossy green-gold 3D medallion near lower-left of product cluster
+function GlossyRupeeMedallion({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position} rotation={[0.15, 0.3, 0]}>
+      {/* Heavy Gold/Green Outer Medallion */}
+      <mesh castShadow receiveShadow>
+        <cylinderGeometry args={[0.48, 0.48, 0.12, 48]} />
+        <meshStandardMaterial color="#f59e0b" roughness={0.1} metalness={0.85} />
+      </mesh>
+      {/* Green Inner Bezel */}
+      <mesh position={[0, 0.062, 0]}>
+        <cylinderGeometry args={[0.41, 0.41, 0.015, 48]} />
+        <meshStandardMaterial color="#07582f" roughness={0.2} metalness={0.3} />
+      </mesh>
+      {/* Outer Torus Rim */}
+      <mesh castShadow>
+        <torusGeometry args={[0.48, 0.035, 16, 48]} />
+        <meshStandardMaterial color="#fbbf24" roughness={0.08} metalness={0.9} />
+      </mesh>
+      {/* 3D ₹ symbol bar accents */}
+      <mesh position={[0, 0.075, 0]} castShadow>
+        <boxGeometry args={[0.28, 0.04, 0.02]} />
+        <meshStandardMaterial color="#fef08a" roughness={0.1} metalness={0.8} />
+      </mesh>
+      <mesh position={[0, 0.075, 0.09]} castShadow>
+        <boxGeometry args={[0.22, 0.035, 0.02]} />
+        <meshStandardMaterial color="#fef08a" roughness={0.1} metalness={0.8} />
+      </mesh>
+    </group>
+  );
+}
+
+// 2. REAL FRUIT — Mango slice near Mango pack + Peeled lychee near Lychee pack
+function MangoSliceItem({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position} rotation={[0.4, -0.3, 0.5]}>
+      {/* Realistic Mango Slice */}
+      <mesh castShadow>
+        <sphereGeometry args={[0.32, 24, 18, 0, Math.PI, 0, Math.PI * 0.7]} />
+        <meshStandardMaterial
+          color="#f59e0b"
+          roughness={0.22}
+          metalness={0.02}
+        />
+      </mesh>
+      {/* Mango Cube Accent */}
+      <mesh position={[0.2, 0.25, 0.1]} rotation={[0.2, 0.4, 0.1]} castShadow>
+        <boxGeometry args={[0.18, 0.18, 0.18]} />
+        <meshStandardMaterial color="#fbbf24" roughness={0.25} metalness={0.02} />
+      </mesh>
+    </group>
+  );
+}
+
+function LycheeFruitItem({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position} rotation={[-0.2, 0.4, 0]}>
+      {/* Peeled Translucent Lychee Flesh */}
+      <mesh castShadow>
+        <sphereGeometry args={[0.26, 24, 20]} />
+        <meshPhysicalMaterial
+          color="#ffffff"
+          roughness={0.12}
+          transmission={0.75}
+          thickness={0.65}
+          ior={1.4}
+          clearcoat={1}
+          clearcoatRoughness={0.08}
+        />
+      </mesh>
+      {/* Lychee Shell Accent */}
+      <mesh position={[-0.15, -0.15, -0.05]} castShadow>
+        <sphereGeometry args={[0.22, 20, 16, 0, Math.PI * 1.5, 0, Math.PI * 0.7]} />
+        <meshStandardMaterial color="#e11d48" roughness={0.45} />
+      </mesh>
+    </group>
+  );
+}
+
+// 3. NO ADDED PRESERVATIVES — Transparent glass shield with delicate green leaf detail
+function GlassShieldBenefit({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position} rotation={[-0.1, 0.2, 0]}>
+      {/* Physical Glass Shield */}
+      <mesh castShadow>
+        <sphereGeometry args={[0.38, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.65]} />
+        <meshPhysicalMaterial
+          color="#a7f3d0"
+          transparent
+          opacity={0.45}
+          roughness={0.06}
+          transmission={0.85}
+          thickness={0.6}
+          ior={1.45}
+          clearcoat={1}
+          clearcoatRoughness={0.05}
+        />
+      </mesh>
+      {/* Embedded Green Leaf Accent */}
+      <mesh position={[0, 0.08, 0.04]} rotation={[0.3, 0, 0.2]} castShadow>
+        <cylinderGeometry args={[0.015, 0.14, 0.32, 12]} />
+        <meshStandardMaterial color="#059669" roughness={0.25} />
+      </mesh>
+    </group>
+  );
+}
+
+// 4. REFRESHING TASTE — Crystal-clear water droplet or splash orb
+function CrystalWaterDroplet({ position, scale = 1 }: { position: [number, number, number]; scale?: number }) {
   return (
     <mesh position={position} scale={scale} castShadow>
-      <sphereGeometry args={[0.18, 32, 32]} />
+      <sphereGeometry args={[0.28, 32, 32]} />
       <meshPhysicalMaterial
-        color="#a7f3d0"
+        color="#bae6fd"
         transparent
         opacity={0.35}
         roughness={0.0}
-        metalness={0.05}
-        transmission={0.88}
-        thickness={0.6}
-        ior={1.45}
+        metalness={0.04}
+        transmission={0.94}
+        thickness={0.9}
+        ior={1.48}
         clearcoat={1}
-        clearcoatRoughness={0.05}
+        clearcoatRoughness={0.02}
       />
     </mesh>
   );
 }
 
-// ₹10 glossy golden coin/symbol
-function RupeeBadge({ position }: { position: [number, number, number] }) {
+// Subtle Floating Leaves & Particles
+function FloatingDecor() {
   return (
-    <group position={position}>
-      <mesh castShadow receiveShadow>
-        <cylinderGeometry args={[0.32, 0.32, 0.08, 48]} />
-        <meshStandardMaterial color="#fbbf24" roughness={0.05} metalness={0.9} />
-      </mesh>
-      {/* Inner ring */}
-      <mesh position={[0, 0.041, 0]}>
-        <cylinderGeometry args={[0.26, 0.26, 0.005, 48]} />
-        <meshStandardMaterial color="#d97706" roughness={0.06} metalness={0.9} />
-      </mesh>
-      {/* Rim edge */}
-      <mesh castShadow>
-        <torusGeometry args={[0.32, 0.025, 12, 48]} />
-        <meshStandardMaterial color="#92400e" roughness={0.08} metalness={0.8} />
-      </mesh>
+    <group>
+      {/* Floating green leaf 1 */}
+      <Float speed={2.0} rotationIntensity={0.2} floatIntensity={0.35}>
+        <mesh position={[-0.8, 1.45, 0.2]} rotation={[0.4, 0.3, 0.5]} castShadow>
+          <cylinderGeometry args={[0.02, 0.15, 0.34, 12]} />
+          <meshStandardMaterial color="#16a34a" roughness={0.35} />
+        </mesh>
+      </Float>
+      {/* Floating green leaf 2 */}
+      <Float speed={1.8} rotationIntensity={0.18} floatIntensity={0.3}>
+        <mesh position={[1.4, -0.9, 0.4]} rotation={[-0.3, 0.2, -0.4]} castShadow>
+          <cylinderGeometry args={[0.02, 0.14, 0.32, 12]} />
+          <meshStandardMaterial color="#059669" roughness={0.35} />
+        </mesh>
+      </Float>
+      {/* Tiny glass bubble */}
+      <Float speed={2.5} floatIntensity={0.4}>
+        <mesh position={[-1.6, -0.4, 0.6]}>
+          <sphereGeometry args={[0.08, 16, 16]} />
+          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.3} transmission={0.9} roughness={0} />
+        </mesh>
+      </Float>
+      <Float speed={2.2} floatIntensity={0.4}>
+        <mesh position={[1.8, 0.7, 0.3]}>
+          <sphereGeometry args={[0.1, 16, 16]} />
+          <meshPhysicalMaterial color="#ffffff" transparent opacity={0.3} transmission={0.9} roughness={0} />
+        </mesh>
+      </Float>
     </group>
   );
 }
 
-// Glass shield for "No Preservatives"
-function GlassShield({ position }: { position: [number, number, number] }) {
-  return (
-    <mesh position={position} castShadow>
-      <sphereGeometry args={[0.22, 16, 8, 0, Math.PI * 2, 0, Math.PI * 0.65]} />
-      <meshPhysicalMaterial
-        color="#86efac"
-        transparent
-        opacity={0.4}
-        roughness={0.08}
-        metalness={0.05}
-        transmission={0.7}
-        thickness={0.5}
-        ior={1.4}
-        clearcoat={1}
-      />
-    </mesh>
-  );
-}
-
-// Mango fruit shape (simplified stylized form)
-function MangoFruit({ position }: { position: [number, number, number] }) {
-  return (
-    <mesh position={position} rotation={[0, 0, 0.3]} castShadow>
-      <sphereGeometry args={[0.15, 16, 12]} />
-      <meshStandardMaterial color="#f59e0b" roughness={0.45} metalness={0.0} />
-    </mesh>
-  );
-}
-
-// Lychee fruit shape
-function LycheeFruit({ position }: { position: [number, number, number] }) {
-  return (
-    <mesh position={position} castShadow>
-      <sphereGeometry args={[0.13, 16, 12]} />
-      <meshStandardMaterial color="#fb7185" roughness={0.5} metalness={0.0} />
-    </mesh>
-  );
-}
-
-// Ambient floating particles
-function AmbientParticles() {
-  const count = 30;
-  const positions = useMemo(() => {
-    const arr = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      arr[i * 3] = (Math.random() - 0.5) * 8;
-      arr[i * 3 + 1] = (Math.random() - 0.5) * 6;
-      arr[i * 3 + 2] = (Math.random() - 0.5) * 5;
-    }
-    return arr;
-  }, []);
-
-  const particlesRef = useRef<THREE.Points>(null!);
-  useFrame((state) => {
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.015;
-    }
-  });
-
-  return (
-    <points ref={particlesRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
-      </bufferGeometry>
-      <pointsMaterial size={0.025} color="#86efac" transparent opacity={0.55} sizeAttenuation />
-    </points>
-  );
-}
-
-// Main 3D group reacting to mouse + scroll progress
-function SceneGroup({ scrollY }: { scrollY: React.MutableRefObject<number> }) {
+// ---------------------------------------------------------------------------
+// MASTER 3D SCENE GROUP (REACTIVE TO SCROLL & MOUSE)
+// ---------------------------------------------------------------------------
+function WhyPio3DScene({
+  scrollProgress,
+  pointer,
+}: {
+  scrollProgress: React.MutableRefObject<number>;
+  pointer: React.MutableRefObject<{ x: number; y: number }>;
+}) {
   const groupRef = useRef<THREE.Group>(null!);
-  const { viewport } = useThree();
-  const mouse = useRef({ x: 0, y: 0 });
+  const mangoPackRef = useRef<THREE.Group>(null!);
+  const lycheePackRef = useRef<THREE.Group>(null!);
+  const rupeeRef = useRef<THREE.Group>(null!);
+  const fruitsRef = useRef<THREE.Group>(null!);
+  const dropletRef = useRef<THREE.Group>(null!);
+  const shieldRef = useRef<THREE.Group>(null!);
 
-  useEffect(() => {
-    const onMouse = (e: MouseEvent) => {
-      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouse.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener('mousemove', onMouse);
-    return () => window.removeEventListener('mousemove', onMouse);
-  }, []);
-
-  useFrame((state, delta) => {
-    if (!groupRef.current) return;
-    const t = scrollY.current;
+  useFrame((state) => {
+    const p = scrollProgress.current; // 0 to 1
     const isMobile = window.innerWidth < 768;
 
-    // Scroll-driven camera push (group Z)
-    groupRef.current.position.z = THREE.MathUtils.lerp(groupRef.current.position.z, -t * 0.8, 0.04);
-    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, -1.2 + t * 1.8, 0.04);
+    // 0-20%: Products rise gently from below, camera pushes in softly
+    state.camera.position.z = THREE.MathUtils.lerp(5.4, 4.4, p);
+    state.camera.position.y = THREE.MathUtils.lerp(0.6, 0.1, p);
 
-    // Subtle mouse tilt (desktop only, max 2deg X, 3deg Y)
-    if (!isMobile) {
+    // Desktop pointer tilt: max 2deg X, 3deg Y as strictly requested
+    if (!isMobile && groupRef.current) {
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
-        mouse.current.x * (Math.PI / 60), // max 3deg
+        pointer.current.x * (Math.PI / 60), // max 3deg
         0.05
       );
       groupRef.current.rotation.x = THREE.MathUtils.lerp(
         groupRef.current.rotation.x,
-        -mouse.current.y * (Math.PI / 90), // max 2deg
+        -pointer.current.y * (Math.PI / 90), // max 2deg
         0.05
       );
+    }
+
+    // Scroll-staggered entry of benefit objects
+    // 20-40%: ₹10 enters from front-left
+    if (rupeeRef.current) {
+      const rupeeProgress = Math.min(1, Math.max(0, (p - 0.15) * 3));
+      rupeeRef.current.position.x = THREE.MathUtils.lerp(-2.6, -1.9, rupeeProgress);
+      rupeeRef.current.position.y = THREE.MathUtils.lerp(-1.2, -0.65, rupeeProgress);
+      rupeeRef.current.scale.setScalar(rupeeProgress);
+    }
+
+    // 40-60%: Mango/Lychee fruits orbit & enter
+    if (fruitsRef.current) {
+      const fruitProgress = Math.min(1, Math.max(0, (p - 0.25) * 2.8));
+      fruitsRef.current.scale.setScalar(fruitProgress);
+    }
+
+    // 60-80%: Water droplet and natural leaf/shield objects enter at different Z-depths
+    if (dropletRef.current) {
+      const dropProgress = Math.min(1, Math.max(0, (p - 0.35) * 2.6));
+      dropletRef.current.scale.setScalar(dropProgress);
+    }
+
+    if (shieldRef.current) {
+      const shieldProgress = Math.min(1, Math.max(0, (p - 0.4) * 2.5));
+      shieldRef.current.scale.setScalar(shieldProgress);
     }
   });
 
   return (
-    <group ref={groupRef} position={[0, -1.2, 0]}>
-      {/* Two PIO Cartons Center */}
-      <Float speed={1.4} rotationIntensity={0.06} floatIntensity={0.2}>
-        <MangoCarton position={[-0.72, 0, 0]} />
-      </Float>
-      <Float speed={1.6} rotationIntensity={0.06} floatIntensity={0.25} floatingRange={[0, 0.12]}>
-        <LycheeCarton position={[0.72, 0, 0]} />
-      </Float>
+    <group ref={groupRef} position={[0, 0, 0]}>
+      {/* Mango pack slightly left/front (subtle tilt toward camera) */}
+      <group ref={mangoPackRef} position={[-0.65, -0.05, 0.2]}>
+        <Float speed={1.4} rotationIntensity={0.04} floatIntensity={0.18}>
+          <RealMangoCarton position={[0, 0, 0]} rotation={[0.04, 0.16, -0.02]} />
+        </Float>
+      </group>
 
-      {/* Benefit Objects */}
-      {/* ₹10 golden coin – left */}
-      <Float speed={1.2} floatIntensity={0.3}>
-        <RupeeBadge position={[-2.2, 0.3, 0.4]} />
-      </Float>
+      {/* Lychee pack slightly right/back (subtle tilt toward camera) */}
+      <group ref={lycheePackRef} position={[0.72, 0.12, -0.25]}>
+        <Float speed={1.6} rotationIntensity={0.04} floatIntensity={0.22}>
+          <RealLycheeCarton position={[0, 0, 0]} rotation={[0.02, -0.15, 0.02]} />
+        </Float>
+      </group>
 
-      {/* Mango + Lychee fruits – orbiting top-right */}
-      <Float speed={1.8} rotationIntensity={0.15} floatIntensity={0.4}>
-        <MangoFruit position={[1.8, 0.95, 0.2]} />
-      </Float>
-      <Float speed={2.0} rotationIntensity={0.12} floatIntensity={0.35} floatingRange={[0, 0.1]}>
-        <LycheeFruit position={[2.3, 0.5, -0.3]} />
-      </Float>
-      <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.3}>
-        <LycheeFruit position={[2.0, 1.3, 0.4]} />
-      </Float>
+      {/* 1. ₹10 VALUE (Medallion near lower-left) */}
+      <group ref={rupeeRef} position={[-1.9, -0.65, 0.4]}>
+        <Float speed={1.3} floatIntensity={0.25}>
+          <GlossyRupeeMedallion position={[0, 0, 0]} />
+        </Float>
+      </group>
 
-      {/* Glass shield – No Preservatives – back right */}
-      <Float speed={1.1} floatIntensity={0.25}>
-        <GlassShield position={[2.4, -0.2, -0.6]} />
-      </Float>
+      {/* 2. REAL FRUIT (Mango slice near Mango pack, Peeled Lychee near Lychee pack) */}
+      <group ref={fruitsRef}>
+        <Float speed={1.7} floatIntensity={0.3} rotationIntensity={0.15}>
+          <MangoSliceItem position={[-1.6, 0.95, 0.2]} />
+        </Float>
+        <Float speed={1.9} floatIntensity={0.32} rotationIntensity={0.12}>
+          <LycheeFruitItem position={[1.8, 1.05, 0.1]} />
+        </Float>
+      </group>
 
-      {/* Crystal water droplet – Refreshing Taste – left-ish */}
-      <Float speed={1.7} floatIntensity={0.45}>
-        <GlassDroplet position={[-2.0, 1.1, 0.5]} scale={0.9} />
-      </Float>
-      <Float speed={2.2} floatIntensity={0.35}>
-        <GlassDroplet position={[-1.5, -0.6, 0.8]} scale={0.65} />
-      </Float>
+      {/* 3. NO ADDED PRESERVATIVES (Glass shield icon near upper-right) */}
+      <group ref={shieldRef} position={[1.9, -0.15, -0.2]}>
+        <Float speed={1.2} floatIntensity={0.22}>
+          <GlassShieldBenefit position={[0, 0, 0]} />
+        </Float>
+      </group>
 
-      {/* Ambient tiny particles */}
-      <AmbientParticles />
+      {/* 4. REFRESHING TASTE (Crystal water droplet near upper-left/center) */}
+      <group ref={dropletRef} position={[-1.4, 0.1, 0.6]}>
+        <Float speed={2.1} floatIntensity={0.35}>
+          <CrystalWaterDroplet position={[0, 0, 0]} scale={0.85} />
+        </Float>
+      </group>
 
-      {/* Contact shadow under cartons */}
-      <ContactShadows position={[0, -0.7, 0]} opacity={0.35} scale={5} blur={2.5} far={3} />
+      {/* Additional subtle floating decor (Leaves & glass bubbles) */}
+      <FloatingDecor />
+
+      {/* Soft Contact Shadows below products */}
+      <ContactShadows position={[0, -0.92, 0]} opacity={0.38} scale={5.5} blur={2.4} far={3} />
     </group>
   );
 }
 
 // ---------------------------------------------------------------------------
-// HTML TEXT LAYER (outside WebGL, overlaid via absolute positioning)
+// MAIN WHY PIO COMPONENT
 // ---------------------------------------------------------------------------
-
-const benefitItems = [
-  {
-    emoji: '₹10',
-    title: 'Just ₹10',
-    desc: 'Pocket-friendly price point for everyday school recesses and afternoon refreshment.',
-    color: 'text-amber-600',
-    bg: 'bg-amber-50 border-amber-200',
-  },
-  {
-    emoji: '🥭',
-    title: 'Made with Real Fruit',
-    desc: 'Pure fruit pulp delivering authentic taste, natural aroma, and rich fruit mouthfeel.',
-    color: 'text-emerald-700',
-    bg: 'bg-emerald-50 border-emerald-200',
-  },
-  {
-    emoji: '🛡️',
-    title: 'No Added Preservatives',
-    desc: 'Protected naturally through state-of-the-art aseptic multilayer carton processing.',
-    color: 'text-sky-700',
-    bg: 'bg-sky-50 border-sky-200',
-  },
-  {
-    emoji: '💧',
-    title: 'Refreshing Taste',
-    desc: 'Perfect balance of vibrant fruit tanginess and gentle sweetness that quenches thirst.',
-    color: 'text-rose-600',
-    bg: 'bg-rose-50 border-rose-200',
-  },
-];
-
-// ---------------------------------------------------------------------------
-// MAIN EXPORT
-// ---------------------------------------------------------------------------
-
 export function WhyPIO() {
   const sectionRef = useRef<HTMLElement>(null!);
   const headlineRef = useRef<HTMLDivElement>(null!);
   const subRef = useRef<HTMLParagraphElement>(null!);
   const ctaRef = useRef<HTMLDivElement>(null!);
-  const benefitsRef = useRef<HTMLDivElement>(null!);
-  const scrollY = useRef(0); // 0–1 normalised scroll progress
-  const prefersReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const benefitsListRef = useRef<HTMLDivElement>(null!);
+  const scrollProgress = useRef(0);
+  const pointer = useRef({ x: 0, y: 0 });
+
+  const prefersReduced =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     if (prefersReduced) return;
 
-    // Scroll progress tracker fed to the 3D scene
     ScrollTrigger.create({
       trigger: sectionRef.current,
       start: 'top 80%',
       end: 'bottom 20%',
-      onUpdate: (self) => { scrollY.current = self.progress; },
+      onUpdate: (self) => {
+        scrollProgress.current = self.progress;
+      },
     });
 
-    // GSAP text animations
+    const handlePointer = (e: MouseEvent) => {
+      pointer.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
+      pointer.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    window.addEventListener('mousemove', handlePointer);
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 70%',
+          start: 'top 75%',
           toggleActions: 'play none none reverse',
         },
       });
@@ -380,18 +440,18 @@ export function WhyPIO() {
         .fromTo(subRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.45')
         .fromTo(ctaRef.current, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.35');
 
-      // Benefit cards stagger
-      if (benefitsRef.current) {
+      if (benefitsListRef.current) {
         gsap.fromTo(
-          Array.from(benefitsRef.current.children),
-          { opacity: 0, y: 28, scale: 0.96 },
+          Array.from(benefitsListRef.current.children),
+          { opacity: 0, x: -20 },
           {
-            opacity: 1, y: 0, scale: 1,
-            duration: 0.55,
+            opacity: 1,
+            x: 0,
+            duration: 0.5,
             stagger: 0.1,
             ease: 'power2.out',
             scrollTrigger: {
-              trigger: benefitsRef.current,
+              trigger: benefitsListRef.current,
               start: 'top 80%',
               toggleActions: 'play none none reverse',
             },
@@ -400,7 +460,10 @@ export function WhyPIO() {
       }
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      window.removeEventListener('mousemove', handlePointer);
+      ctx.revert();
+    };
   }, []);
 
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -411,81 +474,110 @@ export function WhyPIO() {
       ref={sectionRef}
       className="relative overflow-hidden bg-white py-20 lg:py-28"
     >
-      {/* Soft green ambient background */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_60%_30%,rgba(7,88,47,0.06),transparent_55%),radial-gradient(ellipse_at_10%_80%,rgba(251,191,36,0.08),transparent_50%)]" />
+      {/* Soft White + Green Ambient Atmosphere with Warm Mango & Lychee Freshness */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_65%_35%,rgba(7,88,47,0.06),transparent_60%),radial-gradient(circle_at_85%_75%,rgba(244,63,94,0.05),transparent_45%),radial-gradient(circle_at_45%_80%,rgba(245,158,11,0.06),transparent_45%)]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
-        {/* Header row */}
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-12 lg:mb-16">
-          <div className="lg:max-w-lg">
-            <span className="inline-block text-xs font-black uppercase tracking-[0.25em] text-[#07582f] bg-[#eef8f1] px-4 py-1.5 rounded-full border border-emerald-200/60 mb-4">
+        
+        {/* Two-Column Split Layout */}
+        <div className="grid items-center gap-10 lg:grid-cols-12">
+          
+          {/* LEFT SIDE: Text Content & 4 Benefits List */}
+          <div className="lg:col-span-5 space-y-6">
+            <span className="inline-block text-xs font-black uppercase tracking-[0.25em] text-[#07582f] bg-[#eef8f1] px-4 py-1.5 rounded-full border border-emerald-200/60 shadow-xs">
               Why PIO?
             </span>
+
             <div ref={headlineRef}>
               <h2 className="text-3xl sm:text-5xl font-black text-[#083b20] tracking-tight leading-tight">
                 More than just<br />
                 <span className="text-[#07582f]">a drink.</span>
               </h2>
             </div>
-            <p ref={subRef} className="mt-4 text-base sm:text-lg text-[#325340] leading-relaxed font-medium max-w-md">
-              It's a refreshing experience for everyone. Born in Assam, crafted with food-grade purity, and designed to bring a big smile in every small sip.
+
+            <p ref={subRef} className="text-base sm:text-lg text-[#325340] leading-relaxed font-medium">
+              It’s a refreshing experience for everyone. Born in Assam, crafted with food-grade purity, and designed to bring a big smile in every small sip.
             </p>
-            <div ref={ctaRef} className="mt-6">
+
+            {/* 4 Minimalist Supporting Benefits List */}
+            <div ref={benefitsListRef} className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-[#f8fcf9] border border-emerald-900/10 shadow-2xs">
+                <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-amber-100 text-amber-700 font-black text-xs">
+                  ₹10
+                </div>
+                <span className="text-xs font-black text-[#083b20]">Just ₹10</span>
+              </div>
+
+              <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-[#f8fcf9] border border-emerald-900/10 shadow-2xs">
+                <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 font-black text-xs">
+                  🥭
+                </div>
+                <span className="text-xs font-black text-[#083b20]">Made with Real Fruit</span>
+              </div>
+
+              <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-[#f8fcf9] border border-emerald-900/10 shadow-2xs">
+                <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-sky-100 text-sky-800 font-black text-xs">
+                  🛡️
+                </div>
+                <span className="text-xs font-black text-[#083b20]">No Added Preservatives</span>
+              </div>
+
+              <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-[#f8fcf9] border border-emerald-900/10 shadow-2xs">
+                <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-rose-100 text-rose-700 font-black text-xs">
+                  💧
+                </div>
+                <span className="text-xs font-black text-[#083b20]">Refreshing Taste</span>
+              </div>
+            </div>
+
+            {/* CTA Button */}
+            <div ref={ctaRef} className="pt-2">
               <button
                 onClick={() => go('inside')}
-                className="group inline-flex items-center gap-2 rounded-full bg-[#07582f] hover:bg-[#0a6d3b] text-white px-6 py-3 text-xs font-black uppercase tracking-wider shadow-md transition-all duration-200 hover:-translate-y-0.5"
+                className="group inline-flex items-center gap-2.5 rounded-full bg-[#07582f] hover:bg-[#0a6d3b] text-white px-7 py-3.5 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 transition-all"
               >
-                See What's Inside
+                <span>SEE WHAT’S INSIDE</span>
                 <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
               </button>
             </div>
           </div>
 
-          {/* 3D Canvas – fills the right side */}
-          <div className="relative w-full lg:w-[55%] h-[380px] sm:h-[440px] lg:h-[520px] flex-shrink-0 rounded-3xl overflow-hidden bg-gradient-to-br from-[#f0fdf4] via-[#f8ffe8] to-[#fefce8]">
+          {/* RIGHT SIDE: Real 3D Product Showcase Canvas */}
+          <div className="lg:col-span-7 relative w-full h-[420px] sm:h-[480px] lg:h-[540px] rounded-3xl overflow-hidden bg-gradient-to-br from-[#f8fdf9] via-[#f0f9f2] to-[#ecfdf5] border border-emerald-900/10 shadow-sm flex items-center justify-center">
             {!prefersReduced ? (
-              <Canvas
-                dpr={[1, Math.min(window.devicePixelRatio, 2)]}
-                camera={{ position: [0, 0.5, 5.5], fov: 38 }}
-                gl={{ antialias: true, alpha: true }}
-                style={{ background: 'transparent' }}
+              <Suspense
+                fallback={
+                  <div className="w-full h-full flex items-center justify-center gap-6">
+                    <img src="/images/pio-mango.png" alt="PIO Mango Pack" className="h-44 object-contain drop-shadow-xl" />
+                    <img src="/images/pio-lychee.png" alt="PIO Lychee Pack" className="h-44 object-contain drop-shadow-xl" />
+                  </div>
+                }
               >
-                <ambientLight intensity={0.7} />
-                <directionalLight
-                  position={[3, 8, 5]}
-                  intensity={1.2}
-                  color="#ffffff"
-                  castShadow
-                  shadow-mapSize={[1024, 1024]}
-                />
-                <directionalLight position={[-4, 2, -2]} intensity={0.35} color="#86efac" />
-                <pointLight position={[0, 4, 3]} intensity={0.5} color="#fde68a" />
-                <Environment preset="studio" />
-                <SceneGroup scrollY={scrollY} />
-              </Canvas>
+                <Canvas
+                  dpr={[1, Math.min(window.devicePixelRatio || 1, 2)]}
+                  camera={{ position: [0, 0.3, 5.0], fov: 40 }}
+                  gl={{ antialias: true, alpha: true }}
+                  style={{ background: 'transparent' }}
+                >
+                  <ambientLight intensity={0.8} />
+                  <directionalLight position={[4, 8, 5]} intensity={1.3} color="#ffffff" castShadow />
+                  <directionalLight position={[-4, 2, -2]} intensity={0.4} color="#86efac" />
+                  <pointLight position={[-1, 2, 3]} intensity={0.45} color="#fef08a" />
+                  <pointLight position={[2, -1, 2]} intensity={0.35} color="#fecdd3" />
+                  <Environment preset="studio" />
+                  <WhyPio3DScene scrollProgress={scrollProgress} pointer={pointer} />
+                </Canvas>
+              </Suspense>
             ) : (
-              // Reduced-motion fallback: static product renders
               <div className="w-full h-full flex items-center justify-center gap-6">
-                <img src="/images/pio-mango.png" alt="PIO Mango" className="h-40 object-contain drop-shadow-2xl" />
-                <img src="/images/pio-lychee.png" alt="PIO Lychee" className="h-40 object-contain drop-shadow-2xl" />
+                <img src="/images/pio-mango.png" alt="PIO Mango" className="h-48 object-contain drop-shadow-2xl" />
+                <img src="/images/pio-lychee.png" alt="PIO Lychee" className="h-48 object-contain drop-shadow-2xl" />
               </div>
             )}
           </div>
+
         </div>
 
-        {/* Four benefit cards – HTML, outside WebGL */}
-        <div ref={benefitsRef} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {benefitItems.map((item) => (
-            <div
-              key={item.title}
-              className={`group rounded-3xl border p-5 sm:p-6 ${item.bg} backdrop-blur-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-default`}
-            >
-              <div className={`text-2xl mb-3 ${item.color} font-black`}>{item.emoji}</div>
-              <h3 className={`text-base font-black ${item.color} mb-2`}>{item.title}</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">{item.desc}</p>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
