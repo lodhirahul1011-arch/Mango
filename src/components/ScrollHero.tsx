@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Leaf, Droplets, ShieldCheck, Play } from 'lucide-react';
+import { PrismShaderBackdrop } from './PrismShaderBackdrop';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -140,9 +141,16 @@ export function ScrollHero() {
           aria-label="PIO 3D animated cans and fruit splash"
         />
 
+        <PrismShaderBackdrop
+          intensity={0.82}
+          className="z-[1] opacity-80 mix-blend-screen [mask-image:linear-gradient(90deg,transparent_0%,rgba(0,0,0,0.18)_34%,black_56%,rgba(0,0,0,0.92)_100%)]"
+        />
+
+        <div className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(circle_at_78%_42%,rgba(255,255,255,0.18),transparent_24%),linear-gradient(90deg,rgba(255,255,255,0.82)_0%,rgba(255,255,255,0.42)_34%,rgba(255,255,255,0.08)_68%,rgba(255,255,255,0.16)_100%)]" />
+
         {/* Hero Overlay: Anchored to the LEFT with comfortable breathing space */}
         <div className="relative z-10 w-full h-full flex items-center px-6 sm:px-12 lg:px-16 xl:px-24 pointer-events-none">
-          <div className="hero-text-content pointer-events-auto max-w-md lg:max-w-lg space-y-6 pt-16 sm:pt-0">
+          <div className="hero-text-content pointer-events-auto mt-16 max-w-md space-y-6 rounded-[28px] border border-white/50 bg-white/28 p-5 shadow-[0_28px_90px_rgba(7,88,47,0.12)] backdrop-blur-[2px] sm:mt-0 sm:p-6 lg:max-w-lg">
             
             {/* 1. Eyebrow */}
             <div className="text-xs sm:text-[13px] font-black uppercase tracking-[0.25em] text-[#0a4827] drop-shadow-xs">
@@ -176,7 +184,7 @@ export function ScrollHero() {
             <div className="flex items-start gap-4 sm:gap-6 pt-1">
               {/* Badge 1: Real Fruit Goodness */}
               <div className="flex flex-col items-center text-center max-w-[70px]">
-                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-xs flex items-center justify-center text-[#07582f] shadow-sm transition-transform hover:scale-105">
+              <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#07582f] shadow-sm transition-transform hover:scale-105">
                   <Leaf className="w-5 h-5 text-[#07582f]" />
                 </div>
                 <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0a2e1c] leading-tight">
@@ -186,7 +194,7 @@ export function ScrollHero() {
 
               {/* Badge 2: Refreshing Taste */}
               <div className="flex flex-col items-center text-center max-w-[70px]">
-                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-xs flex items-center justify-center text-[#07582f] shadow-sm transition-transform hover:scale-105">
+                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#07582f] shadow-sm transition-transform hover:scale-105">
                   <Droplets className="w-5 h-5 text-[#07582f]" />
                 </div>
                 <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0a2e1c] leading-tight">
@@ -196,7 +204,7 @@ export function ScrollHero() {
 
               {/* Badge 3: No Added Preservatives */}
               <div className="flex flex-col items-center text-center max-w-[70px]">
-                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-xs flex items-center justify-center text-[#07582f] shadow-sm transition-transform hover:scale-105">
+                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#07582f] shadow-sm transition-transform hover:scale-105">
                   <ShieldCheck className="w-5 h-5 text-[#07582f]" />
                 </div>
                 <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0a2e1c] leading-tight">
@@ -206,7 +214,7 @@ export function ScrollHero() {
 
               {/* Badge 4: Just ₹10 */}
               <div className="flex flex-col items-center text-center max-w-[70px]">
-                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-xs flex items-center justify-center text-[#07582f] shadow-sm font-black text-lg transition-transform hover:scale-105">
+                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#07582f] shadow-sm font-black text-lg transition-transform hover:scale-105">
                   ₹
                 </div>
                 <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0a2e1c] leading-tight">
