@@ -397,11 +397,11 @@ export function FlavorStories() {
               Picked at peak harvest, our sun-kissed Alphonso-style mangoes bring that authentic, velvety orchard thickness everyone loves. Golden mango liquid, sunlit vibrancy, and a burst of genuine fruit excitement.
             </p>
 
-            {/* Nutrition Facts Card (Per 100ml) */}
+            {/* Nutrition Facts Card (Per 160ml) */}
             <div ref={mangoNutriRef} className="rounded-3xl bg-white/95 p-4 sm:p-5 border border-amber-200/80 shadow-md shadow-amber-950/5 backdrop-blur-md max-w-md">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-black uppercase tracking-wider text-slate-800">
-                  Nutrition Facts (Per 100ml)
+                  Nutrition Facts (Per 160ml)
                 </span>
                 <span className="text-[11px] font-bold text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded-full">
                   100% Real Fruit
@@ -528,11 +528,11 @@ export function FlavorStories() {
               Crisp, sweet, and imbued with delicate floral fragrance. Lychee offers an invigorating burst of thirst-quenching coolness that revitalizes both body and spirit. Bright, chilled, and exquisitely balanced.
             </p>
 
-            {/* Nutrition Facts Card (Per 100ml) */}
+            {/* Nutrition Facts Card (Per 160ml) */}
             <div ref={lycheeNutriRef} className="rounded-3xl bg-white/95 p-4 sm:p-5 border border-rose-200/80 shadow-md shadow-rose-950/5 backdrop-blur-md max-w-md">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-black uppercase tracking-wider text-slate-800">
-                  Nutrition Facts (Per 100ml)
+                  Nutrition Facts (Per 160ml)
                 </span>
                 <span className="text-[11px] font-bold text-rose-700 bg-rose-100/80 px-2 py-0.5 rounded-full">
                   Pure Aseptic Pack

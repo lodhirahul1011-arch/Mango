@@ -145,7 +145,7 @@ export function Hero() {
                       <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-4/5 h-8 bg-emerald-950/20 rounded-full blur-md" />
                       <img 
                         src="/images/pio-mango.png" 
-                        alt="PIO Mango 100ml pack" 
+                        alt="PIO Mango 160ml pack" 
                         className="h-64 sm:h-80 md:h-96 w-auto object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-2"
                       />
                       {/* Float Badge */}
@@ -167,7 +167,7 @@ export function Hero() {
                       <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-4/5 h-8 bg-emerald-950/20 rounded-full blur-md" />
                       <img 
                         src="/images/pio-lychee.png" 
-                        alt="PIO Lychee 100ml pack" 
+                        alt="PIO Lychee 160ml pack" 
                         className="h-64 sm:h-80 md:h-96 w-auto object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-105 group-hover:rotate-2"
                       />
                       {/* Float Badge */}
@@ -202,7 +202,7 @@ export function Hero() {
                     />
                   </motion.div>
                   <div className="mt-4 p-3 bg-amber-50/90 border border-amber-200 rounded-2xl">
-                    <p className="text-sm font-extrabold text-amber-950">Tropical Mango • 50 kcal/100ml</p>
+                    <p className="text-sm font-extrabold text-amber-950">Tropical Mango • 50 kcal/160ml</p>
                     <p className="text-xs text-amber-800/80">Made with real mango pulp. Just ₹10.</p>
                   </div>
                 </motion.div>
@@ -230,7 +230,7 @@ export function Hero() {
                     />
                   </motion.div>
                   <div className="mt-4 p-3 bg-rose-50/90 border border-rose-200 rounded-2xl">
-                    <p className="text-sm font-extrabold text-rose-950">Fresh Lychee • 54 kcal/100ml</p>
+                    <p className="text-sm font-extrabold text-rose-950">Fresh Lychee • 54 kcal/160ml</p>
                     <p className="text-xs text-rose-800/80">Exotic floral sweetness. Just ₹10.</p>
                   </div>
                 </motion.div>

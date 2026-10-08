@@ -76,7 +76,6 @@ function FruitCluster({
       ref={meshRef}
       onPointerOver={() => onHover(true)}
       onPointerOut={() => onHover(false)}
-      cursor="pointer"
     >
       {/* Mango slice */}
       <mesh position={[-0.15, 0, 0]} rotation={[0.2, 0.3, 0.4]} castShadow>

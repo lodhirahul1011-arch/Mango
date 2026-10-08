@@ -18,7 +18,7 @@ function RealMangoCarton({ position, rotation }: { position: [number, number, nu
   texture.generateMipmaps = true;
   texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-  // Real 100ml tetra pack aspect ratio (width: 1.0, height: 1.45, depth: 0.52)
+  // Real 160ml tetra pack aspect ratio (width: 1.0, height: 1.45, depth: 0.52)
   const width = 1.05;
   const height = 1.52;
   const depth = 0.54;

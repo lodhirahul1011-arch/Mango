@@ -9,6 +9,7 @@ import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
 import { Flavours } from '@/components/BrandSections';
+import { CinematicJourney } from '@/components/CinematicJourney';
 
 function App() {
   useEffect(() => {
@@ -30,6 +31,9 @@ function App() {
           
           {/* Flavours Section */}
           <Flavours />
+
+          {/* Connected 3D scroll narrative */}
+          <CinematicJourney />
           
           {/* Why PIO Section */}
           {/* <WhyPIO /> */}

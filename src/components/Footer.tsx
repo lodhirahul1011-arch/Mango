@@ -46,7 +46,7 @@ export function Footer() {
             </p>
 
             <p className="max-w-sm text-sm text-[#385c45] leading-relaxed font-medium">
-              Real fruit refreshment in everyday convenient 100ml packs. Made with love in Assam by Repose Agrotech Pvt Ltd, a unit of SRD Group. Just ₹10.
+              Real fruit refreshment in everyday convenient 160ml packs. Made with love in Assam by Repose Agrotech Pvt Ltd, a unit of SRD Group. Just ₹10.
             </p>
 
             {/* Social Icons */}
