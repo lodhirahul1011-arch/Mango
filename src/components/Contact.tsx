@@ -52,10 +52,10 @@ export function Contact() {
           <span className="text-xs font-black uppercase tracking-[0.25em] text-[#0b8043] bg-[#eef8f1] px-4 py-1.5 rounded-full">
             Get in Touch
           </span>
-          <h2 className="mt-4 text-3xl sm:text-5xl font-black text-[#083b20] tracking-tight">
+          <h2 className="mt-4 font-['Space_Grotesk',sans-serif] text-[clamp(2.2rem,6vw,3.75rem)] font-black text-[#083b20] tracking-tight">
             Contact & FAQs
           </h2>
-          <p className="mt-3 text-base text-[#3b5e48]">
+          <p className="mt-3 text-sm sm:text-base text-[#3b5e48]">
             Have a question, feedback, or business enquiry? We’d love to hear from you.
           </p>
         </div>

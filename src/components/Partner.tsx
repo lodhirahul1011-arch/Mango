@@ -76,15 +76,15 @@ export function Partner() {
           <span className="text-xs font-black uppercase tracking-[0.25em] text-[#0b8043] bg-[#eef8f1] px-4 py-1.5 rounded-full">
             Grow With PIO
           </span>
-          <h2 className="mt-4 text-3xl sm:text-5xl font-black text-[#083b20] tracking-tight">
+          <h2 className="mt-4 font-['Space_Grotesk',sans-serif] text-[clamp(2.2rem,6vw,3.75rem)] font-black text-[#083b20] tracking-tight">
             Partner With Us
           </h2>
-          <p className="mt-3 text-base text-[#3b5e48]">
+          <p className="mt-3 text-sm sm:text-base text-[#3b5e48]">
             Join our fast-growing distribution and retail network across Assam, Northeast, and pan-India.
           </p>
         </motion.div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
           {PARTNER_TYPES.map((p, idx) => (
             <motion.div
               key={p.id}
@@ -92,7 +92,7 @@ export function Partner() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="rounded-3xl border border-emerald-900/10 bg-white p-7 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              className="rounded-3xl border border-emerald-900/10 bg-white p-5 sm:p-7 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
             >
               <div>
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e8f6ed] text-[#07582f]">
@@ -107,7 +107,7 @@ export function Partner() {
                   {p.title}
                 </h3>
 
-                <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {p.description}
                 </p>
 
@@ -121,12 +121,12 @@ export function Partner() {
                 </ul>
               </div>
 
-              <div className="pt-6">
+              <div className="pt-5 sm:pt-6">
                 <button
                   onClick={() => scrollToContact(p.id)}
-                  className="w-full inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#f2f8f4] hover:bg-[#07582f] text-[#07582f] hover:text-white py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200"
+                  className="w-full inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#f2f8f4] hover:bg-[#07582f] active:bg-[#054022] text-[#07582f] hover:text-white py-3 text-xs font-black uppercase tracking-wider transition-all duration-200 min-h-[44px] cursor-pointer"
                 >
-                  Enquire Now <ArrowRight className="h-3.5 w-3.5" />
+                  <span>Enquire Now</span> <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               </div>
             </motion.div>

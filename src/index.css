@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap');
+@import './styles/responsive.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  scroll-behavior: smooth;
   --header-h: 74px;
   --pio-green: #07582f;
   --pio-green-dark: #054022;

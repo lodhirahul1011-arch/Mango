@@ -31,100 +31,160 @@ export function Flavours() {
   const headlineOpacity = useTransform(scrollYProgress, [0, 0.24], [0.25, 1]);
 
   return (
-    <section ref={sectionRef} id="flavours" className="relative min-h-[210vh] overflow-visible bg-white">
-      <div className="sticky top-[74px] min-h-[calc(100vh-74px)] overflow-hidden border-y border-emerald-900/10 bg-[#fbfff8]">
+    <section ref={sectionRef} id="flavours" className="relative min-h-[150vh] md:min-h-[190vh] lg:min-h-[210vh] overflow-visible bg-white">
+      <div className="sticky top-[60px] lg:top-[74px] min-h-[calc(100svh-60px)] lg:min-h-[calc(100vh-74px)] overflow-hidden border-y border-emerald-900/10 bg-[#fbfff8]">
         <div className="pointer-events-none absolute inset-0">
           <motion.div
             style={{ scale: mangoScale }}
-            className="absolute -left-28 top-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,#ffe36c_0%,rgba(255,227,108,0.62)_34%,transparent_68%)] blur-2xl"
+            className="absolute -left-28 top-10 h-[360px] sm:h-[520px] w-[360px] sm:w-[520px] rounded-full bg-[radial-gradient(circle,#ffe36c_0%,rgba(255,227,108,0.62)_34%,transparent_68%)] blur-2xl"
           />
           <motion.div
             style={{ scale: lycheeScale }}
-            className="absolute -right-24 bottom-0 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,#ffc3d2_0%,rgba(255,195,210,0.56)_35%,transparent_70%)] blur-2xl"
+            className="absolute -right-24 bottom-0 h-[380px] sm:h-[560px] w-[380px] sm:w-[560px] rounded-full bg-[radial-gradient(circle,#ffc3d2_0%,rgba(255,195,210,0.56)_35%,transparent_70%)] blur-2xl"
           />
           <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.72)_42%,rgba(239,255,244,0.78)_100%)]" />
-          <div className="absolute left-[6%] top-[20%] h-20 w-28 rounded-[70%_30%_62%_38%] bg-[#f8c33b]/70 blur-[1px] animate-[floatSubtle_4.5s_ease-in-out_infinite]" />
-          <div className="absolute right-[11%] top-[19%] h-20 w-20 rounded-full border-[10px] border-rose-200/80 animate-[spin_18s_linear_infinite]" />
-          <div className="absolute bottom-[18%] left-[35%] h-12 w-7 rotate-45 rounded-[80%_0_80%_0] bg-[#0b8043]/70" />
-          <div className="absolute right-[35%] top-[13%] h-3 w-3 rounded-full bg-[#f97316]" />
-          <div className="absolute left-[48%] bottom-[16%] h-4 w-4 rounded-full bg-[#fb7185]" />
+          <div className="hidden sm:block absolute left-[6%] top-[20%] h-20 w-28 rounded-[70%_30%_62%_38%] bg-[#f8c33b]/70 blur-[1px] animate-[floatSubtle_4.5s_ease-in-out_infinite]" />
+          <div className="hidden sm:block absolute right-[11%] top-[19%] h-20 w-20 rounded-full border-[10px] border-rose-200/80 animate-[spin_18s_linear_infinite]" />
         </div>
 
-        <div className="relative mx-auto grid min-h-[calc(100vh-74px)] max-w-7xl items-center gap-8 px-5 py-10 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:py-14">
+        <div className="relative mx-auto grid min-h-[calc(100svh-60px)] lg:min-h-[calc(100vh-74px)] max-w-7xl items-center gap-6 sm:gap-8 px-4 sm:px-8 py-6 sm:py-10 lg:grid-cols-12 lg:gap-10 lg:py-14">
           <motion.div style={{ y: headlineY, opacity: headlineOpacity }} className="z-20 max-w-[500px] lg:col-span-5">
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white/80 px-4 py-2 text-[11px] font-black uppercase tracking-[0.28em] text-[#0b8043] shadow-[0_12px_34px_rgba(7,88,47,0.08)] backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white/80 px-3.5 py-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.25em] text-[#0b8043] shadow-[0_12px_34px_rgba(7,88,47,0.08)] backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" />
               Our Flavours
             </span>
-            <h2 className="mt-5 max-w-[470px] font-['Space_Grotesk',sans-serif] text-[clamp(3rem,4.4vw,5.35rem)] font-black uppercase leading-[0.86] tracking-normal text-[#082416]">
-              Two flavours,
-              <span className="block text-[#07582f]">one juicy stage.</span>
+            <h2 className="mt-3 sm:mt-5 max-w-[470px] font-['Space_Grotesk',sans-serif] text-[clamp(2.4rem,7vw,5.35rem)] font-black uppercase leading-[0.92] tracking-tight text-[#082416]">
+              Two flavours,<br />
+              <span className="text-[#07582f]">one juicy stage.</span>
             </h2>
-            <p className="mt-6 max-w-md text-base font-semibold leading-7 text-[#385b45] sm:text-lg">
+            <p className="mt-3 sm:mt-5 max-w-md text-sm sm:text-base font-semibold leading-relaxed text-[#385b45]">
               Mango rolls in warm and golden. Lychee answers with a bright pink splash. Scroll through the flavour switch.
             </p>
-            <div className="mt-7 flex items-center gap-3">
+            <div className="mt-4 sm:mt-6 flex items-center gap-3">
               <span className="h-2 w-16 overflow-hidden rounded-full bg-emerald-100">
                 <motion.span style={{ scaleX: scrollYProgress }} className="block h-full origin-left rounded-full bg-[#07582f]" />
               </span>
-              <span className="text-[11px] font-black uppercase tracking-[0.22em] text-[#07582f]">Scroll</span>
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.22em] text-[#07582f]">Scroll</span>
             </div>
           </motion.div>
 
-          <div className="relative z-10 min-h-[560px] lg:col-span-7 lg:min-h-[650px]">
-            <motion.article
-              style={{ y: mangoY, rotate: mangoRotate, scale: mangoScale }}
-              className="group absolute left-0 top-8 min-h-[450px] w-[88%] overflow-hidden rounded-[28px] border border-amber-300/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.97),rgba(255,236,157,0.92))] p-6 shadow-[0_34px_90px_rgba(146,64,14,0.18)] backdrop-blur sm:p-8 lg:left-[4%] lg:w-[54%] xl:w-[52%]"
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(255,255,255,0.9),transparent_24%),radial-gradient(circle_at_80%_80%,rgba(245,158,11,0.2),transparent_34%)]" />
-              <div className="relative z-10 flex min-h-[400px] flex-col justify-between">
-                <div className="max-w-[270px] sm:max-w-[300px] lg:max-w-[260px] xl:max-w-[300px]">
-                  <span className="rounded-full bg-white/70 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-[#92400e]">01 / Tropical Classic</span>
-                  <h3 className="mt-4 font-['Space_Grotesk',sans-serif] text-5xl font-black uppercase leading-none text-[#78350f] sm:text-7xl lg:text-6xl xl:text-7xl">Mango</h3>
-                  <p className="mt-3 text-lg font-black text-[#92400e]">Tropical sweetness in every sip.</p>
-                  <p className="mt-3 text-sm font-semibold leading-6 text-[#78350f]/75">Rich, sun-ripened Alphonso-style puree blended for silky, juicy perfection.</p>
-                  <div className="mt-5 flex flex-wrap gap-2 text-xs font-black text-amber-900">
-                    <span className="rounded-lg border border-amber-300/70 bg-white/70 px-2.5 py-1">160ml Pack</span>
-                    <span className="rounded-lg border border-amber-300/70 bg-white/70 px-2.5 py-1">50 kcal</span>
-                    <span className="rounded-lg border border-amber-300/70 bg-white/70 px-2.5 py-1">Real Pulp</span>
+          {/* RIGHT COLUMN: RESPONSIVE CARDS CONTAINER */}
+          <div className="relative z-10 lg:col-span-7 w-full">
+            
+            {/* DESKTOP VIEW: PARALLAX SIDE-BY-SIDE CARDS */}
+            <div className="hidden lg:block relative min-h-[650px] w-full">
+              <motion.article
+                style={{ y: mangoY, rotate: mangoRotate, scale: mangoScale }}
+                className="group absolute left-[2%] top-6 min-h-[420px] w-[52%] xl:w-[50%] overflow-hidden rounded-[28px] border border-amber-300/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.97),rgba(255,236,157,0.92))] p-6 shadow-[0_30px_80px_rgba(146,64,14,0.15)] backdrop-blur"
+              >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(255,255,255,0.9),transparent_24%),radial-gradient(circle_at_80%_80%,rgba(245,158,11,0.2),transparent_34%)]" />
+                <div className="relative z-10 flex min-h-[380px] flex-col justify-between">
+                  <div>
+                    <span className="rounded-full bg-white/70 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#92400e]">01 / Tropical Classic</span>
+                    <h3 className="mt-3 font-['Space_Grotesk',sans-serif] text-5xl font-black uppercase leading-none text-[#78350f]">Mango</h3>
+                    <p className="mt-2 text-base font-black text-[#92400e]">Tropical sweetness in every sip.</p>
+                    <p className="mt-1.5 text-xs sm:text-sm font-semibold leading-relaxed text-[#78350f]/75">Rich, sun-ripened Alphonso-style puree blended for silky, juicy perfection.</p>
+                    <div className="mt-3 flex flex-wrap gap-1.5 text-[11px] font-black text-amber-900">
+                      <span className="rounded-lg border border-amber-300/70 bg-white/70 px-2 py-0.5">160ml Pack</span>
+                      <span className="rounded-lg border border-amber-300/70 bg-white/70 px-2 py-0.5">₹10 Price</span>
+                      <span className="rounded-lg border border-amber-300/70 bg-white/70 px-2 py-0.5">Real Pulp</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-3">
+                    <button
+                      onClick={() => go('story')}
+                      className="inline-flex items-center gap-2 rounded-full bg-[#92400e] px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-md active:scale-95 transition-colors min-h-[44px] cursor-pointer"
+                    >
+                      <span>Explore Mango</span> <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 </div>
+              </motion.article>
 
-                <button
-                  onClick={() => go('mango-story')}
-                  className="relative z-20 inline-flex w-fit items-center gap-2 rounded-full bg-[#92400e] px-6 py-3 text-xs font-extrabold uppercase tracking-wider text-white shadow-[0_16px_32px_rgba(146,64,14,0.24)] transition-all hover:-translate-y-1 hover:bg-[#78350f]"
-                >
-                  Explore Mango <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-            </motion.article>
+              <motion.article
+                style={{ y: lycheeY, rotate: lycheeRotate, scale: lycheeScale }}
+                className="group absolute right-[2%] bottom-6 min-h-[420px] w-[52%] xl:w-[50%] overflow-hidden rounded-[28px] border border-rose-300/80 bg-[linear-gradient(135deg,rgba(255,247,249,0.97),rgba(255,214,226,0.92))] p-6 shadow-[0_30px_80px_rgba(157,23,77,0.15)] backdrop-blur"
+              >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_28%,rgba(255,255,255,0.92),transparent_24%),radial-gradient(circle_at_78%_80%,rgba(225,29,72,0.18),transparent_34%)]" />
+                <div className="relative z-10 flex min-h-[380px] flex-col justify-between">
+                  <div>
+                    <span className="rounded-full bg-white/70 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#9d174d]">02 / Exotic Refresh</span>
+                    <h3 className="mt-3 font-['Space_Grotesk',sans-serif] text-5xl font-black uppercase leading-none text-[#831843]">Lychee</h3>
+                    <p className="mt-2 text-base font-black text-[#9d174d]">Fruity, fresh and full of fun.</p>
+                    <p className="mt-1.5 text-xs sm:text-sm font-semibold leading-relaxed text-[#831843]/75">Delicate floral notes and crisp, thirst-quenching juicy sweetness.</p>
+                    <div className="mt-3 flex flex-wrap gap-1.5 text-[11px] font-black text-rose-900">
+                      <span className="rounded-lg border border-rose-300/70 bg-white/70 px-2 py-0.5">160ml Pack</span>
+                      <span className="rounded-lg border border-rose-300/70 bg-white/70 px-2 py-0.5">₹10 Price</span>
+                      <span className="rounded-lg border border-rose-300/70 bg-white/70 px-2 py-0.5">Floral Nectar</span>
+                    </div>
+                  </div>
 
-            <motion.article
-              style={{ y: lycheeY, rotate: lycheeRotate, scale: lycheeScale }}
-              className="group absolute bottom-8 right-0 min-h-[450px] w-[88%] overflow-hidden rounded-[28px] border border-rose-300/80 bg-[linear-gradient(135deg,rgba(255,247,249,0.97),rgba(255,214,226,0.92))] p-6 shadow-[0_34px_90px_rgba(157,23,77,0.18)] backdrop-blur sm:p-8 lg:right-[2%] lg:w-[54%] xl:w-[52%]"
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_28%,rgba(255,255,255,0.92),transparent_24%),radial-gradient(circle_at_78%_80%,rgba(225,29,72,0.18),transparent_34%)]" />
-              <div className="relative z-10 flex min-h-[400px] flex-col justify-between">
-                <div className="max-w-[270px] sm:max-w-[300px] lg:max-w-[260px] xl:max-w-[300px]">
-                  <span className="rounded-full bg-white/70 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-[#9d174d]">02 / Exotic Refresh</span>
-                  <h3 className="mt-4 font-['Space_Grotesk',sans-serif] text-5xl font-black uppercase leading-none text-[#831843] sm:text-7xl lg:text-6xl xl:text-7xl">Lychee</h3>
-                  <p className="mt-3 text-lg font-black text-[#9d174d]">Fruity, fresh and full of fun.</p>
-                  <p className="mt-3 text-sm font-semibold leading-6 text-[#831843]/75">Delicate floral notes and crisp, thirst-quenching juicy sweetness.</p>
-                  <div className="mt-5 flex flex-wrap gap-2 text-xs font-black text-rose-900">
-                    <span className="rounded-lg border border-rose-300/70 bg-white/70 px-2.5 py-1">160ml Pack</span>
-                    <span className="rounded-lg border border-rose-300/70 bg-white/70 px-2.5 py-1">54 kcal</span>
-                    <span className="rounded-lg border border-rose-300/70 bg-white/70 px-2.5 py-1">Pure Floral Taste</span>
+                  <div className="pt-3">
+                    <button
+                      onClick={() => go('story')}
+                      className="inline-flex items-center gap-2 rounded-full bg-[#9d174d] px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-md active:scale-95 transition-colors min-h-[44px] cursor-pointer"
+                    >
+                      <span>Explore Lychee</span> <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 </div>
+              </motion.article>
+            </div>
 
-                <button
-                  onClick={() => go('lychee-story')}
-                  className="relative z-20 inline-flex w-fit items-center gap-2 rounded-full bg-[#9d174d] px-6 py-3 text-xs font-extrabold uppercase tracking-wider text-white shadow-[0_16px_32px_rgba(157,23,77,0.24)] transition-all hover:-translate-y-1 hover:bg-[#831843]"
-                >
-                  Explore Lychee <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-            </motion.article>
+            {/* MOBILE & TABLET VIEW: CLEAN VERTICAL STACK OR DEDICATED CARDS (ZERO OVERLAP) */}
+            <div className="lg:hidden flex flex-col gap-5 w-full">
+              {/* Mango Card */}
+              <article className="relative w-full overflow-hidden rounded-[26px] border border-amber-300/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.98),rgba(255,236,157,0.92))] p-5 shadow-md backdrop-blur">
+                <div className="relative z-10 flex flex-col justify-between space-y-4">
+                  <div>
+                    <span className="rounded-full bg-white/80 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#92400e]">01 / Tropical Classic</span>
+                    <h3 className="mt-2 font-['Space_Grotesk',sans-serif] text-3xl sm:text-4xl font-black uppercase text-[#78350f]">Mango</h3>
+                    <p className="mt-1 text-sm font-black text-[#92400e]">Tropical sweetness in every sip.</p>
+                    <p className="mt-1 text-xs font-semibold text-[#78350f]/80 leading-relaxed">Rich, sun-ripened Alphonso-style puree blended for silky, juicy perfection.</p>
+                    <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] font-black text-amber-900">
+                      <span className="rounded-lg border border-amber-300/70 bg-white/70 px-2 py-0.5">160ml Pack</span>
+                      <span className="rounded-lg border border-amber-300/70 bg-white/70 px-2 py-0.5">₹10 Price</span>
+                      <span className="rounded-lg border border-amber-300/70 bg-white/70 px-2 py-0.5">Real Pulp</span>
+                    </div>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => go('story')}
+                      className="inline-flex items-center gap-2 rounded-full bg-[#92400e] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-xs active:scale-95 cursor-pointer min-h-[44px]"
+                    >
+                      <span>Explore Mango</span> <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              {/* Lychee Card */}
+              <article className="relative w-full overflow-hidden rounded-[26px] border border-rose-300/80 bg-[linear-gradient(135deg,rgba(255,247,249,0.98),rgba(255,214,226,0.92))] p-5 shadow-md backdrop-blur">
+                <div className="relative z-10 flex flex-col justify-between space-y-4">
+                  <div>
+                    <span className="rounded-full bg-white/80 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#9d174d]">02 / Exotic Refresh</span>
+                    <h3 className="mt-2 font-['Space_Grotesk',sans-serif] text-3xl sm:text-4xl font-black uppercase text-[#831843]">Lychee</h3>
+                    <p className="mt-1 text-sm font-black text-[#9d174d]">Fruity, fresh and full of fun.</p>
+                    <p className="mt-1 text-xs font-semibold text-[#831843]/80 leading-relaxed">Delicate floral notes and crisp, thirst-quenching juicy sweetness.</p>
+                    <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] font-black text-rose-900">
+                      <span className="rounded-lg border border-rose-300/70 bg-white/70 px-2 py-0.5">160ml Pack</span>
+                      <span className="rounded-lg border border-rose-300/70 bg-white/70 px-2 py-0.5">₹10 Price</span>
+                      <span className="rounded-lg border border-rose-300/70 bg-white/70 px-2 py-0.5">Floral Nectar</span>
+                    </div>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => go('story')}
+                      className="inline-flex items-center gap-2 rounded-full bg-[#9d174d] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-xs active:scale-95 cursor-pointer min-h-[44px]"
+                    >
+                      <span>Explore Lychee</span> <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </article>
+            </div>
+
           </div>
         </div>
       </div>

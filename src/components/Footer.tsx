@@ -53,21 +53,21 @@ export function Footer() {
             <div className="flex items-center gap-2.5 pt-2">
               <a 
                 href="#" 
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-emerald-900/15 text-[#07582f] hover:bg-[#07582f] hover:text-white transition-all shadow-2xs" 
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white border border-emerald-900/15 text-[#07582f] hover:bg-[#07582f] hover:text-white transition-all shadow-2xs active:scale-95" 
                 aria-label="Instagram"
               >
                 <Instagram className="h-4 w-4" />
               </a>
               <a 
                 href="#" 
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-emerald-900/15 text-[#07582f] hover:bg-[#07582f] hover:text-white transition-all shadow-2xs" 
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white border border-emerald-900/15 text-[#07582f] hover:bg-[#07582f] hover:text-white transition-all shadow-2xs active:scale-95" 
                 aria-label="Facebook"
               >
                 <Facebook className="h-4 w-4" />
               </a>
               <a 
                 href="#" 
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-emerald-900/15 text-[#07582f] hover:bg-[#07582f] hover:text-white transition-all shadow-2xs" 
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white border border-emerald-900/15 text-[#07582f] hover:bg-[#07582f] hover:text-white transition-all shadow-2xs active:scale-95" 
                 aria-label="YouTube"
               >
                 <Youtube className="h-4 w-4" />

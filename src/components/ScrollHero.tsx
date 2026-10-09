@@ -23,8 +23,27 @@ export function ScrollHero() {
     if (!section || !canvas || !ctx) return;
 
     const draw = (index: number) => {
-      const img = imagesRef.current[index];
-      if (!img || !loadedRef.current.has(index)) return;
+      // Find nearest loaded frame if current frame is still downloading
+      let targetIndex = index;
+      if (!loadedRef.current.has(targetIndex)) {
+        let nearest = -1;
+        let minDiff = Infinity;
+        for (const loadedIdx of loadedRef.current) {
+          const diff = Math.abs(loadedIdx - index);
+          if (diff < minDiff) {
+            minDiff = diff;
+            nearest = loadedIdx;
+          }
+        }
+        if (nearest !== -1) {
+          targetIndex = nearest;
+        } else {
+          return;
+        }
+      }
+
+      const img = imagesRef.current[targetIndex];
+      if (!img) return;
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         const scale = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
@@ -34,7 +53,6 @@ export function ScrollHero() {
         const y = (canvas.height - h) / 2;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
         ctx.drawImage(img, x, y, w, h);
       });
     };
@@ -53,14 +71,16 @@ export function ScrollHero() {
     };
 
     const preload = (center: number) => {
-      const radius = window.innerWidth < 768 ? 12 : 24;
+      const isMobile = window.innerWidth < 768;
+      const radius = isMobile ? 14 : 28;
       for (let i = Math.max(0, center - radius); i <= Math.min(FRAME_COUNT - 1, center + radius); i++) {
         load(i);
       }
     };
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const isMobile = window.innerWidth < 768;
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.35 : 1.75);
       canvas.width = Math.round(window.innerWidth * dpr);
       canvas.height = Math.round(window.innerHeight * dpr);
       canvas.style.width = `${window.innerWidth}px`;
@@ -70,13 +90,14 @@ export function ScrollHero() {
 
     // Preload key frames immediately
     load(0, true);
-    [10, 25, 50, 75, 100, 130, 160, 190, 220, 239].forEach((i) => load(i));
+    [5, 15, 30, 50, 75, 100, 130, 160, 190, 220, 239].forEach((i) => load(i));
     preload(0);
     resize();
 
     const mm = gsap.matchMedia();
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      // 1. Frame scrub on scroll
+
+    // 1. Desktop & Tablet Configuration (>= 768px)
+    mm.add('(min-width: 768px)', () => {
       ScrollTrigger.create({
         trigger: section,
         start: 'top top',
@@ -90,9 +111,8 @@ export function ScrollHero() {
         },
       });
 
-      // 2. Smoothly fade left-side hero text on scroll down & restore on scroll up
       gsap.fromTo(
-        '.hero-left-box',
+        '.hero-desktop-box',
         { y: 0, opacity: 1 },
         {
           y: -30,
@@ -104,20 +124,65 @@ export function ScrollHero() {
             end: '18% top',
             scrub: 0.25,
             onLeaveBack: () => {
-              gsap.to('.hero-left-box', { opacity: 1, y: 0, duration: 0.25, overwrite: 'auto' });
+              gsap.to('.hero-desktop-box', { opacity: 1, y: 0, duration: 0.25, overwrite: 'auto' });
             },
             onEnterBack: () => {
-              gsap.to('.hero-left-box', { opacity: 1, y: 0, duration: 0.25, overwrite: 'auto' });
+              gsap.to('.hero-desktop-box', { opacity: 1, y: 0, duration: 0.25, overwrite: 'auto' });
             },
           },
         }
       );
-
-      return () => ScrollTrigger.getAll().forEach((t) => t.kill());
     });
+
+    // 2. Mobile Configuration (< 768px)
+    mm.add('(max-width: 767px)', () => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.2,
+        onUpdate: ({ progress }) => {
+          const frame = Math.round(progress * (FRAME_COUNT - 1));
+          frameRef.current = frame;
+          preload(frame);
+          draw(frame);
+        },
+      });
+
+      // Fade mobile top header as user scrubs through 3D sequence
+      gsap.to('.hero-mobile-header', {
+        opacity: 0,
+        y: -15,
+        ease: 'power1.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '25% top',
+          scrub: 0.2,
+        },
+      });
+
+      // Fade mobile bottom controls as user scrubs
+      gsap.to('.hero-mobile-bottom', {
+        opacity: 0,
+        y: 15,
+        ease: 'power1.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '25% top',
+          scrub: 0.2,
+        },
+      });
+    });
+
+    const refreshTimeout = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 120);
 
     window.addEventListener('resize', resize);
     return () => {
+      clearTimeout(refreshTimeout);
       window.removeEventListener('resize', resize);
       mm.revert();
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -127,9 +192,13 @@ export function ScrollHero() {
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <section ref={sectionRef} id="home" className="relative h-[320vh]">
+    <section 
+      ref={sectionRef} 
+      id="home" 
+      className="relative h-[160svh] sm:h-[220vh] lg:h-[300vh] w-full"
+    >
       <div 
-        className="sticky top-0 h-screen w-full overflow-hidden bg-cover bg-center"
+        className="sticky top-0 h-[100svh] min-h-[100svh] w-full overflow-hidden bg-cover bg-center"
         style={{ backgroundImage: `url(${frameSrc(0)})` }}
       >
         {/* Fullscreen 3D Canvas with enhanced saturation & crisp contrast */}
@@ -145,11 +214,11 @@ export function ScrollHero() {
         {/* Subtle cinematic vignette that makes center cartons pop with depth */}
         <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(6,46,25,0.12)_100%)]" />
 
-        {/* ----------------------------------------------------
-            TEXT FIXED ON LEFT SIDE WITH ZERO OVERLAP ON CARTONS
-        ---------------------------------------------------- */}
-        <div className="relative z-10 w-full h-full flex items-center px-5 sm:px-10 lg:px-14 xl:px-20 pointer-events-none">
-          <div className="hero-left-box pointer-events-auto mt-14 sm:mt-8 max-w-sm sm:max-w-md lg:max-w-[440px] xl:max-w-[480px] space-y-5 rounded-[32px] border border-white/70 bg-white/78 p-6 sm:p-7 shadow-[0_24px_70px_rgba(7,88,47,0.15)] backdrop-blur-md">
+        {/* ====================================================
+            DESKTOP & TABLET LAYOUT (>= 768px): PRESERVED EXACTLY
+        ==================================================== */}
+        <div className="hidden md:flex relative z-10 w-full h-full items-center px-6 sm:px-10 lg:px-14 xl:px-20 pointer-events-none">
+          <div className="hero-desktop-box pointer-events-auto mt-14 sm:mt-8 max-w-sm sm:max-w-md lg:max-w-[440px] xl:max-w-[480px] space-y-5 rounded-[32px] border border-white/70 bg-white/78 p-6 sm:p-7 shadow-[0_24px_70px_rgba(7,88,47,0.15)] backdrop-blur-md">
             
             {/* 1. Eyebrow Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-900/15 text-[#07582f] text-[11px] font-black uppercase tracking-[0.2em] shadow-2xs">
@@ -222,7 +291,7 @@ export function ScrollHero() {
               <div className="flex flex-wrap items-center gap-2.5">
                 <button
                   onClick={() => go('flavours')}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#07582f] hover:bg-[#096d3a] active:scale-95 text-white px-6 py-2.5 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 transition-all"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#07582f] hover:bg-[#096d3a] active:scale-95 text-white px-6 py-2.5 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 transition-all cursor-pointer min-h-[44px]"
                 >
                   <span>Explore Flavours</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -230,7 +299,7 @@ export function ScrollHero() {
 
                 <button
                   onClick={() => go('story')}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white hover:bg-emerald-50 text-[#07582f] border border-emerald-900/20 px-5 py-2.5 text-xs font-black uppercase tracking-wider shadow-2xs hover:-translate-y-0.5 transition-all"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-white hover:bg-emerald-50 text-[#07582f] border border-emerald-900/20 px-5 py-2.5 text-xs font-black uppercase tracking-wider shadow-2xs hover:-translate-y-0.5 transition-all cursor-pointer min-h-[44px]"
                 >
                   <Play className="w-3 h-3 fill-[#07582f]" />
                   <span>Our Story</span>
@@ -250,8 +319,91 @@ export function ScrollHero() {
           </div>
         </div>
 
-        {/* Bottom Center: Scroll To Animate 3D Cue */}
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none z-20 opacity-90">
+        {/* ====================================================
+            DEDICATED MOBILE COMPOSITION (< 768px): PERFECT VIEWPORT FIT
+            Order: Eyebrow -> Heading -> Supporting Text -> Products (visible) -> Buttons -> Scroll Cue
+        ==================================================== */}
+        <div className="md:hidden relative z-10 w-full h-full flex flex-col justify-between px-4 pt-20 pb-5 pointer-events-none">
+          
+          {/* 1. Mobile Top Card: Clean, unclipped typography */}
+          <div className="hero-mobile-header pointer-events-auto rounded-3xl bg-white/85 backdrop-blur-md p-4 sm:p-5 border border-white/70 shadow-lg space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-900/15 text-[#07582f] text-[10px] font-black uppercase tracking-widest shadow-2xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
+              <span>BORN IN ASSAM &bull; ₹10 PACK</span>
+            </div>
+
+            <div className="flex items-baseline gap-2">
+              <span className="font-['Caveat',cursive] text-4xl font-black text-[#074c2a] leading-none">
+                Har Sip
+              </span>
+              <span className="font-['Space_Grotesk',sans-serif] text-4xl font-black text-[#074c2a] tracking-tight leading-none">
+                PIO!
+              </span>
+              <Leaf className="w-5 h-5 text-[#16a34a] fill-[#16a34a] inline-block" />
+            </div>
+
+            <p className="text-xs text-[#264b34] font-semibold leading-relaxed max-w-[320px]">
+              Small Sip. Big Refreshment. Real fruit puree sealed in 160ml packs at ₹10.
+            </p>
+          </div>
+
+          {/* Center Product Area: Canvas frames render cans fully visible in the center */}
+          <div className="flex-1 min-h-[40px] pointer-events-none" />
+
+          {/* 2. Mobile Bottom Controls: Large touch targets & Quick Flavors */}
+          <div className="hero-mobile-bottom pointer-events-auto space-y-2.5">
+            
+            {/* Quick 4 Feature Pills */}
+            <div className="grid grid-cols-4 gap-1.5 bg-white/88 backdrop-blur-md rounded-2xl p-2 border border-white/80 shadow-sm text-center">
+              <div>
+                <span className="text-[10px] font-black text-[#07582f] block">🥭 Real</span>
+                <span className="text-[8px] font-bold text-slate-500">Fruit</span>
+              </div>
+              <div>
+                <span className="text-[10px] font-black text-[#07582f] block">💧 Chilled</span>
+                <span className="text-[8px] font-bold text-slate-500">Sip</span>
+              </div>
+              <div>
+                <span className="text-[10px] font-black text-[#07582f] block">🛡️ Zero</span>
+                <span className="text-[8px] font-bold text-slate-500">Chemical</span>
+              </div>
+              <div>
+                <span className="text-[10px] font-black text-amber-600 block">₹10</span>
+                <span className="text-[8px] font-bold text-slate-500">Pocket</span>
+              </div>
+            </div>
+
+            {/* Mobile CTAs: Stacked with >= 48px touch height */}
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => go('flavours')}
+                className="w-full inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#07582f] active:bg-[#054022] text-white py-3.5 px-3 text-xs font-black uppercase tracking-wider shadow-md min-h-[48px] cursor-pointer"
+              >
+                <span>Flavours</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={() => go('story')}
+                className="w-full inline-flex items-center justify-center gap-1.5 rounded-2xl bg-white/95 active:bg-emerald-50 text-[#07582f] border border-emerald-900/15 py-3.5 px-3 text-xs font-black uppercase tracking-wider shadow-xs min-h-[48px] cursor-pointer"
+              >
+                <Play className="w-3 h-3 fill-[#07582f]" />
+                <span>Our Story</span>
+              </button>
+            </div>
+
+            {/* Subtle mobile scroll prompt */}
+            <div className="text-center pt-1">
+              <span className="inline-block text-[10px] font-black uppercase tracking-widest text-[#07582f] bg-white/90 px-3 py-0.5 rounded-full border border-emerald-900/10 shadow-2xs">
+                ↓ Scroll to Explore 3D Cans
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Desktop Bottom Center: Scroll Cue */}
+        <div className="hidden md:flex absolute bottom-5 left-1/2 -translate-x-1/2 flex-col items-center gap-1 pointer-events-none z-20 opacity-90">
           <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/95 px-3 py-1 rounded-full border border-emerald-900/15 shadow-xs">
             Scroll To Animate 3D
           </span>

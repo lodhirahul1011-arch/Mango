@@ -1,12 +1,18 @@
-import React, { useRef, useEffect, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Text, ContactShadows, Environment } from '@react-three/drei';
-import * as THREE from 'three';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, Building2, Award } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Building2, 
+  Award, 
+  ArrowRight, 
+  Sparkles, 
+  Play, 
+  Pause, 
+  RotateCcw, 
+  Clock, 
+  ShieldCheck, 
+  CheckCircle2, 
+  Flame 
+} from 'lucide-react';
 
 const STORY_SEQUENCE_PATH = '/pio_website_jpg_sequence_24fps/pio_website_jpg_sequence';
 const STORY_SEQUENCE_FRAME_COUNT = 121;
@@ -15,452 +21,404 @@ function getStoryFrameSrc(frame: number) {
   return `${STORY_SEQUENCE_PATH}/frame_${String(frame).padStart(4, '0')}.jpg`;
 }
 
-// ---------------------------------------------------------------------------
-// 3D HERITAGE SCENE (1931 Mangaldai Tea Stall -> Modern PIO)
-// ---------------------------------------------------------------------------
-
-// Historical Tea Kettle & Stall Environment
-function HeritageTeaStall({ opacity }: { opacity: number }) {
-  return (
-    <group position={[0, -0.4, 0]}>
-      {/* Wooden stall bench / counter */}
-      <mesh position={[0, -0.4, 0]} receiveShadow>
-        <boxGeometry args={[3.2, 0.25, 1.4]} />
-        <meshStandardMaterial
-          color="#5c3a21"
-          roughness={0.8}
-          transparent
-          opacity={opacity}
-        />
-      </mesh>
-
-      {/* Brass Tea Kettle */}
-      <group position={[-0.6, 0.1, 0]}>
-        {/* Kettle body */}
-        <mesh castShadow>
-          <sphereGeometry args={[0.35, 24, 20]} />
-          <meshStandardMaterial
-            color="#d4af37"
-            roughness={0.25}
-            metalness={0.85}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-        {/* Kettle lid */}
-        <mesh position={[0, 0.35, 0]}>
-          <cylinderGeometry args={[0.16, 0.2, 0.08, 20]} />
-          <meshStandardMaterial
-            color="#b8860b"
-            roughness={0.3}
-            metalness={0.8}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-        {/* Spout */}
-        <mesh position={[0.3, 0.1, 0]} rotation={[0, 0, -0.5]}>
-          <cylinderGeometry args={[0.04, 0.08, 0.4, 16]} />
-          <meshStandardMaterial
-            color="#d4af37"
-            roughness={0.25}
-            metalness={0.85}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-      </group>
-
-      {/* Traditional clay / brass tea cups */}
-      <mesh position={[0.5, -0.15, 0.2]} castShadow>
-        <cylinderGeometry args={[0.09, 0.06, 0.22, 16]} />
-        <meshStandardMaterial
-          color="#a0522d"
-          roughness={0.7}
-          transparent
-          opacity={opacity}
-        />
-      </mesh>
-      <mesh position={[0.8, -0.15, 0.1]} castShadow>
-        <cylinderGeometry args={[0.09, 0.06, 0.22, 16]} />
-        <meshStandardMaterial
-          color="#a0522d"
-          roughness={0.7}
-          transparent
-          opacity={opacity}
-        />
-      </mesh>
-    </group>
-  );
+interface Era {
+  id: string;
+  year: string;
+  tag: string;
+  title: string;
+  frameTarget: number;
+  description: string;
+  statLabel: string;
+  statValue: string;
+  accent: string;
 }
 
-// Rising Steam Particles from Kettle
-function RisingSteam({ opacity }: { opacity: number }) {
-  const count = 35;
-  const particlesRef = useRef<THREE.Points>(null!);
+const ERAS: Era[] = [
+  {
+    id: '1931',
+    year: '1931',
+    tag: 'Origins in Assam',
+    title: 'The Mangaldai Tea Hearth',
+    frameTarget: 1,
+    description:
+      'Ninety-three years ago, in the small town of Mangaldai, Assam, a humble roadside tea stall began serving commuters with authentic warmth and uncompromised purity.',
+    statLabel: 'Hearth Foundation',
+    statValue: '1931 Assam',
+    accent: '#f59e0b',
+  },
+  {
+    id: '1985',
+    year: '1980s – 2000s',
+    tag: 'Industrial Craft',
+    title: 'The Repose Food Legacy',
+    frameTarget: 60,
+    description:
+      'The tea stall evolved into Repose Agrotech and the venerable SRD Group — becoming the Northeast’s gold standard for confectionery, baking, and community nutrition.',
+    statLabel: 'Food-Grade Trust',
+    statValue: '90+ Years',
+    accent: '#d97706',
+  },
+  {
+    id: 'today',
+    year: 'Today',
+    tag: 'Modern Aseptic Era',
+    title: 'Har Sip PIO! ₹10 Beverage',
+    frameTarget: 121,
+    description:
+      'From tea roots to state-of-the-art aseptic beverage packaging. Real Alphonso mango and floral lychee delivered in sterile 6-layer cartons across 15,000+ retail points.',
+    statLabel: 'Aseptic Purity',
+    statValue: '100% Sterile',
+    accent: '#10b981',
+  },
+];
 
-  const positions = useMemo(() => {
-    const arr = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      arr[i * 3] = -0.6 + (Math.random() - 0.5) * 0.25;
-      arr[i * 3 + 1] = 0.3 + Math.random() * 1.5;
-      arr[i * 3 + 2] = (Math.random() - 0.5) * 0.25;
-    }
-    return arr;
-  }, []);
-
-  useFrame((_, delta) => {
-    if (!particlesRef.current) return;
-    const pos = particlesRef.current.geometry.attributes.position.array as Float32Array;
-    for (let i = 0; i < count; i++) {
-      pos[i * 3 + 1] += delta * 0.4;
-      if (pos[i * 3 + 1] > 2.0) {
-        pos[i * 3 + 1] = 0.3;
-      }
-    }
-    particlesRef.current.geometry.attributes.position.needsUpdate = true;
-  });
-
-  return (
-    <points ref={particlesRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.06}
-        color="#fef3c7"
-        transparent
-        opacity={opacity * 0.45}
-        sizeAttenuation
-      />
-    </points>
-  );
-}
-
-// Modern PIO Products (Emerge as heritage morphs into modern)
-function ModernPioProducts({ opacity }: { opacity: number }) {
-  return (
-    <group position={[0, 0, 0]}>
-      {/* Mango Carton */}
-      <Float speed={1.5} rotationIntensity={0.05} floatIntensity={0.25}>
-        <group position={[-0.55, 0, 0]} rotation={[0, -0.18, 0]}>
-          <mesh castShadow receiveShadow>
-            <boxGeometry args={[0.55, 0.98, 0.35]} />
-            <meshStandardMaterial
-              color="#f59e0b"
-              roughness={0.2}
-              metalness={0.06}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
-          <mesh position={[0, 0.51, 0]}>
-            <boxGeometry args={[0.55, 0.06, 0.35]} />
-            <meshStandardMaterial color="#d97706" transparent opacity={opacity} />
-          </mesh>
-          {/* Label area */}
-          <mesh position={[0, 0, 0.176]}>
-            <boxGeometry args={[0.52, 0.28, 0.001]} />
-            <meshStandardMaterial color="#fef3c7" transparent opacity={opacity} />
-          </mesh>
-        </group>
-      </Float>
-
-      {/* Lychee Carton */}
-      <Float speed={1.7} rotationIntensity={0.05} floatIntensity={0.28}>
-        <group position={[0.55, 0, 0]} rotation={[0, 0.18, 0]}>
-          <mesh castShadow receiveShadow>
-            <boxGeometry args={[0.55, 0.98, 0.35]} />
-            <meshStandardMaterial
-              color="#f43f5e"
-              roughness={0.2}
-              metalness={0.06}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
-          <mesh position={[0, 0.51, 0]}>
-            <boxGeometry args={[0.55, 0.06, 0.35]} />
-            <meshStandardMaterial color="#e11d48" transparent opacity={opacity} />
-          </mesh>
-          {/* Label area */}
-          <mesh position={[0, 0, 0.176]}>
-            <boxGeometry args={[0.52, 0.28, 0.001]} />
-            <meshStandardMaterial color="#ffe4e6" transparent opacity={opacity} />
-          </mesh>
-        </group>
-      </Float>
-
-      {/* Modern Fresh Floating Leaves */}
-      <Float speed={2.0} rotationIntensity={0.15} floatIntensity={0.35}>
-        <mesh position={[1.4, 0.6, 0.2]} castShadow>
-          <cylinderGeometry args={[0.02, 0.16, 0.35, 12]} />
-          <meshStandardMaterial color="#16a34a" transparent opacity={opacity} />
-        </mesh>
-      </Float>
-      <Float speed={1.8} rotationIntensity={0.12} floatIntensity={0.3}>
-        <mesh position={[-1.3, -0.4, 0.3]} castShadow>
-          <cylinderGeometry args={[0.02, 0.14, 0.32, 12]} />
-          <meshStandardMaterial color="#22c55e" transparent opacity={opacity} />
-        </mesh>
-      </Float>
-    </group>
-  );
-}
-
-// Liquid Ribbon connecting Heritage to Modern
-function LiquidRibbon({ progress }: { progress: number }) {
-  const curve = useMemo(() => {
-    return new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.6, 0.35, 0),
-      new THREE.Vector3(-0.2, 0.8, 0.4),
-      new THREE.Vector3(0.2, 0.5, 0.8),
-      new THREE.Vector3(0.0, 0.1, 1.2),
-      new THREE.Vector3(0.4, -0.1, 1.6),
-    ]);
-  }, []);
-
-  const tubeGeo = useMemo(() => {
-    return new THREE.TubeGeometry(curve, 64, 0.06, 12, false);
-  }, [curve]);
-
-  // Color transforms from warm amber/tea gold to PIO green
-  const ribbonColor = progress > 0.5 ? '#16a34a' : '#d97706';
-  const ribbonOpacity = Math.sin(progress * Math.PI) * 0.85;
-
-  return (
-    <mesh geometry={tubeGeo}>
-      <meshPhysicalMaterial
-        color={ribbonColor}
-        transparent
-        opacity={Math.max(0, ribbonOpacity)}
-        roughness={0.1}
-        transmission={0.7}
-        thickness={0.5}
-        ior={1.4}
-      />
-    </mesh>
-  );
-}
-
-// Master Scene combining both eras based on scroll progress
-function StoryScene({ scrollProgress }: { scrollProgress: React.MutableRefObject<number> }) {
-  const [prog, setProg] = React.useState(0);
-
-  useFrame((state) => {
-    const p = scrollProgress.current;
-    setProg(p);
-
-    // Camera travels forward through time
-    state.camera.position.z = THREE.MathUtils.lerp(5.8, 4.2, p);
-    state.camera.position.y = THREE.MathUtils.lerp(0.8, 0.2, p);
-    state.camera.lookAt(0, 0, 0);
-  });
-
-  // Era transition: 0 to 0.55 is 1931 Tea Stall; 0.45 to 1.0 is Modern PIO
-  const heritageOpacity = Math.max(0, 1 - prog * 1.8);
-  const modernOpacity = Math.min(1, Math.max(0, (prog - 0.45) * 2.2));
-
-  return (
-    <group>
-      {/* 1931 Heritage typography floating deep in environment */}
-      <Text
-        position={[0, 1.5, -1.8]}
-        fontSize={1.4}
-        color="#78350f"
-        font="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
-        fillOpacity={Math.max(0, 0.4 - prog * 0.8)}
-      >
-        1931
-      </Text>
-
-      {/* Era 1: 1931 Heritage Stall & Kettle */}
-      {heritageOpacity > 0.01 && (
-        <>
-          <HeritageTeaStall opacity={heritageOpacity} />
-          <RisingSteam opacity={heritageOpacity} />
-        </>
-      )}
-
-      {/* Liquid Ribbon connecting eras */}
-      <LiquidRibbon progress={prog} />
-
-      {/* Era 2: Modern PIO Products */}
-      {modernOpacity > 0.01 && (
-        <ModernPioProducts opacity={modernOpacity} />
-      )}
-
-      {/* Ground contact shadow */}
-      <ContactShadows position={[0, -0.65, 0]} opacity={0.3} scale={5} blur={2.2} far={2.5} />
-    </group>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// MAIN OUR STORY COMPONENT
-// ---------------------------------------------------------------------------
 export function OurStory() {
-  const sectionRef = useRef<HTMLElement>(null!);
-  const scrollProgress = useRef(0);
-  const textColRef = useRef<HTMLDivElement>(null!);
-  const [sequenceFrame, setSequenceFrame] = React.useState(1);
+  const [currentFrame, setCurrentFrame] = useState(1);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [activeEraIndex, setActiveEraIndex] = useState(0);
+  const playTimerRef = useRef<number | null>(null);
 
-  const prefersReduced =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Staged preload: Only fetch key milestone frames on initial load
+  useEffect(() => {
+    const keyFrames = [1, 30, 60, 90, 121];
+    keyFrames.forEach((i) => {
+      const img = new Image();
+      img.src = getStoryFrameSrc(i);
+    });
+  }, []);
+
+  // Frame Player Loop
+  const stopPlayback = useCallback(() => {
+    if (playTimerRef.current) {
+      window.clearInterval(playTimerRef.current);
+      playTimerRef.current = null;
+    }
+    setIsPlaying(false);
+  }, []);
+
+  const startPlayback = useCallback(() => {
+    stopPlayback();
+    setIsPlaying(true);
+    playTimerRef.current = window.setInterval(() => {
+      setCurrentFrame((prev) => {
+        if (prev >= STORY_SEQUENCE_FRAME_COUNT) {
+          stopPlayback();
+          return 1;
+        }
+        const next = prev + 1;
+        // Sync active era based on frame
+        if (next < 45) setActiveEraIndex(0);
+        else if (next < 85) setActiveEraIndex(1);
+        else setActiveEraIndex(2);
+        return next;
+      });
+    }, 45); // ~22fps smooth cinematic playback
+  }, [stopPlayback]);
 
   useEffect(() => {
-    if (prefersReduced || !sectionRef.current) return;
-
-    const sequenceImages = Array.from({ length: STORY_SEQUENCE_FRAME_COUNT }, (_, index) => {
-      const image = new Image();
-      image.src = getStoryFrameSrc(index + 1);
-      return image;
-    });
-
-    const sequenceTrigger = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: 'top 80%',
-      end: 'bottom 20%',
-      onUpdate: (self) => {
-        scrollProgress.current = self.progress;
-        const nextFrame = Math.min(
-          STORY_SEQUENCE_FRAME_COUNT,
-          Math.max(1, Math.round(self.progress * (STORY_SEQUENCE_FRAME_COUNT - 1)) + 1)
-        );
-        setSequenceFrame((current) => (current === nextFrame ? current : nextFrame));
-      },
-    });
-
-    const ctx = gsap.context(() => {
-      if (textColRef.current) {
-        gsap.fromTo(
-          textColRef.current.children,
-          { opacity: 0, y: 28 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.65,
-            stagger: 0.12,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: textColRef.current,
-              start: 'top 75%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      }
-    }, sectionRef);
-
     return () => {
-      sequenceTrigger.kill();
-      sequenceImages.length = 0;
-      ctx.revert();
+      if (playTimerRef.current) {
+        clearInterval(playTimerRef.current);
+      }
     };
   }, []);
 
-  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const selectEra = (index: number) => {
+    stopPlayback();
+    setActiveEraIndex(index);
+    const target = ERAS[index].frameTarget;
+    setCurrentFrame(target);
+  };
+
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    stopPlayback();
+    const val = parseInt(e.target.value, 10);
+    setCurrentFrame(val);
+    if (val < 45) setActiveEraIndex(0);
+    else if (val < 85) setActiveEraIndex(1);
+    else setActiveEraIndex(2);
+  };
+
+  const activeEra = ERAS[activeEraIndex];
+  const progressPercent = ((currentFrame - 1) / (STORY_SEQUENCE_FRAME_COUNT - 1)) * 100;
+
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <section
-      id="story"
-      ref={sectionRef}
-      className="relative py-16 lg:py-24 bg-[#f7f4ea] border-t border-emerald-900/10 overflow-hidden"
+    <section 
+      id="story" 
+      className="relative py-14 sm:py-20 lg:py-24 bg-gradient-to-b from-[#03150c] via-[#051f12] to-[#020e07] text-white border-t border-amber-500/15 overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-0">
-        <img
-          src={getStoryFrameSrc(sequenceFrame)}
-          alt=""
-          aria-hidden="true"
-          className="h-full w-full object-cover opacity-80 saturate-125 contrast-105"
-        />
-        <div className="absolute inset-0 bg-[#fff8ed]/25" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.78)_36%,rgba(255,255,255,0.28)_70%,rgba(255,255,255,0.56)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_34%,rgba(255,255,255,0.86),transparent_34%),radial-gradient(circle_at_78%_30%,rgba(255,241,214,0.34),transparent_34%)]" />
-      </div>
+      {/* Ambient Luxury Atmospheric Light Rays */}
+      <div className="pointer-events-none absolute -top-32 left-1/3 h-96 w-96 rounded-full bg-amber-500/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-32 right-1/4 h-96 w-96 rounded-full bg-emerald-500/10 blur-[120px]" />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_40%,rgba(217,119,6,0.08),transparent_60%),radial-gradient(circle_at_20%_80%,rgba(7,88,47,0.09),transparent_50%)]" />
+      {/* Subtle Archival Texture Grid */}
+      <div 
+        className="pointer-events-none absolute inset-0 opacity-[0.035]"
+        style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #f59e0b 1px, transparent 0)`,
+          backgroundSize: '28px 28px',
+        }}
+      />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-12">
-          <div ref={textColRef} className="lg:col-span-6 space-y-6 rounded-[30px] border border-white/80 bg-white/62 p-5 shadow-[0_30px_90px_rgba(7,88,47,0.16)] backdrop-blur-md sm:p-7 lg:p-8">
-            <span className="inline-block text-xs font-black uppercase tracking-[0.28em] text-[#064b29] bg-[#ecfff4] px-5 py-2 rounded-full border border-emerald-300/70 shadow-[0_10px_28px_rgba(7,88,47,0.08)]">
-              Our Story
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        
+        {/* =========================================================
+            HEADER: EDITORIAL PRESTIGE & BRAND PROVENANCE
+            ========================================================= */}
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-950/40 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.25em] text-amber-300 shadow-inner backdrop-blur-md">
+            <Sparkles className="h-3.5 w-3.5 text-amber-400 animate-pulse" />
+            <span>Heritage Chronicle · Assam Est. 1931</span>
+          </div>
+
+          <h2 className="mt-4 font-['Space_Grotesk',sans-serif] text-[clamp(2.1rem,5.5vw,3.85rem)] font-extrabold uppercase tracking-tight text-white leading-[1.02]">
+            From Tea Stall Roots <br className="hidden sm:inline" />
+            <span className="bg-gradient-to-r from-amber-300 via-yellow-100 to-emerald-400 bg-clip-text text-transparent">
+              To Fresh Refreshment.
             </span>
+          </h2>
 
-            <h2 className="max-w-[620px] text-4xl sm:text-5xl lg:text-6xl font-black text-[#031b12] tracking-tight leading-[0.92] drop-shadow-[0_2px_0_rgba(255,255,255,0.72)]">
-              FROM TEA STALL ROOTS<br />
-              <span className="text-[#064b29]">TO FRESH REFRESHMENT.</span>
-            </h2>
-
-            <div className="h-1.5 w-56 rounded-full bg-[linear-gradient(90deg,#07582f,#8abf3d,transparent)]" />
-
-            <p className="max-w-xl text-base sm:text-lg text-[#17392c] leading-relaxed font-semibold">
-              Born from a humble 1931 tea stall in Mangaldai, PIO carries the same trust, quality, and refreshing spirit into every modern sip.
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="group rounded-2xl bg-white/78 border border-emerald-900/10 p-4 shadow-[0_16px_40px_rgba(7,88,47,0.09)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_54px_rgba(7,88,47,0.14)]">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#07582f] text-white shadow-[0_10px_22px_rgba(7,88,47,0.24)]">
-                  <Building2 className="w-4 h-4" />
-                </div>
-                <h4 className="mt-3 text-sm font-black text-[#062316]">1931 Assam Roots</h4>
-                <p className="mt-1 text-xs font-medium text-[#50665d]">From roadside tea to trusted refreshment.</p>
-              </div>
-
-              <div className="group rounded-2xl bg-white/78 border border-emerald-900/10 p-4 shadow-[0_16px_40px_rgba(7,88,47,0.09)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_54px_rgba(7,88,47,0.14)]">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#07582f] text-white shadow-[0_10px_22px_rgba(7,88,47,0.24)]">
-                  <Award className="w-4 h-4" />
-                </div>
-                <h4 className="mt-3 text-sm font-black text-[#062316]">Repose Excellence</h4>
-                <p className="mt-1 text-xs font-medium text-[#50665d]">Food-grade quality at Rs 10.</p>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <button 
-                onClick={() => go('contact')}
-                className="group inline-flex items-center gap-3 rounded-full bg-[linear-gradient(180deg,#108944,#034f29)] hover:bg-[#0a6d3b] text-white px-8 py-4 text-xs font-black uppercase tracking-wider shadow-[0_18px_36px_rgba(7,88,47,0.28)] hover:-translate-y-1 hover:shadow-[0_24px_46px_rgba(7,88,47,0.34)] transition-all"
-              >
-                Know Our Story 
-                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-              </button>
-            </div>
-          </div>
-
-          <div className="lg:col-span-6 relative w-full h-[380px] sm:h-[470px] lg:h-[540px] overflow-hidden rounded-[32px] border border-white/80 bg-white/46 shadow-[0_32px_100px_rgba(7,88,47,0.26)] backdrop-blur-md transition-transform duration-500 hover:-translate-y-1">
-            <div className="pointer-events-none absolute inset-0">
-              <img
-                src={getStoryFrameSrc(sequenceFrame)}
-                alt=""
-                aria-hidden="true"
-                className="h-full w-full object-cover opacity-100 saturate-125 contrast-110"
-              />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_38%_18%,rgba(255,255,255,0.28),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0)_48%,rgba(7,88,47,0.14)_100%)]" />
-              <div className="absolute inset-x-10 bottom-7 h-16 rounded-full bg-emerald-950/16 blur-2xl" />
-            </div>
-            <div className="pointer-events-none absolute left-5 top-5 z-10 rounded-full border border-emerald-700/15 bg-white/82 px-4 py-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#064b29] shadow-[0_10px_28px_rgba(7,88,47,0.12)] backdrop-blur">
-              1931 to Today
-            </div>
-            <div className="pointer-events-none absolute bottom-5 left-5 right-5 z-10 flex items-center justify-between rounded-2xl border border-white/70 bg-white/78 px-5 py-4 shadow-[0_16px_44px_rgba(7,88,47,0.18)] backdrop-blur-md">
-              <div>
-                <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#0b8043]">
-                  PIO Journey
-                </p>
-                <p className="mt-1 text-sm font-bold text-[#083b20]">
-                  Scroll the heritage journey
-                </p>
-              </div>
-              <div className="h-2 w-24 overflow-hidden rounded-full bg-emerald-100">
-                <div
-                  className="h-full rounded-full bg-[#07582f] transition-[width] duration-150"
-                  style={{ width: `${(sequenceFrame / STORY_SEQUENCE_FRAME_COUNT) * 100}%` }}
-                />
-              </div>
-            </div>
-          </div>
+          <p className="mt-3 text-xs sm:text-sm lg:text-base text-emerald-100/70 max-w-2xl mx-auto font-medium leading-relaxed">
+            A 93-year journey from a humble tea kettle in Mangaldai to state-of-the-art aseptic fruit beverage manufacturing across Northeast and India.
+          </p>
         </div>
+
+        {/* =========================================================
+            INTERACTIVE CHRONICLE THEATRE (Two-Column Split Console)
+            ========================================================= */}
+        <div className="rounded-3xl border border-amber-500/20 bg-gradient-to-br from-[#0c2e1b]/80 via-[#061e12]/90 to-[#03140b]/95 p-5 sm:p-7 lg:p-9 shadow-[0_25px_80px_rgba(0,0,0,0.7)] backdrop-blur-xl">
+          
+          {/* Era Navigation Tabs */}
+          <div className="flex items-center justify-between flex-wrap gap-3 pb-6 border-b border-white/10">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-amber-400" />
+              <span className="text-xs font-black uppercase tracking-wider text-amber-200">
+                Interactive Era Scrubber
+              </span>
+            </div>
+
+            {/* Era Tabs with Sliding Indicator */}
+            <div className="flex items-center gap-1.5 bg-black/40 p-1.5 rounded-2xl border border-white/10">
+              {ERAS.map((era, index) => {
+                const isCurrent = activeEraIndex === index;
+                return (
+                  <button
+                    key={era.id}
+                    onClick={() => selectEra(index)}
+                    className={`relative px-3.5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-colors duration-200 cursor-pointer ${
+                      isCurrent ? 'text-black' : 'text-emerald-100/60 hover:text-white'
+                    }`}
+                  >
+                    {isCurrent && (
+                      <motion.div
+                        layoutId="activeEraPill"
+                        className="absolute inset-0 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-300 shadow-md"
+                        transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{era.year}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Main Display: Left (Archival Narrative) + Right (Cinematic Frame Portal) */}
+          <div className="grid lg:grid-cols-12 gap-8 items-center pt-6 sm:pt-8">
+            
+            {/* ----------------------------------------------------
+                LEFT: EDITORIAL NARRATIVE & STATS
+                ---------------------------------------------------- */}
+            <div className="lg:col-span-5 space-y-6">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeEra.id}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 16 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-4"
+                >
+                  <div className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-white/5 border border-amber-400/30 text-amber-300">
+                    <Flame className="h-3 w-3 text-amber-400" />
+                    <span>{activeEra.tag}</span>
+                  </div>
+
+                  <h3 className="font-['Space_Grotesk',sans-serif] text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-tight text-white leading-tight">
+                    {activeEra.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed font-medium">
+                    {activeEra.description}
+                  </p>
+
+                  {/* Highlight Specs Pill */}
+                  <div className="grid grid-cols-2 gap-3 pt-2">
+                    <div className="rounded-2xl bg-black/40 border border-white/10 p-3.5">
+                      <span className="text-[10px] uppercase tracking-wider text-emerald-200/50 font-bold block">
+                        Milestone Anchor
+                      </span>
+                      <span className="text-sm sm:text-base font-black text-amber-300 mt-0.5 block font-['Space_Grotesk',sans-serif]">
+                        {activeEra.statValue}
+                      </span>
+                    </div>
+
+                    <div className="rounded-2xl bg-black/40 border border-white/10 p-3.5">
+                      <span className="text-[10px] uppercase tracking-wider text-emerald-200/50 font-bold block">
+                        Core Value
+                      </span>
+                      <span className="text-sm sm:text-base font-black text-emerald-400 mt-0.5 block font-['Space_Grotesk',sans-serif]">
+                        Zero Preservative
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Action Button */}
+              <div className="pt-2">
+                <button
+                  onClick={scrollToContact}
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-black px-6 py-3.5 text-xs font-black uppercase tracking-wider shadow-[0_0_25px_rgba(245,158,11,0.35)] transition-transform duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer min-h-[44px]"
+                >
+                  <span>Connect With Our Heritage</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* ----------------------------------------------------
+                RIGHT: CINEMATIC FILMSTRIP SEQUENCE PORTAL
+                ---------------------------------------------------- */}
+            <div className="lg:col-span-7 space-y-4">
+              
+              {/* Image Frame Viewport with Glass Specular Rims */}
+              <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full rounded-2xl sm:rounded-3xl border border-amber-400/25 bg-black overflow-hidden shadow-2xl flex items-center justify-center">
+                
+                {/* Current Rendered Film Frame */}
+                <img
+                  src={getStoryFrameSrc(currentFrame)}
+                  alt="PIO heritage journey film sequence"
+                  className="h-full w-full object-cover object-center select-none"
+                  loading="eager"
+                />
+
+                {/* Subtle vignette and cinematic grade */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+
+                {/* Top Corner Frame Badge */}
+                <div className="absolute top-3.5 left-3.5 flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1 rounded-full backdrop-blur-md text-[10px] font-black uppercase tracking-wider text-amber-300">
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-ping" />
+                  <span>Timeline Archive {activeEra.year}</span>
+                </div>
+
+                {/* Bottom Frame Counter */}
+                <div className="absolute bottom-3.5 left-3.5 right-3.5 flex items-center justify-between text-xs text-white/80 pointer-events-none">
+                  <div className="bg-black/60 border border-white/10 px-3 py-1 rounded-full backdrop-blur-md text-[10px] font-bold tracking-widest text-emerald-300">
+                    Frame {currentFrame} / {STORY_SEQUENCE_FRAME_COUNT}
+                  </div>
+                  <div className="bg-black/60 border border-white/10 px-3 py-1 rounded-full backdrop-blur-md text-[10px] font-bold text-amber-200/70">
+                    Mangaldai Origin
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Interactive Player Controls & Timeline Scrubber */}
+              <div className="rounded-2xl bg-black/40 border border-white/10 p-3 sm:p-4 flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  
+                  {/* Play / Pause Toggle Button */}
+                  <button
+                    onClick={isPlaying ? stopPlayback : startPlayback}
+                    className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400 text-black hover:bg-yellow-300 active:scale-95 transition-transform duration-150 shrink-0 cursor-pointer shadow-md"
+                    aria-label={isPlaying ? 'Pause timeline playback' : 'Play timeline sequence'}
+                  >
+                    {isPlaying ? <Pause className="h-4 w-4 fill-current" /> : <Play className="h-4 w-4 fill-current ml-0.5" />}
+                  </button>
+
+                  {/* Reset to 1931 */}
+                  <button
+                    onClick={() => selectEra(0)}
+                    className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 active:scale-95 transition-transform duration-150 shrink-0 cursor-pointer"
+                    aria-label="Reset sequence to 1931"
+                    title="Reset to 1931"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" />
+                  </button>
+
+                  {/* Interactive Scrub Range Bar */}
+                  <div className="relative flex-1 flex items-center">
+                    <input
+                      type="range"
+                      min={1}
+                      max={STORY_SEQUENCE_FRAME_COUNT}
+                      value={currentFrame}
+                      onChange={handleSliderChange}
+                      className="w-full h-2 bg-emerald-950/90 rounded-lg appearance-none cursor-pointer accent-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                      aria-label="Scrub through heritage journey sequence"
+                    />
+                  </div>
+
+                </div>
+
+                {/* Milestone Tick Marks */}
+                <div className="flex justify-between items-center text-[10px] font-bold text-emerald-200/50 px-1">
+                  <span className={activeEraIndex === 0 ? 'text-amber-300 font-black' : ''}>1931 Stall</span>
+                  <span className={activeEraIndex === 1 ? 'text-amber-300 font-black' : ''}>1985 Growth</span>
+                  <span className={activeEraIndex === 2 ? 'text-emerald-400 font-black' : ''}>Today (PIO)</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* 3 Luxury Heritage Provenance Cards */}
+          <div className="grid sm:grid-cols-3 gap-3.5 mt-8 pt-6 border-t border-white/10">
+            <div className="p-4 rounded-2xl bg-black/30 border border-white/5 flex items-start gap-3">
+              <div className="h-8 w-8 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                <Building2 className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-black text-white">Assam Hearth Heritage</h4>
+                <p className="text-[11px] text-emerald-200/60 mt-0.5 font-medium leading-relaxed">
+                  Deep regional roots in Mangaldai with 90+ years of food manufacturing trust.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-black/30 border border-white/5 flex items-start gap-3">
+              <div className="h-8 w-8 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                <ShieldCheck className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-black text-white">6-Layer Sterile Science</h4>
+                <p className="text-[11px] text-emerald-200/60 mt-0.5 font-medium leading-relaxed">
+                  No artificial preservatives needed. Multi-layer packaging locks in raw freshness.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-black/30 border border-white/5 flex items-start gap-3">
+              <div className="h-8 w-8 rounded-xl bg-yellow-500/15 text-yellow-300 flex items-center justify-center shrink-0 mt-0.5">
+                <Award className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-black text-white">₹10 Daily Accessible Luxury</h4>
+                <p className="text-[11px] text-emerald-200/60 mt-0.5 font-medium leading-relaxed">
+                  Premium tropical refreshment priced so every child and family can enjoy daily.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </section>
   );

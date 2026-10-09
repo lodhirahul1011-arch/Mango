@@ -253,10 +253,10 @@ export function TetraExperience() {
         </div>
 
         {/* Main Interactive Stage (Grid Layout) */}
-        <div className="mt-14 grid items-center gap-10 lg:grid-cols-12">
+        <div className="mt-10 sm:mt-14 grid items-center gap-8 lg:gap-10 lg:grid-cols-12">
           
           {/* Left Column: Interactive 6-Layer Packaging Breakdown */}
-          <div className="lg:col-span-4 space-y-4">
+          <div className="lg:col-span-4 order-2 lg:order-1 space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between pb-1">
               <span className="text-xs font-black uppercase tracking-[0.2em] text-[#07582f] flex items-center gap-2">
                 <Layers className="w-4 h-4 text-[#0b8043]" />
@@ -314,14 +314,14 @@ export function TetraExperience() {
           </div>
 
           {/* Center Column: Interactive 3D Holographic Animated Tetra Pak */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center">
+          <div className="lg:col-span-5 order-1 lg:order-2 flex flex-col items-center justify-center w-full">
             
             <div 
               ref={containerRef}
               onMouseMove={handleMouseMove}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={handleMouseLeave}
-              className="relative w-full max-w-[360px] aspect-[4/5] rounded-[36px] bg-gradient-to-b from-white/95 via-white/80 to-white/50 border border-emerald-900/10 shadow-[0_24px_50px_rgba(7,88,47,0.12)] p-6 flex flex-col items-center justify-center overflow-visible select-none backdrop-blur-md"
+              className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-[4/5] rounded-[32px] sm:rounded-[36px] bg-gradient-to-b from-white/95 via-white/80 to-white/50 border border-emerald-900/10 shadow-[0_24px_50px_rgba(7,88,47,0.12)] p-5 sm:p-6 flex flex-col items-center justify-center overflow-visible select-none backdrop-blur-md"
               style={{ perspective: 1000 }}
             >
               {/* Radial Backlight Burst */}
@@ -470,7 +470,7 @@ export function TetraExperience() {
           </div>
 
           {/* Right Column: Flavor Specs, Sip Meter & Quick Facts */}
-          <div className="lg:col-span-3 space-y-5">
+          <div className="lg:col-span-3 order-3 lg:order-3 space-y-4 sm:space-y-5 w-full">
             
             {/* Active Flavor Card */}
             <div className={`p-5 rounded-3xl bg-white border ${current.cardBorder} shadow-sm space-y-3`}>
