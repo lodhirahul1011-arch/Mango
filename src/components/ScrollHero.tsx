@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Leaf, Droplets, ShieldCheck, Play } from 'lucide-react';
-import { PrismShaderBackdrop } from './PrismShaderBackdrop';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,7 +53,7 @@ export function ScrollHero() {
     };
 
     const preload = (center: number) => {
-      const radius = innerWidth < 768 ? 12 : 24;
+      const radius = window.innerWidth < 768 ? 12 : 24;
       for (let i = Math.max(0, center - radius); i <= Math.min(FRAME_COUNT - 1, center + radius); i++) {
         load(i);
       }
@@ -69,7 +68,7 @@ export function ScrollHero() {
       draw(frameRef.current);
     };
 
-    // Preload frame 0 immediately
+    // Preload key frames immediately
     load(0, true);
     [10, 25, 50, 75, 100, 130, 160, 190, 220, 239].forEach((i) => load(i));
     preload(0);
@@ -82,7 +81,7 @@ export function ScrollHero() {
         trigger: section,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.3,
+        scrub: 0.35,
         onUpdate: ({ progress }) => {
           const frame = Math.round(progress * (FRAME_COUNT - 1));
           frameRef.current = frame;
@@ -91,25 +90,24 @@ export function ScrollHero() {
         },
       });
 
-      // 2. Bidirectional Text Animation: fades out on scroll down, FADES BACK IN on scroll up!
+      // 2. Smoothly fade left-side hero text on scroll down & restore on scroll up
       gsap.fromTo(
-        '.hero-text-content',
+        '.hero-left-box',
         { y: 0, opacity: 1 },
         {
-          y: -40,
+          y: -30,
           opacity: 0,
           ease: 'power1.out',
           scrollTrigger: {
             trigger: section,
             start: 'top top',
             end: '18% top',
-            scrub: 0.2,
+            scrub: 0.25,
             onLeaveBack: () => {
-              // Ensure 100% visibility when user returns to top
-              gsap.to('.hero-text-content', { opacity: 1, y: 0, duration: 0.2, overwrite: 'auto' });
+              gsap.to('.hero-left-box', { opacity: 1, y: 0, duration: 0.25, overwrite: 'auto' });
             },
             onEnterBack: () => {
-              gsap.to('.hero-text-content', { opacity: 1, y: 0, duration: 0.2, overwrite: 'auto' });
+              gsap.to('.hero-left-box', { opacity: 1, y: 0, duration: 0.25, overwrite: 'auto' });
             },
           },
         }
@@ -134,123 +132,130 @@ export function ScrollHero() {
         className="sticky top-0 h-screen w-full overflow-hidden bg-cover bg-center"
         style={{ backgroundImage: `url(${frameSrc(0)})` }}
       >
-        {/* Fullscreen 3D Canvas Scrubbing */}
+        {/* Fullscreen 3D Canvas with enhanced saturation & crisp contrast */}
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 h-full w-full object-cover"
+          style={{
+            filter: 'contrast(1.08) saturate(1.24) brightness(1.02)',
+          }}
+          className="absolute inset-0 h-full w-full object-cover transition-all"
           aria-label="PIO 3D animated cans and fruit splash"
         />
 
-        <PrismShaderBackdrop
-          intensity={0.82}
-          className="z-[1] opacity-80 mix-blend-screen [mask-image:linear-gradient(90deg,transparent_0%,rgba(0,0,0,0.18)_34%,black_56%,rgba(0,0,0,0.92)_100%)]"
-        />
+        {/* Subtle cinematic vignette that makes center cartons pop with depth */}
+        <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(6,46,25,0.12)_100%)]" />
 
-        <div className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(circle_at_78%_42%,rgba(255,255,255,0.18),transparent_24%),linear-gradient(90deg,rgba(255,255,255,0.82)_0%,rgba(255,255,255,0.42)_34%,rgba(255,255,255,0.08)_68%,rgba(255,255,255,0.16)_100%)]" />
-
-        {/* Hero Overlay: Anchored to the LEFT with comfortable breathing space */}
-        <div className="relative z-10 w-full h-full flex items-center px-6 sm:px-12 lg:px-16 xl:px-24 pointer-events-none">
-          <div className="hero-text-content pointer-events-auto mt-16 max-w-md space-y-6 rounded-[28px] border border-white/50 bg-white/28 p-5 shadow-[0_28px_90px_rgba(7,88,47,0.12)] backdrop-blur-[2px] sm:mt-0 sm:p-6 lg:max-w-lg">
+        {/* ----------------------------------------------------
+            TEXT FIXED ON LEFT SIDE WITH ZERO OVERLAP ON CARTONS
+        ---------------------------------------------------- */}
+        <div className="relative z-10 w-full h-full flex items-center px-5 sm:px-10 lg:px-14 xl:px-20 pointer-events-none">
+          <div className="hero-left-box pointer-events-auto mt-14 sm:mt-8 max-w-sm sm:max-w-md lg:max-w-[440px] xl:max-w-[480px] space-y-5 rounded-[32px] border border-white/70 bg-white/78 p-6 sm:p-7 shadow-[0_24px_70px_rgba(7,88,47,0.15)] backdrop-blur-md">
             
-            {/* 1. Eyebrow */}
-            <div className="text-xs sm:text-[13px] font-black uppercase tracking-[0.25em] text-[#0a4827] drop-shadow-xs">
-              BORN IN ASSAM &bull; ₹10 REFRESHMENT
+            {/* 1. Eyebrow Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-900/15 text-[#07582f] text-[11px] font-black uppercase tracking-[0.2em] shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
+              <span>BORN IN ASSAM &bull; ₹10 REFRESHMENT</span>
             </div>
 
-            {/* 2. Main Title: Har Sip PIO! in authentic cursive brush */}
+            {/* 2. Main Title: Har Sip PIO! */}
             <div className="space-y-0 select-none">
-              <span className="block font-['Caveat',cursive] text-6xl sm:text-7xl lg:text-8xl font-black text-[#074c2a] leading-[0.85] -rotate-2 origin-left tracking-tight">
+              <span className="block font-['Caveat',cursive] text-5xl sm:text-6xl lg:text-7xl font-black text-[#074c2a] leading-[0.88] -rotate-2 origin-left tracking-tight">
                 Har Sip
               </span>
-              <div className="flex items-center gap-1.5 font-['Space_Grotesk',sans-serif] text-6xl sm:text-7xl lg:text-8xl font-black text-[#074c2a] tracking-tight leading-[0.9]">
+              <div className="flex items-center gap-1.5 font-['Space_Grotesk',sans-serif] text-5xl sm:text-6xl lg:text-7xl font-black text-[#074c2a] tracking-tight leading-[0.92]">
                 <span>PIO!</span>
-                <Leaf className="w-10 h-10 sm:w-12 sm:h-12 text-[#16a34a] fill-[#16a34a] -rotate-12 inline-block shrink-0" />
+                <Leaf className="w-9 h-9 sm:w-11 sm:h-11 text-[#16a34a] fill-[#16a34a] -rotate-12 inline-block shrink-0" />
               </div>
             </div>
 
-            {/* 3. Subtitle: Mango sunshine. Lychee attitude. */}
-            <div className="text-2xl sm:text-3xl lg:text-[2rem] font-extrabold tracking-tight leading-snug">
-              <div>
-                <span className="text-[#f59e0b] font-black">Mango</span>{' '}
-                <span className="text-[#0a2e1c]">sunshine.</span>
-              </div>
-              <div>
-                <span className="text-[#e11d48] font-black">Lychee</span>{' '}
-                <span className="text-[#0a2e1c]">attitude.</span>
-              </div>
+            {/* 3. Subtitle */}
+            <div className="space-y-1">
+              <h2 className="text-xl sm:text-2xl font-black text-[#083b20] tracking-tight">
+                Small Sip. <span className="text-[#07582f]">Big Refreshment.</span>
+              </h2>
+              <p className="text-xs sm:text-sm text-[#264b34] font-semibold leading-relaxed">
+                Mango sunshine, lychee attitude. Aseptically sealed in convenient 160ml packs with attached straw. Real fruit refreshment for everyone.
+              </p>
             </div>
 
-            {/* 4. Four Circular Badges in a Row */}
-            <div className="flex items-start gap-4 sm:gap-6 pt-1">
-              {/* Badge 1: Real Fruit Goodness */}
-              <div className="flex flex-col items-center text-center max-w-[70px]">
-              <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#07582f] shadow-sm transition-transform hover:scale-105">
-                  <Leaf className="w-5 h-5 text-[#07582f]" />
+            {/* 4. Four Badges */}
+            <div className="grid grid-cols-4 gap-2 pt-1">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-emerald-900/15 bg-white flex items-center justify-center text-[#07582f] shadow-2xs">
+                  <Leaf className="w-4 h-4 text-[#07582f]" />
                 </div>
-                <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0a2e1c] leading-tight">
-                  Real<br />Fruit Goodness
+                <span className="mt-1 text-[9px] sm:text-[10px] font-extrabold text-[#0a2e1c] leading-tight">
+                  Real Fruit
                 </span>
               </div>
 
-              {/* Badge 2: Refreshing Taste */}
-              <div className="flex flex-col items-center text-center max-w-[70px]">
-                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#07582f] shadow-sm transition-transform hover:scale-105">
-                  <Droplets className="w-5 h-5 text-[#07582f]" />
+              <div className="flex flex-col items-center text-center">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-emerald-900/15 bg-white flex items-center justify-center text-[#07582f] shadow-2xs">
+                  <Droplets className="w-4 h-4 text-[#07582f]" />
                 </div>
-                <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0a2e1c] leading-tight">
-                  Refreshing<br />Taste
+                <span className="mt-1 text-[9px] sm:text-[10px] font-extrabold text-[#0a2e1c] leading-tight">
+                  Chilled Sip
                 </span>
               </div>
 
-              {/* Badge 3: No Added Preservatives */}
-              <div className="flex flex-col items-center text-center max-w-[70px]">
-                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#07582f] shadow-sm transition-transform hover:scale-105">
-                  <ShieldCheck className="w-5 h-5 text-[#07582f]" />
+              <div className="flex flex-col items-center text-center">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-emerald-900/15 bg-white flex items-center justify-center text-[#07582f] shadow-2xs">
+                  <ShieldCheck className="w-4 h-4 text-[#07582f]" />
                 </div>
-                <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0a2e1c] leading-tight">
-                  No Added<br />Preservatives
+                <span className="mt-1 text-[9px] sm:text-[10px] font-extrabold text-[#0a2e1c] leading-tight">
+                  0 Chemical
                 </span>
               </div>
 
-              {/* Badge 4: Just ₹10 */}
-              <div className="flex flex-col items-center text-center max-w-[70px]">
-                <div className="w-12 h-12 rounded-full border border-emerald-900/20 bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#07582f] shadow-sm font-black text-lg transition-transform hover:scale-105">
-                  ₹
+              <div className="flex flex-col items-center text-center">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-emerald-900/15 bg-white flex items-center justify-center text-[#07582f] shadow-2xs font-black text-sm">
+                  ₹10
                 </div>
-                <span className="mt-2 text-[10px] sm:text-[11px] font-extrabold text-[#0a2e1c] leading-tight">
-                  Just<br />₹10
+                <span className="mt-1 text-[9px] sm:text-[10px] font-extrabold text-[#0a2e1c] leading-tight">
+                  Pocket Price
                 </span>
               </div>
             </div>
 
-            {/* 5. Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
-              <button
-                onClick={() => go('story')}
-                className="inline-flex items-center gap-2 rounded-full bg-[#07582f] hover:bg-[#096d3a] active:scale-95 text-white px-7 py-3.5 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-900/20 hover:-translate-y-0.5 transition-all"
-              >
-                <span>OUR STORY</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+            {/* 5. Action Buttons & Quick Flavor Badges */}
+            <div className="pt-2 space-y-3">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <button
+                  onClick={() => go('flavours')}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#07582f] hover:bg-[#096d3a] active:scale-95 text-white px-6 py-2.5 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 transition-all"
+                >
+                  <span>Explore Flavours</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
 
-              <button
-                onClick={() => go('story')}
-                className="inline-flex items-center gap-2 rounded-full bg-white hover:bg-emerald-50/70 border-2 border-[#07582f] text-[#07582f] px-7 py-3 text-xs font-black uppercase tracking-wider shadow-xs hover:-translate-y-0.5 transition-all"
-              >
-                <Play className="w-3.5 h-3.5 fill-[#07582f]" />
-                <span>OUR STORY</span>
-              </button>
+                <button
+                  onClick={() => go('story')}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-white hover:bg-emerald-50 text-[#07582f] border border-emerald-900/20 px-5 py-2.5 text-xs font-black uppercase tracking-wider shadow-2xs hover:-translate-y-0.5 transition-all"
+                >
+                  <Play className="w-3 h-3 fill-[#07582f]" />
+                  <span>Our Story</span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 text-[11px] font-bold">
+                <span className="bg-amber-100/90 text-amber-900 px-2.5 py-1 rounded-lg border border-amber-300/60 shadow-2xs">
+                  🥭 Mango 160ml &bull; ₹10
+                </span>
+                <span className="bg-rose-100/90 text-rose-900 px-2.5 py-1 rounded-lg border border-rose-300/60 shadow-2xs">
+                  🌺 Lychee 160ml &bull; ₹10
+                </span>
+              </div>
             </div>
 
           </div>
         </div>
 
-        {/* Subtle scroll cue indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none z-20">
-          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/90 px-3 py-1 rounded-full border border-emerald-900/10 shadow-2xs">
+        {/* Bottom Center: Scroll To Animate 3D Cue */}
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none z-20 opacity-90">
+          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/95 px-3 py-1 rounded-full border border-emerald-900/15 shadow-xs">
             Scroll To Animate 3D
           </span>
-          <div className="w-5 h-8 rounded-full border-2 border-emerald-800/40 flex items-start justify-center p-1 bg-white/60">
+          <div className="w-5 h-8 rounded-full border-2 border-emerald-800/40 flex items-start justify-center p-1 bg-white/80 shadow-xs">
             <div className="w-1.5 h-2 rounded-full bg-emerald-800 animate-bounce" />
           </div>
         </div>
