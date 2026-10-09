@@ -46,11 +46,14 @@ export function ScrollHero() {
       if (!img) return;
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
+        const isMobile = window.innerWidth < 768;
         const scale = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
         const w = img.naturalWidth * scale;
         const h = img.naturalHeight * scale;
         const x = (canvas.width - w) / 2;
-        const y = (canvas.height - h) / 2;
+        // On mobile portrait, shift canvas image down slightly so product sits comfortably in lower 65% of viewport
+        const yOffset = isMobile ? canvas.height * 0.05 : 0;
+        const y = (canvas.height - h) / 2 + yOffset;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = true;
         ctx.drawImage(img, x, y, w, h);
@@ -307,41 +310,50 @@ export function ScrollHero() {
         </div>
 
         {/* ====================================================
-            CLEAN MOBILE COMPOSITION (< 768px): UNOBSTRUCTED 3D VIEW
-            Single cohesive top card + full-screen visibility for cans
+        {/* ====================================================
+            LUXURY TRANSPARENT MOBILE HERO (< 768px)
+            Zero heavy opaque box: Airy frosted glass, floating typography,
+            unobstructed 3D product view
         ==================================================== */}
-        <div className="md:hidden relative z-10 w-full h-full flex flex-col justify-between px-4 pt-20 pb-4 pointer-events-none">
+        <div className="md:hidden relative z-10 w-full h-full flex flex-col justify-between px-4 pt-[72px] pb-5 pointer-events-none">
           
-          {/* Unified Clean Mobile Hero Card */}
-          <div className="hero-mobile-card pointer-events-auto rounded-3xl bg-white/90 backdrop-blur-md p-4 sm:p-5 border border-white/80 shadow-[0_15px_45px_rgba(7,88,47,0.12)] space-y-2.5 max-w-sm mx-auto">
+          {/* Top Floating Brand Block - Transparent Glass Gradient */}
+          <div className="hero-mobile-card pointer-events-auto w-full max-w-sm mx-auto rounded-3xl bg-white/35 backdrop-blur-md p-4 sm:p-5 border border-white/50 shadow-[0_12px_36px_rgba(7,88,47,0.08)] space-y-2">
             
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-900/15 text-[#07582f] text-[10px] font-black uppercase tracking-widest shadow-2xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
-              <span>BORN IN ASSAM &bull; ₹10 REFRESHMENT</span>
+            {/* Top row: Badge + ₹10 Tag */}
+            <div className="flex items-center justify-between">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/70 backdrop-blur-sm border border-emerald-900/15 text-[#07582f] text-[10px] font-black uppercase tracking-wider shadow-2xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
+                <span>Born in Assam</span>
+              </div>
+              <span className="inline-flex items-center text-[10px] font-black text-[#07582f] bg-emerald-100/80 px-2.5 py-1 rounded-full border border-emerald-500/20 shadow-2xs">
+                ₹10 &bull; 160ml
+              </span>
             </div>
 
-            {/* Title */}
-            <div className="flex items-baseline gap-2">
-              <span className="font-['Caveat',cursive] text-4xl sm:text-5xl font-black text-[#074c2a] leading-none">
-                Har Sip
-              </span>
-              <span className="font-['Space_Grotesk',sans-serif] text-4xl sm:text-5xl font-black text-[#074c2a] tracking-tight leading-none">
-                PIO!
-              </span>
-              <Leaf className="w-5 h-5 text-[#16a34a] fill-[#16a34a] inline-block" />
+            {/* Title with Soft Halo & Organic Feel */}
+            <div className="flex items-center justify-between pt-0.5">
+              <div className="flex items-baseline gap-2">
+                <span className="font-['Caveat',cursive] text-4xl sm:text-5xl font-black text-[#064223] leading-none drop-shadow-xs">
+                  Har Sip
+                </span>
+                <span className="font-['Space_Grotesk',sans-serif] text-4xl sm:text-5xl font-black text-[#07582f] tracking-tight leading-none drop-shadow-xs">
+                  PIO!
+                </span>
+              </div>
+              <Leaf className="w-6 h-6 text-[#16a34a] fill-[#16a34a]/30 -rotate-12 inline-block shrink-0" />
             </div>
 
-            {/* Description */}
-            <p className="text-xs text-[#264b34] font-semibold leading-relaxed">
-              Small Sip. Big Refreshment. Real fruit puree sealed in 160ml grab-and-go packs at ₹10.
+            {/* Punchy 1-line Subtitle */}
+            <p className="text-[11px] sm:text-xs text-[#123820] font-bold leading-snug drop-shadow-2xs">
+              Real fruit refreshment in grab-and-go packs. Mango sunshine &amp; Lychee crush.
             </p>
 
-            {/* Action Buttons */}
-            <div className="flex items-center gap-2 pt-1">
+            {/* Floating Glass CTAs */}
+            <div className="flex items-center gap-2 pt-1.5">
               <button
                 onClick={() => go('flavours')}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#07582f] active:bg-[#054022] text-white py-2.5 px-3 text-xs font-black uppercase tracking-wider shadow-sm min-h-[44px] cursor-pointer"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#07582f]/90 hover:bg-[#07582f] active:scale-95 text-white py-2.5 px-3 text-xs font-black uppercase tracking-wider shadow-md min-h-[44px] cursor-pointer backdrop-blur-sm transition-transform"
               >
                 <span>Flavours</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -349,27 +361,18 @@ export function ScrollHero() {
 
               <button
                 onClick={() => go('story')}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-white active:bg-emerald-50 text-[#07582f] border border-emerald-900/15 py-2.5 px-3 text-xs font-black uppercase tracking-wider shadow-2xs min-h-[44px] cursor-pointer"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-white/75 hover:bg-white active:scale-95 text-[#07582f] border border-white/80 py-2.5 px-3 text-xs font-black uppercase tracking-wider shadow-2xs min-h-[44px] cursor-pointer backdrop-blur-sm transition-transform"
               >
                 <Play className="w-3 h-3 fill-[#07582f]" />
                 <span>Our Story</span>
               </button>
             </div>
-
-            {/* Quick Flavor Chips */}
-            <div className="flex items-center justify-between text-[10px] font-black pt-1.5 border-t border-emerald-900/10">
-              <span className="text-[#92400e]">🥭 Mango 160ml</span>
-              <span className="text-emerald-700">&bull;</span>
-              <span className="text-[#9d174d]">🌺 Lychee 160ml</span>
-              <span className="text-emerald-700">&bull;</span>
-              <span className="text-emerald-800">₹10 Only</span>
-            </div>
           </div>
 
-          {/* Bottom subtle scroll prompt */}
+          {/* Bottom Floating Pill: Scroll to Scrub 3D */}
           <div className="text-center pb-2 pointer-events-none">
-            <span className="inline-block text-[10px] font-black uppercase tracking-widest text-[#07582f] bg-white/85 backdrop-blur-sm px-3.5 py-1 rounded-full border border-emerald-900/10 shadow-2xs">
-              ↓ Scroll to Animate 3D Cans
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-[#07582f] bg-white/55 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/60 shadow-xs">
+              <span className="animate-bounce">↓</span> Scroll to Animate 3D Cans
             </span>
           </div>
 
