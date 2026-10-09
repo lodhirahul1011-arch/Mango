@@ -149,28 +149,15 @@ export function ScrollHero() {
         },
       });
 
-      // Fade mobile top header as user scrubs through 3D sequence
-      gsap.to('.hero-mobile-header', {
+      // Fade mobile hero card cleanly as user scrubs through 3D sequence
+      gsap.to('.hero-mobile-card', {
         opacity: 0,
-        y: -15,
+        y: -20,
         ease: 'power1.out',
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: '25% top',
-          scrub: 0.2,
-        },
-      });
-
-      // Fade mobile bottom controls as user scrubs
-      gsap.to('.hero-mobile-bottom', {
-        opacity: 0,
-        y: 15,
-        ease: 'power1.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '25% top',
+          end: '22% top',
           scrub: 0.2,
         },
       });
@@ -320,64 +307,41 @@ export function ScrollHero() {
         </div>
 
         {/* ====================================================
-            DEDICATED MOBILE COMPOSITION (< 768px): PERFECT VIEWPORT FIT
-            Order: Eyebrow -> Heading -> Supporting Text -> Products (visible) -> Buttons -> Scroll Cue
+            CLEAN MOBILE COMPOSITION (< 768px): UNOBSTRUCTED 3D VIEW
+            Single cohesive top card + full-screen visibility for cans
         ==================================================== */}
-        <div className="md:hidden relative z-10 w-full h-full flex flex-col justify-between px-4 pt-20 pb-5 pointer-events-none">
+        <div className="md:hidden relative z-10 w-full h-full flex flex-col justify-between px-4 pt-20 pb-4 pointer-events-none">
           
-          {/* 1. Mobile Top Card: Clean, unclipped typography */}
-          <div className="hero-mobile-header pointer-events-auto rounded-3xl bg-white/85 backdrop-blur-md p-4 sm:p-5 border border-white/70 shadow-lg space-y-2">
+          {/* Unified Clean Mobile Hero Card */}
+          <div className="hero-mobile-card pointer-events-auto rounded-3xl bg-white/90 backdrop-blur-md p-4 sm:p-5 border border-white/80 shadow-[0_15px_45px_rgba(7,88,47,0.12)] space-y-2.5 max-w-sm mx-auto">
+            
+            {/* Eyebrow */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-900/15 text-[#07582f] text-[10px] font-black uppercase tracking-widest shadow-2xs">
               <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
-              <span>BORN IN ASSAM &bull; ₹10 PACK</span>
+              <span>BORN IN ASSAM &bull; ₹10 REFRESHMENT</span>
             </div>
 
+            {/* Title */}
             <div className="flex items-baseline gap-2">
-              <span className="font-['Caveat',cursive] text-4xl font-black text-[#074c2a] leading-none">
+              <span className="font-['Caveat',cursive] text-4xl sm:text-5xl font-black text-[#074c2a] leading-none">
                 Har Sip
               </span>
-              <span className="font-['Space_Grotesk',sans-serif] text-4xl font-black text-[#074c2a] tracking-tight leading-none">
+              <span className="font-['Space_Grotesk',sans-serif] text-4xl sm:text-5xl font-black text-[#074c2a] tracking-tight leading-none">
                 PIO!
               </span>
               <Leaf className="w-5 h-5 text-[#16a34a] fill-[#16a34a] inline-block" />
             </div>
 
-            <p className="text-xs text-[#264b34] font-semibold leading-relaxed max-w-[320px]">
-              Small Sip. Big Refreshment. Real fruit puree sealed in 160ml packs at ₹10.
+            {/* Description */}
+            <p className="text-xs text-[#264b34] font-semibold leading-relaxed">
+              Small Sip. Big Refreshment. Real fruit puree sealed in 160ml grab-and-go packs at ₹10.
             </p>
-          </div>
 
-          {/* Center Product Area: Canvas frames render cans fully visible in the center */}
-          <div className="flex-1 min-h-[40px] pointer-events-none" />
-
-          {/* 2. Mobile Bottom Controls: Large touch targets & Quick Flavors */}
-          <div className="hero-mobile-bottom pointer-events-auto space-y-2.5">
-            
-            {/* Quick 4 Feature Pills */}
-            <div className="grid grid-cols-4 gap-1.5 bg-white/88 backdrop-blur-md rounded-2xl p-2 border border-white/80 shadow-sm text-center">
-              <div>
-                <span className="text-[10px] font-black text-[#07582f] block">🥭 Real</span>
-                <span className="text-[8px] font-bold text-slate-500">Fruit</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-black text-[#07582f] block">💧 Chilled</span>
-                <span className="text-[8px] font-bold text-slate-500">Sip</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-black text-[#07582f] block">🛡️ Zero</span>
-                <span className="text-[8px] font-bold text-slate-500">Chemical</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-black text-amber-600 block">₹10</span>
-                <span className="text-[8px] font-bold text-slate-500">Pocket</span>
-              </div>
-            </div>
-
-            {/* Mobile CTAs: Stacked with >= 48px touch height */}
-            <div className="grid grid-cols-2 gap-2">
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2 pt-1">
               <button
                 onClick={() => go('flavours')}
-                className="w-full inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#07582f] active:bg-[#054022] text-white py-3.5 px-3 text-xs font-black uppercase tracking-wider shadow-md min-h-[48px] cursor-pointer"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#07582f] active:bg-[#054022] text-white py-2.5 px-3 text-xs font-black uppercase tracking-wider shadow-sm min-h-[44px] cursor-pointer"
               >
                 <span>Flavours</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -385,19 +349,28 @@ export function ScrollHero() {
 
               <button
                 onClick={() => go('story')}
-                className="w-full inline-flex items-center justify-center gap-1.5 rounded-2xl bg-white/95 active:bg-emerald-50 text-[#07582f] border border-emerald-900/15 py-3.5 px-3 text-xs font-black uppercase tracking-wider shadow-xs min-h-[48px] cursor-pointer"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-2xl bg-white active:bg-emerald-50 text-[#07582f] border border-emerald-900/15 py-2.5 px-3 text-xs font-black uppercase tracking-wider shadow-2xs min-h-[44px] cursor-pointer"
               >
                 <Play className="w-3 h-3 fill-[#07582f]" />
                 <span>Our Story</span>
               </button>
             </div>
 
-            {/* Subtle mobile scroll prompt */}
-            <div className="text-center pt-1">
-              <span className="inline-block text-[10px] font-black uppercase tracking-widest text-[#07582f] bg-white/90 px-3 py-0.5 rounded-full border border-emerald-900/10 shadow-2xs">
-                ↓ Scroll to Explore 3D Cans
-              </span>
+            {/* Quick Flavor Chips */}
+            <div className="flex items-center justify-between text-[10px] font-black pt-1.5 border-t border-emerald-900/10">
+              <span className="text-[#92400e]">🥭 Mango 160ml</span>
+              <span className="text-emerald-700">&bull;</span>
+              <span className="text-[#9d174d]">🌺 Lychee 160ml</span>
+              <span className="text-emerald-700">&bull;</span>
+              <span className="text-emerald-800">₹10 Only</span>
             </div>
+          </div>
+
+          {/* Bottom subtle scroll prompt */}
+          <div className="text-center pb-2 pointer-events-none">
+            <span className="inline-block text-[10px] font-black uppercase tracking-widest text-[#07582f] bg-white/85 backdrop-blur-sm px-3.5 py-1 rounded-full border border-emerald-900/10 shadow-2xs">
+              ↓ Scroll to Animate 3D Cans
+            </span>
           </div>
 
         </div>
