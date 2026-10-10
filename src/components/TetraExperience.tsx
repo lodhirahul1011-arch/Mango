@@ -204,6 +204,8 @@ function ProductStage({
   activeLayer,
   mouseX,
   mouseY,
+  strawPopped,
+  splashes,
   onMove,
   onLeave,
 }: {
@@ -211,6 +213,8 @@ function ProductStage({
   activeLayer: number;
   mouseX: ReturnType<typeof useSpring>;
   mouseY: ReturnType<typeof useSpring>;
+  strawPopped: boolean;
+  splashes: { id: number; x: number; y: number; color: string }[];
   onMove: (event: MouseEvent<HTMLDivElement>) => void;
   onLeave: () => void;
 }) {
@@ -253,6 +257,32 @@ function ProductStage({
           }}
           className="tetra-pack-motion relative z-10"
         >
+          <motion.div
+            initial={false}
+            animate={{
+              y: strawPopped ? -30 : 8,
+              opacity: strawPopped ? 1 : 0.56,
+              rotate: strawPopped ? -12 : -5,
+              scale: strawPopped ? 1.05 : 0.92,
+            }}
+            transition={{ type: 'spring', stiffness: 340, damping: 18 }}
+            className="absolute left-1/2 top-4 z-30 -translate-x-1/2"
+          >
+            <div className="h-20 w-3 rounded-full border border-white/70 bg-gradient-to-r from-red-400 via-white to-red-400 shadow-[0_12px_24px_rgba(7,61,44,0.16)]" />
+            <div className="-mt-1 h-2.5 w-4 rounded-full bg-red-300 shadow-sm" />
+          </motion.div>
+
+          {splashes.map((splash) => (
+            <motion.span
+              key={splash.id}
+              initial={{ opacity: 1, scale: 0, x: 0, y: 0 }}
+              animate={{ opacity: 0, scale: [0, 1.4, 0.8], x: splash.x, y: splash.y }}
+              transition={{ duration: 0.9, ease: 'easeOut' }}
+              className="absolute left-1/2 top-16 z-40 h-3.5 w-3.5 rounded-full shadow-lg"
+              style={{ backgroundColor: splash.color }}
+            />
+          ))}
+
           <AnimatePresence mode="wait">
             <motion.div
               key={flavor.id}
@@ -285,6 +315,9 @@ function ProductStage({
 export function TetraExperience() {
   const [flavor, setFlavor] = useState<FlavorId>('mango');
   const [activeLayer, setActiveLayer] = useState(1);
+  const [strawPopped, setStrawPopped] = useState(false);
+  const [sipCount, setSipCount] = useState(0);
+  const [splashes, setSplashes] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
   const mouseX = useSpring(0, { stiffness: 160, damping: 22 });
   const mouseY = useSpring(0, { stiffness: 160, damping: 22 });
@@ -371,7 +404,23 @@ export function TetraExperience() {
 
   const handleFlavorChange = (next: FlavorId) => {
     setFlavor(next);
+    setStrawPopped(false);
+    setSipCount(0);
     fizzAudio.playFizz();
+  };
+
+  const handleSip = () => {
+    fizzAudio.playFizz();
+    setStrawPopped(true);
+    setSipCount((prev) => Math.min(prev + 1, 6));
+    const burst = Array.from({ length: 7 }).map((_, index) => ({
+      id: Date.now() + index,
+      x: (Math.random() - 0.5) * 170,
+      y: -72 - Math.random() * 84,
+      color: current.accent,
+    }));
+    setSplashes(burst);
+    window.setTimeout(() => setSplashes([]), 1000);
   };
 
   const handleMouseMove = (event: MouseEvent<HTMLDivElement>) => {
@@ -429,6 +478,8 @@ export function TetraExperience() {
             activeLayer={activeLayer}
             mouseX={mouseX}
             mouseY={mouseY}
+            strawPopped={strawPopped}
+            splashes={splashes}
             onMove={handleMouseMove}
             onLeave={handleMouseLeave}
           />
@@ -480,13 +531,10 @@ export function TetraExperience() {
 
               <button
                 type="button"
-                onClick={() => {
-                  setActiveLayer(activeLayer === 6 ? 1 : activeLayer + 1);
-                  fizzAudio.playFizz();
-                }}
+                onClick={handleSip}
                 className="mt-5 inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-full bg-white px-5 text-[11px] font-black uppercase tracking-[0.16em] text-[#073D2C] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#FFF4D8] active:scale-95"
               >
-                Explore next layer
+                {strawPopped ? `Sip freshness ${sipCount}/6` : 'Pop straw and sip'}
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>

@@ -29,6 +29,9 @@ const PARTNER_OPTIONS = [
   'General Consumer Feedback',
 ];
 
+const FACTORY_MAP_URL =
+  'https://www.google.com/maps/search/?api=1&query=Repose%20Agrotech%20Pvt%20Ltd%20Ramhari%20Mangaldai%20Darrang%20Assam%20784125';
+
 export function Contact() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [submitted, setSubmitted] = useState(false);
@@ -108,13 +111,19 @@ export function Contact() {
 
             {/* Quick Contact Info Cards */}
             <div className="mt-8 grid sm:grid-cols-2 gap-3 pt-2">
-              <div className="p-4 rounded-2xl bg-[#eef8f1] border border-[#cbe8d3] flex items-start gap-3">
+              <a
+                href={FACTORY_MAP_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="p-4 rounded-2xl bg-[#eef8f1] border border-[#cbe8d3] flex items-start gap-3 transition-colors hover:bg-[#e4f4e9] focus:outline-none focus:ring-2 focus:ring-[#07582f]/30"
+                aria-label="Open Factory and Office location in Google Maps"
+              >
                 <MapPin className="w-5 h-5 text-[#07582f] shrink-0 mt-0.5" />
                 <div className="text-xs">
                   <div className="font-black text-[#083b20]">Factory & Office</div>
                   <div className="text-slate-600 mt-0.5">Mangaldai, Darrang, Assam - 784125</div>
                 </div>
-              </div>
+              </a>
 
               <a
                 href="tel:+919971918470"

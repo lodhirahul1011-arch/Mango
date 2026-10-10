@@ -4,8 +4,8 @@ import gsap from 'gsap';
 
 const LINKS = {
   consumers: [
-    { label: 'Our Story', id: 'story' },
     { label: 'Products', id: 'flavours' },
+    { label: 'Store Locator', id: 'map' },
     { label: 'FAQs', id: 'faq' },
   ],
   business: [

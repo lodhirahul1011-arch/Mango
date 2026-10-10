@@ -127,28 +127,6 @@ export function ConsumerFaqs() {
               Simple answers about storage, shelf life, preservatives and where PIO is made.
             </p>
 
-            <div className="relative mt-12 h-[290px] overflow-hidden rounded-[2rem] border border-[#0a3d2d]/8 bg-[radial-gradient(circle_at_30%_30%,rgba(22,122,74,0.10),transparent_40%),linear-gradient(180deg,rgba(255,255,255,0.38),rgba(255,255,255,0.08))]">
-              <div className="absolute left-10 top-14 h-36 w-36 rounded-full border border-[#0a3d2d]/10 bg-[#dff5ea]/20 blur-[2px]" />
-              <div className="absolute left-20 top-16 h-14 w-14 rounded-full bg-[#d5f4e7]/50 blur-sm" />
-              <div className="absolute right-10 top-14 h-32 w-32 rounded-full border border-[#eb5574]/10 bg-[#fff2f5]/30" />
-
-              <div className="absolute left-16 top-20 h-24 w-12 rotate-[18deg] rounded-[40%_40%_50%_50%] border border-[#0a3d2d]/15 bg-[#e6f4eb]/30" />
-              <div className="absolute right-24 top-20 h-24 w-16 rotate-[-18deg] rounded-[38%_38%_58%_52%] border border-[#0a3d2d]/15 bg-[#ecf9f0]/20" />
-
-              <div className="absolute left-1/2 top-16 h-16 w-16 -translate-x-1/2 rounded-full border border-[#0a3d2d]/10 bg-[#f4f7ef]/60 blur-[1px]" />
-              <div className="absolute left-1/2 top-24 h-28 w-24 -translate-x-1/2 rounded-[24%_24%_30%_30%] border border-[#0a3d2d]/8 bg-transparent" style={{ boxShadow: 'inset 0 0 0 1px rgba(10,61,45,0.08)' }} />
-
-              <div className="absolute bottom-8 left-8 flex flex-wrap gap-2">
-                {['ASEPTICALLY PACKED', 'MADE IN ASSAM', 'NO ADDED PRESERVATIVES'].map((label) => (
-                  <span
-                    key={label}
-                    className="rounded-full border border-[#0a3d2d]/10 bg-white/55 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.18em] text-[#073D2C] backdrop-blur-sm"
-                  >
-                    {label}
-                  </span>
-                ))}
-              </div>
-            </div>
           </div>
 
           <div className="faq-list">

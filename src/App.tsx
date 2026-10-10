@@ -3,13 +3,12 @@ import Lenis from 'lenis';
 import { Navbar } from '@/components/Navbar';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { MouseProvider } from '@/components/MouseProvider';
-import { InteractiveCursor } from '@/components/InteractiveCursor';
 import { ScrollHero } from '@/components/ScrollHero';
+import { SignatureProductTrail } from '@/components/SignatureProductTrail';
 import { Flavours } from '@/components/BrandSections';
 import { TetraExperience } from '@/components/TetraExperience';
 import { Ingredients } from '@/components/Ingredients';
 import { InteractiveMap } from '@/components/InteractiveMap';
-import { OurStory } from '@/components/OurStory';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
 import { ConsumerFaqs } from '@/components/ConsumerFaqs';
@@ -53,11 +52,11 @@ function App() {
   return (
     <MouseProvider>
       <div className="relative min-h-screen bg-white text-[#10271b] selection:bg-emerald-200 selection:text-emerald-950">
-        {/* Interactive Custom Floating Cursor Trail */}
-        <InteractiveCursor />
-
         {/* Global Reading Scroll Progress */}
         <ScrollProgress />
+
+        {/* Signature product scroll transition between Hero and Products */}
+        <SignatureProductTrail />
 
         {/* Sleek Navigation Bar */}
         <Navbar />
@@ -78,9 +77,6 @@ function App() {
 
           {/* 8. Interactive Distribution Network & Store Locator Map */}
           <InteractiveMap />
-
-          {/* 9. Our Story: 1931 Assam Tea Stall Roots to Modern Aseptic Plant */}
-          <OurStory />
 
           {/* 10. Partner With Us (Distributor, Retailer, Institutional) */}
           <Partner />
