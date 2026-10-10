@@ -426,16 +426,16 @@ export function InteractiveMap() {
             {/* ----------------------------------------------------
                 RIGHT: LUXURY HUB INSPECTOR & SMART LOCATOR
                 ---------------------------------------------------- */}
-            <div className="lg:col-span-5 p-5 sm:p-6 flex flex-col justify-between bg-black/20 gap-5">
+            <div className="lg:col-span-5 p-3.5 sm:p-5 lg:p-6 flex flex-col justify-between bg-black/20 gap-4 sm:gap-5 min-w-0">
               
               {/* Quick Hub Switcher Strip (Horizontal Scroll on Mobile) */}
-              <div>
+              <div className="min-w-0">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-200/50">
                     Quick Select Hub
                   </span>
                   <span className="text-[10px] font-bold text-emerald-400">
-                    {CITY_HUBS.length} Verified Locations
+                    {CITY_HUBS.length} Locations
                   </span>
                 </div>
 
@@ -470,44 +470,44 @@ export function InteractiveMap() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -12, scale: 0.98 }}
                   transition={{ duration: 0.25, ease: 'easeOut' }}
-                  className="rounded-2xl border border-emerald-400/20 bg-gradient-to-br from-emerald-950/60 via-black/40 to-black/60 p-4 sm:p-5 shadow-lg relative overflow-hidden"
+                  className="rounded-2xl border border-emerald-400/20 bg-gradient-to-br from-emerald-950/60 via-black/40 to-black/60 p-3.5 sm:p-5 shadow-lg relative overflow-hidden min-w-0"
                 >
                   {/* Subtle card glow */}
                   <div className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-emerald-500/15 blur-2xl" />
 
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-emerald-300 bg-emerald-900/60 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
-                      <Sparkles className="h-3 w-3 text-amber-300" />
-                      {activeHub.status}
+                  <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 flex-wrap">
+                    <span className="inline-flex items-center gap-1.5 text-[9.5px] sm:text-[10px] font-black uppercase tracking-wider text-emerald-300 bg-emerald-900/60 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                      <Sparkles className="h-3 w-3 text-amber-300 shrink-0" />
+                      <span>{activeHub.status}</span>
                     </span>
-                    <span className="text-[11px] font-bold text-emerald-200/60">
+                    <span className="text-[10px] sm:text-[11px] font-bold text-emerald-200/60">
                       {activeHub.state}
                     </span>
                   </div>
 
-                  <h3 className="font-['Space_Grotesk',sans-serif] text-2xl sm:text-3xl font-black uppercase tracking-tight text-white leading-tight">
+                  <h3 className="font-['Space_Grotesk',sans-serif] text-xl sm:text-2xl lg:text-3xl font-black uppercase tracking-tight text-white leading-tight break-words">
                     {activeHub.name}
                   </h3>
-                  <p className="text-xs text-emerald-200/80 font-medium mt-0.5">
+                  <p className="text-xs text-emerald-200/80 font-medium mt-0.5 break-words">
                     {activeHub.distributors}
                   </p>
 
                   {/* 2-Cell Mini Specs */}
-                  <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-white/10">
-                    <div className="rounded-xl bg-white/[0.03] border border-white/5 p-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 sm:mt-4 pt-3 border-t border-white/10">
+                    <div className="rounded-xl bg-white/[0.03] border border-white/5 p-2 sm:p-2.5">
                       <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-emerald-200/50 font-bold">
-                        <Store className="h-3 w-3 text-emerald-400" />
-                        Network Capacity
+                        <Store className="h-3 w-3 text-emerald-400 shrink-0" />
+                        <span>Network Capacity</span>
                       </div>
                       <div className="text-xs sm:text-sm font-black text-white mt-1">
                         {activeHub.stores}
                       </div>
                     </div>
 
-                    <div className="rounded-xl bg-white/[0.03] border border-white/5 p-2.5">
+                    <div className="rounded-xl bg-white/[0.03] border border-white/5 p-2 sm:p-2.5">
                       <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-emerald-200/50 font-bold">
-                        <Clock className="h-3 w-3 text-amber-300" />
-                        Fulfillment Lead
+                        <Clock className="h-3 w-3 text-amber-300 shrink-0" />
+                        <span>Fulfillment Lead</span>
                       </div>
                       <div className="text-xs sm:text-sm font-black text-amber-300 mt-1">
                         {activeHub.leadTime}
@@ -518,10 +518,10 @@ export function InteractiveMap() {
                   {/* Quick Action Button */}
                   <button
                     onClick={() => scrollToSection('partner')}
-                    className="mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-black py-2.5 px-4 text-xs font-black uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all active:scale-[0.99] cursor-pointer"
+                    className="mt-3.5 sm:mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-400 hover:from-emerald-400 hover:to-teal-300 text-black py-2.5 px-3 text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all active:scale-[0.99] cursor-pointer text-center"
                   >
-                    <span>Supply PIO to Your Counter in {activeHub.name}</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    <span className="truncate">Supply PIO to Your Counter in {activeHub.name}</span>
+                    <ArrowRight className="h-3.5 w-3.5 shrink-0" />
                   </button>
                 </motion.div>
               </AnimatePresence>
