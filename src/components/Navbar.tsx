@@ -6,7 +6,7 @@ import { fizzAudio } from '@/utils/audio';
 const NAV_LINKS = [
   { id: 'home', label: 'Home' },
   { id: 'flavours', label: 'Products' },
-  { id: 'tetra-experience', label: 'Manufacturing & Quality' },
+  { id: 'ingredients', label: "What's Inside" },
   { id: 'partner', label: 'Partner With Us' },
   { id: 'contact', label: 'Contact Us' },
 ];

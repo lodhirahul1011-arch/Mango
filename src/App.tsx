@@ -6,7 +6,6 @@ import { MouseProvider } from '@/components/MouseProvider';
 import { ScrollHero } from '@/components/ScrollHero';
 import { SignatureProductTrail } from '@/components/SignatureProductTrail';
 import { Flavours } from '@/components/BrandSections';
-import { TetraExperience } from '@/components/TetraExperience';
 import { Ingredients } from '@/components/Ingredients';
 import { InteractiveMap } from '@/components/InteractiveMap';
 import { Partner } from '@/components/Partner';
@@ -67,9 +66,6 @@ function App() {
 
           {/* 2. Signature Flavours Showcase (Alphonso Mango & Floral Lychee) */}
           <Flavours />
-
-          {/* 3. Interactive 3D Tetra Pak Experience & 6-Layer Technology */}
-          <TetraExperience />
 
           {/* 5. What's Inside: 3D Orbiting Natural Ingredients Universe */}
           <Ingredients />
