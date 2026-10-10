@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, ArrowRight, Sparkles, MapPin } from 'lucide-react';
+import { Menu, X, ArrowRight, Sparkles } from 'lucide-react';
 import { useScrolled, useActiveSection } from '@/hooks/useScrollReveal';
 import { fizzAudio } from '@/utils/audio';
 
 const NAV_LINKS = [
   { id: 'home', label: 'Home' },
-  { id: 'flavours', label: 'Flavours' },
-  { id: 'tetra-experience', label: 'Tetra Pack' },
-  { id: 'inside', label: "What's Inside" },
-  { id: 'map', label: 'Store Locator' },
   { id: 'story', label: 'Our Story' },
-  { id: 'contact', label: 'Contact' },
+  { id: 'flavours', label: 'Products' },
+  { id: 'tetra-experience', label: 'Manufacturing & Quality' },
+  { id: 'partner', label: 'Partner With Us' },
+  { id: 'contact', label: 'Contact Us' },
 ];
 
 export function Navbar() {
@@ -43,30 +42,30 @@ export function Navbar() {
     <>
       <header 
         className={`fixed z-50 transition-all duration-300 ${
-          // Mobile: floating compact glass pill / bar
           'top-2.5 left-3 right-3 lg:top-0 lg:left-0 lg:right-0 lg:w-full'
         }`}
       >
         <div 
-          className={`mx-auto max-w-7xl transition-all duration-300 rounded-2xl lg:rounded-none ${
+          className={`mx-auto max-w-7xl transition-all duration-300 rounded-full lg:rounded-[1.25rem] ${
             scrolled || open
-              ? 'bg-white/94 backdrop-blur-md shadow-sm border border-emerald-900/10 lg:border-b lg:border-x-0 lg:border-t-0' 
-              : 'bg-white/88 backdrop-blur-sm border border-emerald-900/10 lg:border-transparent'
+              ? 'bg-[#f8f6ef]/80 backdrop-blur-xl shadow-[0_12px_35px_rgba(7,61,44,0.12)] border border-[#0a3d2d]/10' 
+              : 'bg-[#f8f6ef]/70 backdrop-blur-md border border-[#0a3d2d]/10'
           }`}
         >
-          <nav className="flex items-center justify-between px-4 py-2.5 sm:px-6 lg:px-8 lg:py-3.5 min-h-[56px] lg:min-h-[64px]">
+          <nav className="flex items-center justify-between px-4 py-2.5 sm:px-6 lg:px-8 lg:py-3 min-h-[56px] lg:min-h-[64px]">
             
             {/* Brand Logo */}
             <button 
               onClick={() => go('home')} 
-              className="flex items-center gap-2 group cursor-pointer focus:outline-none" 
+              className="group flex items-center gap-2 cursor-pointer focus:outline-none" 
               aria-label="Go to PIO home"
             >
-              <span className="font-black text-2xl sm:text-3xl lg:text-4xl tracking-tighter text-[#0b6b3a] lowercase flex items-center">
-                P<span className="inline-block relative">i<span className="absolute -top-1 left-0.5 w-1.5 h-1.5 rounded-full bg-[#10b981]" /></span>o
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#07582f] bg-[#eef8f1] px-2 py-0.5 rounded-md border border-emerald-900/10 hidden sm:inline-block">
-                SipOhh!
+              <span className="relative flex h-11 w-[82px] items-center justify-center rounded-full border border-emerald-900/10 bg-white/70 px-3 shadow-[0_10px_26px_rgba(7,61,44,0.08)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-[0_16px_34px_rgba(7,61,44,0.14)] sm:h-12 sm:w-[96px]">
+                <img
+                  src="/brand/pio-logo-trim.png"
+                  alt="PIO"
+                  className="brand-logo-lift h-8 w-auto object-contain sm:h-9"
+                />
               </span>
             </button>
 
@@ -76,10 +75,10 @@ export function Navbar() {
                 <li key={link.id}>
                   <button 
                     onClick={() => go(link.id)} 
-                    className={`relative px-3.5 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                    className={`relative px-3.5 py-1.5 rounded-full text-[10px] xl:text-xs font-semibold uppercase tracking-[0.16em] transition-all duration-200 cursor-pointer ${
                       active === link.id 
-                        ? 'text-[#07582f] bg-[#eef8f1] font-bold shadow-2xs' 
-                        : 'text-[#1d3c2a]/80 hover:text-[#07582f] hover:bg-[#f4faf5]'
+                        ? 'text-[#0d3c2d] bg-[#eef6ef] font-bold shadow-[0_8px_18px_rgba(7,61,44,0.08)]' 
+                        : 'text-[#1d3c2a]/75 hover:text-[#0d3c2d] hover:bg-[#f3f0e8]'
                     }`}
                   >
                     {link.label}
@@ -104,7 +103,7 @@ export function Navbar() {
                 onClick={() => go('partner')} 
                 className="hidden sm:inline-flex items-center justify-center gap-1.5 rounded-full bg-[#07582f] hover:bg-[#096d3a] active:scale-95 text-white text-xs font-black uppercase tracking-wider px-5 py-2.5 shadow-sm transition-all duration-200 cursor-pointer min-h-[44px]"
               >
-                <span>Partner</span>
+                <span>Partner With Us</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
 

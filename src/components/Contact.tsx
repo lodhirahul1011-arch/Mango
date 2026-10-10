@@ -116,15 +116,19 @@ export function Contact() {
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#eef8f1] border border-[#cbe8d3] flex items-start gap-3">
+              <a
+                href="tel:+919971918470"
+                className="p-4 rounded-2xl bg-[#eef8f1] border border-[#cbe8d3] flex items-start gap-3 transition-colors hover:bg-[#e4f4e9]"
+                aria-label="Call Direct Helpline +91 99719 18470"
+              >
                 <Phone className="w-5 h-5 text-[#07582f] shrink-0 mt-0.5" />
                 <div className="text-xs">
                   <div className="font-black text-[#083b20]">Direct Helpline</div>
-                  <a href="tel:9971918470" className="text-[#07582f] font-bold mt-0.5 block hover:underline">
+                  <span className="text-[#07582f] font-bold mt-0.5 block hover:underline">
                     +91 99719 18470
-                  </a>
+                  </span>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
 
@@ -160,7 +164,7 @@ export function Contact() {
                         required
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        placeholder="Rahul Sharma"
+                        placeholder="Rahul Lodhi"
                         className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
                       />
                     </div>
@@ -173,7 +177,7 @@ export function Contact() {
                         required
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        placeholder="+91 98765 43210"
+                        placeholder="+91 99999 99999"
                         className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
                       />
                     </div>

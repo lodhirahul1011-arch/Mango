@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 @import './styles/responsive.css';
 
 @tailwind base;
@@ -7,16 +7,27 @@
 
 :root {
   --header-h: 74px;
+  --font-display: 'Cormorant Garamond', serif;
+  --font-ui: 'Manrope', sans-serif;
+
+  --warm-white: #F8F6EF;
+  --deep-green: #073D2C;
+  --fresh-green: #167A4A;
+  --mango: #F5A623;
+  --lychee: #EB5574;
+  --text: #10352B;
+  --muted: #67736D;
+
   --pio-green: #07582f;
   --pio-green-dark: #054022;
   --pio-green-light: #eef8f1;
   --ink: #082416;
-  --muted: #4e6b5a;
 }
 
 html {
   scroll-padding-top: var(--header-h);
-  background: #ffffff;
+  background: var(--warm-white);
+  scroll-behavior: smooth;
 }
 
 * {
@@ -25,12 +36,27 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
-  background: #ffffff;
-  color: var(--ink);
+  background: var(--warm-white);
+  color: var(--text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+  color: var(--deep-green);
+  font-weight: 600;
+  margin: 0;
+}
+
+p, span, button, a, li {
+  font-family: var(--font-ui);
 }
 
 button, input, textarea, select {
@@ -42,26 +68,46 @@ button {
 }
 
 ::selection {
-  background: #c3ebd2;
-  color: #074022;
+  background: rgba(22, 122, 74, 0.16);
+  color: var(--deep-green);
 }
 
-/* Custom subtle scrollbar */
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(3.1rem, 6vw, 5.75rem);
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  font-weight: 600;
+}
+
+.display-heading {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 8vw, 8rem);
+  line-height: 0.82;
+  letter-spacing: -0.06em;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f8f3;
+  background: #f1efe7;
 }
 ::-webkit-scrollbar-thumb {
-  background: #85c89f;
+  background: #9bb4a5;
   border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #07582f;
+  background: var(--deep-green);
 }
 
-/* Float subtle keyframes */
 @keyframes floatSubtle {
   0%, 100% {
     transform: translateY(0);
@@ -73,6 +119,18 @@ button {
 
 .animate-float {
   animation: floatSubtle 4s ease-in-out infinite;
+}
+
+.brand-logo-lift {
+  filter: drop-shadow(0 10px 18px rgba(7, 61, 44, 0.12));
+  transform: translateZ(0);
+  transition: transform 320ms ease, filter 320ms ease;
+}
+
+.group:hover .brand-logo-lift,
+.brand-logo-lift:hover {
+  filter: drop-shadow(0 14px 24px rgba(7, 61, 44, 0.2));
+  transform: translateY(-1px) scale(1.03);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -12,6 +12,7 @@ import { InteractiveMap } from '@/components/InteractiveMap';
 import { OurStory } from '@/components/OurStory';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
+import { ConsumerFaqs } from '@/components/ConsumerFaqs';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Footer } from '@/components/Footer';
@@ -84,7 +85,10 @@ function App() {
           {/* 10. Partner With Us (Distributor, Retailer, Institutional) */}
           <Partner />
 
-          {/* 11. Contact & FAQs Accordion */}
+          {/* 11. Consumer FAQs */}
+          <ConsumerFaqs />
+
+          {/* 12. Contact */}
           <Contact />
         </main>
 

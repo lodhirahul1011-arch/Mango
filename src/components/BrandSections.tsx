@@ -27,6 +27,8 @@ export function Flavours() {
   const lycheeRotate = useTransform(scrollYProgress, [0, 1], [6, -4]);
   const mangoScale = useTransform(scrollYProgress, [0, 0.45, 1], [0.94, 1.03, 0.98]);
   const lycheeScale = useTransform(scrollYProgress, [0, 0.56, 1], [0.9, 1.04, 1]);
+  const mangoPackY = useTransform(scrollYProgress, [0, 1], [24, -34]);
+  const lycheePackY = useTransform(scrollYProgress, [0, 1], [30, -40]);
   const headlineY = useTransform(scrollYProgress, [0, 0.36], [46, 0]);
   const headlineOpacity = useTransform(scrollYProgress, [0, 0.24], [0.25, 1]);
 
@@ -51,16 +53,21 @@ export function Flavours() {
           <motion.div style={{ y: headlineY, opacity: headlineOpacity }} className="z-20 max-w-[500px] lg:col-span-5">
             <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white/80 px-3.5 py-1.5 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.25em] text-[#0b8043] shadow-[0_12px_34px_rgba(7,88,47,0.08)] backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" />
-              Our Flavours
+              Products
             </span>
             <h2 className="mt-3 sm:mt-5 max-w-[470px] font-['Space_Grotesk',sans-serif] text-[clamp(2.4rem,7vw,5.35rem)] font-black uppercase leading-[0.92] tracking-tight text-[#082416]">
-              Two flavours,<br />
-              <span className="text-[#07582f]">one juicy stage.</span>
+              Real fruit,<br />
+              <span className="text-[#07582f]">ready to shine.</span>
             </h2>
             <p className="mt-3 sm:mt-5 max-w-md text-sm sm:text-base font-semibold leading-relaxed text-[#385b45]">
-              Mango rolls in warm and golden. Lychee answers with a bright pink splash. Scroll through the flavour switch.
+              Mango brings golden tropical depth. Lychee adds a bright floral chill. Both arrive in handy 160ml packs at Rs 10.
             </p>
-            <div className="mt-4 sm:mt-6 flex items-center gap-3">
+            <div className="mt-4 flex flex-wrap gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#07582f] sm:mt-6">
+              <span className="rounded-full border border-emerald-900/10 bg-white/75 px-3 py-1.5 shadow-2xs">160ml Pack</span>
+              <span className="rounded-full border border-emerald-900/10 bg-white/75 px-3 py-1.5 shadow-2xs">Rs 10</span>
+              <span className="rounded-full border border-emerald-900/10 bg-white/75 px-3 py-1.5 shadow-2xs">Made in Assam</span>
+            </div>
+            <div className="mt-5 sm:mt-7 flex items-center gap-3">
               <span className="h-2 w-16 overflow-hidden rounded-full bg-emerald-100">
                 <motion.span style={{ scaleX: scrollYProgress }} className="block h-full origin-left rounded-full bg-[#07582f]" />
               </span>
@@ -75,10 +82,16 @@ export function Flavours() {
             <div className="hidden lg:block relative min-h-[650px] w-full">
               <motion.article
                 style={{ y: mangoY, rotate: mangoRotate, scale: mangoScale }}
-                className="group absolute left-[2%] top-6 min-h-[420px] w-[52%] xl:w-[50%] overflow-hidden rounded-[28px] border border-amber-300/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.97),rgba(255,236,157,0.92))] p-6 shadow-[0_30px_80px_rgba(146,64,14,0.15)] backdrop-blur"
+                className="group absolute left-[1%] top-4 min-h-[470px] w-[55%] xl:w-[52%] overflow-hidden rounded-[34px] border border-amber-300/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.98),rgba(255,236,157,0.92))] p-6 shadow-[0_36px_90px_rgba(146,64,14,0.18)] backdrop-blur"
               >
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(255,255,255,0.9),transparent_24%),radial-gradient(circle_at_80%_80%,rgba(245,158,11,0.2),transparent_34%)]" />
-                <div className="relative z-10 flex min-h-[380px] flex-col justify-between">
+                <motion.img
+                  style={{ y: mangoPackY }}
+                  src="/images/pio-mango.png"
+                  alt="PIO Mango pack"
+                  className="absolute -right-8 bottom-8 z-20 w-[45%] max-w-[250px] rotate-[8deg] object-contain drop-shadow-[0_26px_34px_rgba(120,53,15,0.24)] transition-transform duration-500 group-hover:rotate-[4deg] group-hover:scale-105"
+                />
+                <div className="relative z-10 flex min-h-[420px] max-w-[62%] flex-col justify-between">
                   <div>
                     <span className="rounded-full bg-white/70 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#92400e]">01 / Tropical Classic</span>
                     <h3 className="mt-3 font-['Space_Grotesk',sans-serif] text-5xl font-black uppercase leading-none text-[#78350f]">Mango</h3>
@@ -93,10 +106,10 @@ export function Flavours() {
 
                   <div className="pt-3">
                     <button
-                      onClick={() => go('story')}
-                      className="inline-flex items-center gap-2 rounded-full bg-[#92400e] px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-md active:scale-95 transition-colors min-h-[44px] cursor-pointer"
+                      onClick={() => go('partner')}
+                      className="inline-flex items-center gap-2 rounded-full bg-[#92400e] px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-[0_14px_30px_rgba(146,64,14,0.22)] active:scale-95 transition-all hover:-translate-y-0.5 hover:bg-[#78350f] min-h-[44px] cursor-pointer"
                     >
-                      <span>Explore Mango</span> <ArrowRight className="h-3.5 w-3.5" />
+                      <span>Enquire Mango</span> <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                   </div>
                 </div>
@@ -104,10 +117,16 @@ export function Flavours() {
 
               <motion.article
                 style={{ y: lycheeY, rotate: lycheeRotate, scale: lycheeScale }}
-                className="group absolute right-[2%] bottom-6 min-h-[420px] w-[52%] xl:w-[50%] overflow-hidden rounded-[28px] border border-rose-300/80 bg-[linear-gradient(135deg,rgba(255,247,249,0.97),rgba(255,214,226,0.92))] p-6 shadow-[0_30px_80px_rgba(157,23,77,0.15)] backdrop-blur"
+                className="group absolute right-[1%] bottom-4 min-h-[470px] w-[55%] xl:w-[52%] overflow-hidden rounded-[34px] border border-rose-300/80 bg-[linear-gradient(135deg,rgba(255,247,249,0.98),rgba(255,214,226,0.92))] p-6 shadow-[0_36px_90px_rgba(157,23,77,0.18)] backdrop-blur"
               >
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_28%,rgba(255,255,255,0.92),transparent_24%),radial-gradient(circle_at_78%_80%,rgba(225,29,72,0.18),transparent_34%)]" />
-                <div className="relative z-10 flex min-h-[380px] flex-col justify-between">
+                <motion.img
+                  style={{ y: lycheePackY }}
+                  src="/images/pio-lychee.png"
+                  alt="PIO Lychee pack"
+                  className="absolute -right-8 bottom-8 z-20 w-[45%] max-w-[250px] rotate-[7deg] object-contain drop-shadow-[0_26px_34px_rgba(131,24,67,0.22)] transition-transform duration-500 group-hover:rotate-[3deg] group-hover:scale-105"
+                />
+                <div className="relative z-10 flex min-h-[420px] max-w-[62%] flex-col justify-between">
                   <div>
                     <span className="rounded-full bg-white/70 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#9d174d]">02 / Exotic Refresh</span>
                     <h3 className="mt-3 font-['Space_Grotesk',sans-serif] text-5xl font-black uppercase leading-none text-[#831843]">Lychee</h3>
@@ -122,10 +141,10 @@ export function Flavours() {
 
                   <div className="pt-3">
                     <button
-                      onClick={() => go('story')}
-                      className="inline-flex items-center gap-2 rounded-full bg-[#9d174d] px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-md active:scale-95 transition-colors min-h-[44px] cursor-pointer"
+                      onClick={() => go('partner')}
+                      className="inline-flex items-center gap-2 rounded-full bg-[#9d174d] px-5 py-2.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-[0_14px_30px_rgba(157,23,77,0.22)] active:scale-95 transition-all hover:-translate-y-0.5 hover:bg-[#831843] min-h-[44px] cursor-pointer"
                     >
-                      <span>Explore Lychee</span> <ArrowRight className="h-3.5 w-3.5" />
+                      <span>Enquire Lychee</span> <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                   </div>
                 </div>
@@ -135,8 +154,9 @@ export function Flavours() {
             {/* MOBILE & TABLET VIEW: CLEAN VERTICAL STACK OR DEDICATED CARDS (ZERO OVERLAP) */}
             <div className="lg:hidden flex flex-col gap-5 w-full">
               {/* Mango Card */}
-              <article className="relative w-full overflow-hidden rounded-[26px] border border-amber-300/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.98),rgba(255,236,157,0.92))] p-5 shadow-md backdrop-blur">
-                <div className="relative z-10 flex flex-col justify-between space-y-4">
+              <article className="relative w-full overflow-hidden rounded-[28px] border border-amber-300/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.98),rgba(255,236,157,0.92))] p-5 shadow-[0_20px_54px_rgba(146,64,14,0.12)] backdrop-blur">
+                <img src="/images/pio-mango.png" alt="PIO Mango pack" className="absolute -right-5 bottom-4 w-[34%] min-w-[112px] rotate-6 object-contain drop-shadow-[0_18px_24px_rgba(120,53,15,0.18)]" />
+                <div className="relative z-10 flex min-h-[250px] max-w-[70%] flex-col justify-between space-y-4">
                   <div>
                     <span className="rounded-full bg-white/80 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#92400e]">01 / Tropical Classic</span>
                     <h3 className="mt-2 font-['Space_Grotesk',sans-serif] text-3xl sm:text-4xl font-black uppercase text-[#78350f]">Mango</h3>
@@ -150,18 +170,19 @@ export function Flavours() {
                   </div>
                   <div>
                     <button
-                      onClick={() => go('story')}
+                      onClick={() => go('partner')}
                       className="inline-flex items-center gap-2 rounded-full bg-[#92400e] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-xs active:scale-95 cursor-pointer min-h-[44px]"
                     >
-                      <span>Explore Mango</span> <ArrowRight className="h-3.5 w-3.5" />
+                      <span>Enquire</span> <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                   </div>
                 </div>
               </article>
 
               {/* Lychee Card */}
-              <article className="relative w-full overflow-hidden rounded-[26px] border border-rose-300/80 bg-[linear-gradient(135deg,rgba(255,247,249,0.98),rgba(255,214,226,0.92))] p-5 shadow-md backdrop-blur">
-                <div className="relative z-10 flex flex-col justify-between space-y-4">
+              <article className="relative w-full overflow-hidden rounded-[28px] border border-rose-300/80 bg-[linear-gradient(135deg,rgba(255,247,249,0.98),rgba(255,214,226,0.92))] p-5 shadow-[0_20px_54px_rgba(157,23,77,0.12)] backdrop-blur">
+                <img src="/images/pio-lychee.png" alt="PIO Lychee pack" className="absolute -right-5 bottom-4 w-[34%] min-w-[112px] rotate-6 object-contain drop-shadow-[0_18px_24px_rgba(131,24,67,0.18)]" />
+                <div className="relative z-10 flex min-h-[250px] max-w-[70%] flex-col justify-between space-y-4">
                   <div>
                     <span className="rounded-full bg-white/80 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#9d174d]">02 / Exotic Refresh</span>
                     <h3 className="mt-2 font-['Space_Grotesk',sans-serif] text-3xl sm:text-4xl font-black uppercase text-[#831843]">Lychee</h3>
@@ -175,10 +196,10 @@ export function Flavours() {
                   </div>
                   <div>
                     <button
-                      onClick={() => go('story')}
+                      onClick={() => go('partner')}
                       className="inline-flex items-center gap-2 rounded-full bg-[#9d174d] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-xs active:scale-95 cursor-pointer min-h-[44px]"
                     >
-                      <span>Explore Lychee</span> <ArrowRight className="h-3.5 w-3.5" />
+                      <span>Enquire</span> <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                   </div>
                 </div>
