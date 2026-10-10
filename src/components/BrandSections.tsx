@@ -119,12 +119,24 @@ function FlavourInfo({
   copy: string;
   className?: string;
 }) {
-  const palette = tone === 'mango' ? 'text-[#8A5200] border-[#FFC83D]/35 bg-[#fff7d7]/70' : 'text-[#8a2149] border-[#F6ABC5]/45 bg-[#fff2f7]/72';
+  const isMango = tone === 'mango';
+  const containerStyle = isMango
+    ? 'bg-white/92 border-amber-300/80 shadow-[0_16px_36px_rgba(180,83,9,0.14)] text-slate-800'
+    : 'bg-white/94 border-rose-300/85 shadow-[0_16px_36px_rgba(225,29,72,0.15)] text-slate-800';
+
+  const badgeStyle = isMango
+    ? 'text-[#b45309] bg-amber-50 border-amber-200'
+    : 'text-[#be123c] bg-rose-50 border-rose-200';
 
   return (
-    <div className={`flavour-info absolute z-30 w-[180px] rounded-2xl border px-4 py-3 shadow-[0_18px_42px_rgba(6,79,50,0.12)] backdrop-blur-xl ${palette} ${className}`}>
-      <div className="text-[10px] font-black uppercase tracking-[0.22em]">{title}</div>
-      <p className="mt-1 text-xs font-bold leading-snug opacity-80">{copy}</p>
+    <div className={`flavour-info absolute z-30 w-[196px] rounded-2xl border p-3.5 backdrop-blur-xl transition-all duration-300 ${containerStyle} ${className}`}>
+      <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[0.2em] ${badgeStyle}`}>
+        <span className={`w-1.5 h-1.5 rounded-full ${isMango ? 'bg-amber-500' : 'bg-rose-500'}`} />
+        <span>{title}</span>
+      </div>
+      <p className="mt-2 text-xs font-semibold leading-relaxed text-[#1e293b]">
+        {copy}
+      </p>
     </div>
   );
 }
