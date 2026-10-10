@@ -106,21 +106,7 @@ const PURITY_PILLARS = [
 export function Ingredients() {
   const [selectedFlavor, setSelectedFlavor] = useState<'mango' | 'lychee'>('mango');
   const [scanActive, setScanActive] = useState(true);
-  const [poppedBubbles, setPoppedBubbles] = useState<number[]>([]);
   const flavor = INGREDIENTS_DATA[selectedFlavor];
-
-  // Pop interactive bubble
-  const handlePopBubble = (id: number) => {
-    fizzAudio.playFizz();
-    if (!poppedBubbles.includes(id)) {
-      setPoppedBubbles((prev) => [...prev, id]);
-    }
-  };
-
-  const handleResetBubbles = () => {
-    setPoppedBubbles([]);
-    fizzAudio.playFizz();
-  };
 
   return (
     <section 
@@ -453,56 +439,7 @@ export function Ingredients() {
           ))}
         </div>
 
-        {/* ----------------------------------------------------
-            INTERACTIVE FIZZY BUBBLE POPPER (PLAYFUL LAB SENSORY TOY)
-        ---------------------------------------------------- */}
-        <div className="mt-8 rounded-[32px] bg-gradient-to-r from-[#eefaf1] via-white to-[#fef8eb] border border-emerald-900/10 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
-          
-          <div className="space-y-1 text-center sm:text-left">
-            <div className="flex items-center justify-center sm:justify-start gap-2">
-              <Smile className="w-4 h-4 text-amber-500" />
-              <h4 className="text-base font-black text-[#083b20]">
-                Interactive Freshness Bubbles
-              </h4>
-            </div>
-            <p className="text-xs text-[#385b45] font-medium">
-              Click any bubble below to pop fruit freshness with realistic audio feedback!
-            </p>
-          </div>
 
-          {/* Bubbles Row */}
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 sm:gap-3">
-            {[1, 2, 3, 4, 5].map((bubbleId) => {
-              const isPopped = poppedBubbles.includes(bubbleId);
-              return (
-                <button
-                  key={bubbleId}
-                  onClick={() => handlePopBubble(bubbleId)}
-                  disabled={isPopped}
-                  className={`relative flex h-11 w-11 items-center justify-center rounded-full text-base font-black transition-all cursor-pointer ${
-                    isPopped
-                      ? 'bg-emerald-100 text-emerald-700 scale-75 opacity-50 cursor-not-allowed'
-                      : 'bg-white shadow-md hover:scale-110 active:scale-90 border border-emerald-900/15 text-[#083b20]'
-                  }`}
-                  aria-label={`Pop bubble ${bubbleId}`}
-                >
-                  {isPopped ? '✨' : bubbleId === 1 ? '🥭' : bubbleId === 2 ? '💧' : bubbleId === 3 ? '🌺' : bubbleId === 4 ? '🍃' : '⭐'}
-                </button>
-              );
-            })}
-
-            {poppedBubbles.length > 0 && (
-              <button
-                onClick={handleResetBubbles}
-                className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-[#0b8043] hover:underline ml-2 cursor-pointer"
-              >
-                <RotateCw className="w-3.5 h-3.5" />
-                Reset
-              </button>
-            )}
-          </div>
-
-        </div>
 
       </div>
     </section>
