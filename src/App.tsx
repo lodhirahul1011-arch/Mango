@@ -14,7 +14,6 @@ import { ConsumerFaqs } from '@/components/ConsumerFaqs';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Footer } from '@/components/Footer';
-import { initPioMotion } from '@/utils/motionSystem';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,11 +41,8 @@ function App() {
       ScrollTrigger.refresh();
     }, 200);
 
-    const motionCleanup = initPioMotion(document.body);
-
     return () => {
       clearTimeout(refreshTimer);
-      motionCleanup();
       cancelAnimationFrame(raf);
       lenis.destroy();
     };

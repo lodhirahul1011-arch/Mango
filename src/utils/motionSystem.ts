@@ -54,8 +54,8 @@ function revealSelfAnimatedShell(section: HTMLElement, index: number, isDesktop:
       scrollTrigger: {
         trigger: section,
         start: 'top 104%',
-        end: isDesktop ? 'top 24%' : 'top 34%',
-        scrub: 0.65,
+        end: isDesktop ? 'top 88%' : 'top 90%',
+        scrub: 0.2,
       },
     }
   );
@@ -282,8 +282,8 @@ export function pageSectionReveal(section: HTMLElement, index: number, isDesktop
       scrollTrigger: {
         trigger: section,
         start: 'top 102%',
-        end: isDesktop ? 'top 8%' : 'top 18%',
-        scrub: 0.7,
+        end: isDesktop ? 'top 88%' : 'top 90%',
+        scrub: 0.2,
       },
     }
   );
@@ -303,8 +303,8 @@ export function pageSectionReveal(section: HTMLElement, index: number, isDesktop
     scrollTrigger: {
       trigger: section,
       start: 'top 96%',
-      end: isDesktop ? 'top 20%' : 'top 34%',
-      scrub: 0.7,
+      end: isDesktop ? 'top 86%' : 'top 88%',
+      scrub: 0.2,
     },
   });
 
@@ -330,8 +330,8 @@ export function pageSectionReveal(section: HTMLElement, index: number, isDesktop
         scrollTrigger: {
           trigger: section,
           start: 'top 92%',
-          end: 'top 28%',
-          scrub: 0.9,
+          end: 'top 84%',
+          scrub: 0.2,
         },
       }
     );
@@ -445,10 +445,7 @@ export function initPioMotion(root: HTMLElement): Cleanup {
             revealImage(section);
             parallaxElement(section, isDesktop);
           }
-          sectionTransition(section, index);
         });
-
-        scrollPageVeil(root, sections);
 
         magneticCleanup = magneticButton(root);
       }

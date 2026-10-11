@@ -92,7 +92,7 @@ function LiquidSplashLayer({ tone }: { tone: 'mango' | 'lychee' }) {
   const accent = tone === 'mango' ? 'rgba(255,154,31,0.2)' : 'rgba(219,52,96,0.2)';
 
   return (
-    <div className={`liquid-splash liquid-splash-${tone} pointer-events-none absolute inset-0`} aria-hidden="true">
+    <div className={`liquid-splash liquid-splash-${tone} pointer-events-none absolute inset-0 hidden sm:block`} aria-hidden="true">
       <span
         data-placeholder="transparent-liquid-splash-asset"
         className="absolute inset-x-[8%] top-[24%] h-[44%] rounded-[54%_46%_58%_42%] blur-[2px]"
@@ -290,10 +290,10 @@ function ProductsShowcase() {
     <section
       ref={sectionRef}
       id="flavours"
-      className="products-showcase relative isolate overflow-hidden bg-[#FAFCF7] py-20 text-[#064F32] sm:py-24 lg:min-h-[100svh] lg:py-0"
+      className="products-showcase relative isolate overflow-hidden bg-[#fbfaf2] py-20 text-[#064F32] sm:py-24 lg:min-h-[100svh] lg:bg-[#FAFCF7] lg:py-0"
     >
-      <div className="products-bg-shift pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_28%,rgba(246,171,197,0.30),transparent_26%),radial-gradient(circle_at_56%_54%,rgba(255,200,61,0.30),transparent_30%),linear-gradient(120deg,#FAFCF7_0%,#F4FAF0_52%,#ECF7EE_100%)] bg-[length:140%_140%]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[linear-gradient(180deg,rgba(250,252,247,0.96),transparent)]" />
+      <div className="products-bg-shift pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(255,255,255,0.82),transparent_32%),radial-gradient(circle_at_18%_58%,rgba(245,158,11,0.16),transparent_30%),radial-gradient(circle_at_86%_55%,rgba(244,63,94,0.13),transparent_28%),linear-gradient(180deg,#fbfaf2_0%,#fff8dc_48%,#eef8ed_100%)] bg-[length:140%_140%] lg:bg-[radial-gradient(circle_at_72%_28%,rgba(246,171,197,0.30),transparent_26%),radial-gradient(circle_at_56%_54%,rgba(255,200,61,0.30),transparent_30%),linear-gradient(120deg,#FAFCF7_0%,#F4FAF0_52%,#ECF7EE_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[linear-gradient(180deg,rgba(251,250,242,0.96),transparent)] lg:bg-[linear-gradient(180deg,rgba(250,252,247,0.96),transparent)]" />
 
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-8 lg:min-h-[100svh] lg:grid-cols-[0.88fr_1.12fr] lg:gap-8 lg:py-24">
         <div className="relative z-20 max-w-xl">
@@ -316,27 +316,27 @@ function ProductsShowcase() {
           <AnimatedCTA />
         </div>
 
-        <div ref={visualRef} className="relative z-10 min-h-[540px] overflow-visible sm:min-h-[650px] lg:min-h-[760px]">
+        <div ref={visualRef} className="relative z-10 -mt-4 min-h-[410px] overflow-visible sm:mt-0 sm:min-h-[650px] lg:min-h-[760px]">
           <LiquidSplashLayer tone="mango" />
           <LiquidSplashLayer tone="lychee" />
 
-          <FruitLayer tone="leaf" className="depth-far left-[12%] top-[10%] h-14 w-28 rotate-[-28deg] rounded-[90%_10%_90%_10%]" />
-          <FruitLayer tone="leaf" className="depth-near right-[5%] top-[13%] h-16 w-32 rotate-[32deg] rounded-[90%_10%_90%_10%]" />
-          <FruitLayer tone="mango" className="depth-near left-[3%] bottom-[22%] h-20 w-24 rotate-[-14deg] rounded-[58%_42%_52%_48%]" />
-          <FruitLayer tone="lychee" className="depth-far right-[8%] bottom-[18%] h-20 w-20 rounded-full border-[10px] border-white/30" />
-          <FruitLayer tone="leaf" className="depth-far left-[44%] bottom-[7%] h-10 w-24 rotate-[18deg] rounded-[90%_10%_90%_10%]" />
+          <FruitLayer tone="leaf" className="depth-far left-[12%] top-[6%] h-10 w-20 rotate-[-28deg] rounded-[90%_10%_90%_10%] sm:top-[10%] sm:h-14 sm:w-28" />
+          <FruitLayer tone="leaf" className="depth-near right-[5%] top-[9%] h-11 w-24 rotate-[32deg] rounded-[90%_10%_90%_10%] sm:top-[13%] sm:h-16 sm:w-32" />
+          <FruitLayer tone="mango" className="depth-near left-[4%] bottom-[16%] h-16 w-20 rotate-[-14deg] rounded-[58%_42%_52%_48%] sm:left-[3%] sm:bottom-[22%] sm:h-20 sm:w-24" />
+          <FruitLayer tone="lychee" className="depth-far right-[8%] bottom-[12%] h-16 w-16 rounded-full border-[8px] border-white/30 sm:bottom-[18%] sm:h-20 sm:w-20 sm:border-[10px]" />
+          <FruitLayer tone="leaf" className="depth-far left-[44%] bottom-[4%] h-8 w-20 rotate-[18deg] rounded-[90%_10%_90%_10%] sm:bottom-[7%] sm:h-10 sm:w-24" />
 
           <ProductVisual
             src={PRODUCT_ASSETS.mango}
             alt="PIO Mango original carton"
             tone="mango"
-            className="product-mango left-[2%] top-[14%] h-[430px] w-[48%] max-w-[360px] -rotate-[5deg] sm:left-[10%] sm:h-[560px] lg:left-[7%] lg:top-[12%] lg:h-[610px]"
+            className="product-mango left-[5%] top-[4%] h-[330px] w-[47%] max-w-[260px] -rotate-[5deg] sm:left-[10%] sm:top-[14%] sm:h-[560px] sm:max-w-[360px] lg:left-[7%] lg:top-[12%] lg:h-[610px]"
           />
           <ProductVisual
             src={PRODUCT_ASSETS.lychee}
             alt="PIO Lychee original carton"
             tone="lychee"
-            className="product-lychee right-[0%] top-[22%] h-[420px] w-[48%] max-w-[350px] rotate-[5deg] sm:right-[8%] sm:h-[545px] lg:right-[5%] lg:top-[20%] lg:h-[590px]"
+            className="product-lychee right-[4%] top-[12%] h-[320px] w-[47%] max-w-[250px] rotate-[5deg] sm:right-[8%] sm:top-[22%] sm:h-[545px] sm:max-w-[350px] lg:right-[5%] lg:top-[20%] lg:h-[590px]"
           />
 
           <FlavourInfo

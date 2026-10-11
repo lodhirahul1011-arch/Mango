@@ -305,11 +305,11 @@ export function InteractiveMap() {
   return (
     <section 
       id="map" 
-      className="relative py-12 sm:py-16 lg:py-20 overflow-hidden bg-gradient-to-b from-[#03150c] via-[#062013] to-[#04170d] text-white border-t border-emerald-500/15"
+      className="relative py-12 sm:py-16 lg:py-20 overflow-hidden bg-gradient-to-b from-[#fbfaf2] via-[#eff8ef] to-[#fff7df] text-[#083b20] border-t border-emerald-900/10"
     >
       {/* 1. Ambient Luxury Glows */}
-      <div className="pointer-events-none absolute -top-24 left-1/4 h-80 w-80 rounded-full bg-emerald-500/10 blur-[100px]" />
-      <div className="pointer-events-none absolute -bottom-24 right-1/4 h-80 w-80 rounded-full bg-amber-400/10 blur-[110px]" />
+      <div className="pointer-events-none absolute -top-24 left-1/4 h-80 w-80 rounded-full bg-emerald-300/22 blur-[100px]" />
+      <div className="pointer-events-none absolute -bottom-24 right-1/4 h-80 w-80 rounded-full bg-amber-300/24 blur-[110px]" />
       
       {/* Subtle Luxury Carbon Pattern */}
       <div 
@@ -327,7 +327,7 @@ export function InteractiveMap() {
             ========================================================= */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8 lg:mb-10">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-950/60 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#34d399] shadow-inner backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white/80 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.25em] text-[#0b8043] shadow-sm backdrop-blur-md">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
@@ -335,29 +335,29 @@ export function InteractiveMap() {
               Dispatch Radar & Store Locator
             </div>
 
-            <h2 className="mt-3 font-['Space_Grotesk',sans-serif] text-[clamp(1.9rem,4.5vw,3.2rem)] font-extrabold uppercase tracking-tight text-white leading-[1.05]">
-              PIO <span className="bg-gradient-to-r from-emerald-400 via-teal-200 to-amber-300 bg-clip-text text-transparent">Near You.</span>
+            <h2 className="mt-3 font-['Space_Grotesk',sans-serif] text-[clamp(1.9rem,4.5vw,3.2rem)] font-extrabold uppercase tracking-tight text-[#083b20] leading-[1.05]">
+              PIO <span className="bg-gradient-to-r from-[#0b8043] via-[#18a464] to-[#d97706] bg-clip-text text-transparent">Near You.</span>
             </h2>
 
-            <p className="mt-1.5 text-xs sm:text-sm text-emerald-100/70 max-w-xl font-medium leading-relaxed">
+            <p className="mt-1.5 text-xs sm:text-sm text-[#3b5e48] max-w-xl font-medium leading-relaxed">
               Real-time dispatch corridors from Mangaldai aseptic plant across 15,000+ verified neighborhood retail points.
             </p>
           </div>
 
           {/* Luxury Compact KPI Ribbon */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 bg-white/[0.04] border border-white/10 rounded-2xl p-2.5 backdrop-blur-md">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 bg-white/70 border border-emerald-900/10 rounded-2xl p-2.5 backdrop-blur-md shadow-sm">
             {METRICS.map((m) => {
               const Icon = m.icon;
               return (
-                <div key={m.label} className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-black/20 border border-white/5">
-                  <div className="h-7 w-7 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+                <div key={m.label} className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#f8fdf9] border border-emerald-900/10">
+                  <div className="h-7 w-7 rounded-lg bg-emerald-100 text-[#07582f] flex items-center justify-center shrink-0">
                     <Icon className="h-3.5 w-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm sm:text-base font-black font-['Space_Grotesk',sans-serif] text-white leading-none">
+                    <div className="text-sm sm:text-base font-black font-['Space_Grotesk',sans-serif] text-[#083b20] leading-none">
                       {m.value}
                     </div>
-                    <div className="text-[9px] sm:text-[10px] text-emerald-200/60 truncate font-semibold mt-0.5">
+                    <div className="text-[9px] sm:text-[10px] text-[#3b5e48] truncate font-semibold mt-0.5">
                       {m.label}
                     </div>
                   </div>
@@ -370,35 +370,35 @@ export function InteractiveMap() {
         {/* =========================================================
             MAIN INTEGRATED LUXURY RADAR CONSOLE
             ========================================================= */}
-        <div className="relative rounded-3xl border border-emerald-500/20 bg-gradient-to-b from-[#0a2919]/80 via-[#051c11]/90 to-[#03150c]/95 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] backdrop-blur-xl overflow-hidden">
+        <div className="relative rounded-3xl border border-emerald-900/10 bg-white/82 shadow-[0_24px_60px_-20px_rgba(7,61,44,0.22)] backdrop-blur-xl overflow-hidden">
           
           {/* Top Console Bar */}
-          <div className="flex items-center justify-between flex-wrap gap-3 px-5 py-3.5 border-b border-white/10 bg-white/[0.02]">
+          <div className="flex items-center justify-between flex-wrap gap-3 px-5 py-3.5 border-b border-emerald-900/10 bg-[#f8fdf9]/85">
             <div className="flex items-center gap-2.5">
               <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-emerald-300">
-                <Radio className="h-4 w-4 text-emerald-400 animate-pulse" />
+                <Radio className="h-4 w-4 text-[#0b8043] animate-pulse" />
                 <span>Live Logistics Grid</span>
               </div>
-              <span className="hidden sm:inline-block h-3 w-px bg-white/15" />
-              <span className="hidden sm:inline-flex text-[10px] uppercase font-bold text-emerald-200/50 tracking-wider">
+              <span className="hidden sm:inline-block h-3 w-px bg-emerald-900/15" />
+              <span className="hidden sm:inline-flex text-[10px] uppercase font-bold text-[#3b5e48] tracking-wider">
                 9 Corridors Synchronized
               </span>
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex items-center gap-1 bg-black/40 p-1 rounded-xl border border-white/10 text-xs">
+            <div className="flex items-center gap-1 bg-emerald-50 p-1 rounded-xl border border-emerald-900/10 text-xs">
               {(['all', 'central', 'hub'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setFilterType(tab)}
                   className={`relative px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-colors duration-200 ${
-                    filterType === tab ? 'text-white' : 'text-emerald-200/50 hover:text-white'
+                    filterType === tab ? 'text-white' : 'text-[#3b5e48] hover:text-[#07582f]'
                   }`}
                 >
                   {filterType === tab && (
                     <motion.div
                       layoutId="mapTabActive"
-                      className="absolute inset-0 rounded-lg bg-emerald-600/80 border border-emerald-400/30 shadow-xs"
+                      className="absolute inset-0 rounded-lg bg-[#07582f] border border-emerald-600/30 shadow-xs"
                       transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                     />
                   )}
@@ -416,10 +416,10 @@ export function InteractiveMap() {
             {/* ----------------------------------------------------
                 LEFT: LUXURY RADAR VECTOR MAP (Compact, High-Visual)
                 ---------------------------------------------------- */}
-            <div className="lg:col-span-7 relative p-4 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/10 min-h-[340px] sm:min-h-[400px]">
+            <div className="lg:col-span-7 relative p-4 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-emerald-900/10 min-h-[340px] sm:min-h-[400px]">
               
               {/* Radar Stage Container */}
-              <div className="relative w-full h-full min-h-[300px] sm:min-h-[350px] rounded-2xl bg-black/40 border border-emerald-500/15 overflow-hidden flex items-center justify-center">
+              <div className="relative w-full h-full min-h-[300px] sm:min-h-[350px] rounded-2xl bg-gradient-to-br from-[#eef8f1] via-[#f8fdf9] to-[#fff4d8] border border-emerald-900/10 overflow-hidden flex items-center justify-center">
                 
                 {/* 1. Radar Circular Target Rings */}
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -515,7 +515,7 @@ export function InteractiveMap() {
                         className={`absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md px-1.5 py-0.5 text-[8.5px] font-extrabold uppercase tracking-wider transition-all pointer-events-none shadow-md ${
                           isSelected
                             ? 'bg-emerald-400 text-black font-black scale-105 ring-1 ring-white/50'
-                            : 'bg-black/80 text-emerald-100/80 border border-white/10 group-hover:text-white group-hover:border-emerald-400/40'
+                            : 'bg-white/90 text-[#07582f] border border-emerald-900/10 group-hover:text-[#083b20] group-hover:border-emerald-500/40'
                         }`}
                       >
                         {hub.name}
@@ -525,7 +525,7 @@ export function InteractiveMap() {
                 })}
 
                 {/* Map Bottom Quick Indicator */}
-                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] text-emerald-200/60 pointer-events-none bg-black/40 px-2.5 py-1 rounded-lg backdrop-blur-xs border border-white/5">
+                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] text-[#3b5e48] pointer-events-none bg-white/88 px-2.5 py-1 rounded-lg backdrop-blur-xs border border-emerald-900/10">
                   <div className="flex items-center gap-3">
                     <span className="flex items-center gap-1.5 font-bold text-amber-300">
                       <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
@@ -536,7 +536,7 @@ export function InteractiveMap() {
                       Active Hubs
                     </span>
                   </div>
-                  <span className="hidden sm:inline-block text-[9px] uppercase tracking-widest text-emerald-200/40">
+                  <span className="hidden sm:inline-block text-[9px] uppercase tracking-widest text-[#3b5e48]/70">
                     Touch any node
                   </span>
                 </div>
@@ -548,12 +548,12 @@ export function InteractiveMap() {
             {/* ----------------------------------------------------
                 RIGHT: LUXURY HUB INSPECTOR & SMART LOCATOR
                 ---------------------------------------------------- */}
-            <div className="lg:col-span-5 p-3.5 sm:p-5 lg:p-6 flex flex-col justify-between bg-black/20 gap-4 sm:gap-5 min-w-0">
+            <div className="lg:col-span-5 p-3.5 sm:p-5 lg:p-6 flex flex-col justify-between bg-[#f8fdf9] gap-4 sm:gap-5 min-w-0">
               
               {/* Quick Hub Switcher Strip (Horizontal Scroll on Mobile) */}
               <div className="min-w-0">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-200/50">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#3b5e48]">
                     Quick Select Hub
                   </span>
                   <span className="text-[10px] font-bold text-emerald-400">
@@ -574,7 +574,7 @@ export function InteractiveMap() {
                         className={`relative px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all duration-150 shrink-0 ${
                           isSelected 
                             ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-black shadow-xs font-black' 
-                            : 'bg-white/5 text-emerald-100/70 hover:bg-white/10 hover:text-white border border-white/5'
+                            : 'bg-white text-[#3b5e48] hover:bg-emerald-50 hover:text-[#07582f] border border-emerald-900/10'
                         }`}
                       >
                         {hub.name}
@@ -592,42 +592,42 @@ export function InteractiveMap() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -12, scale: 0.98 }}
                   transition={{ duration: 0.25, ease: 'easeOut' }}
-                  className="rounded-2xl border border-emerald-400/20 bg-gradient-to-br from-emerald-950/60 via-black/40 to-black/60 p-3.5 sm:p-5 shadow-lg relative overflow-hidden min-w-0"
+                  className="rounded-2xl border border-emerald-900/10 bg-white p-3.5 sm:p-5 shadow-lg relative overflow-hidden min-w-0"
                 >
                   {/* Subtle card glow */}
                   <div className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-emerald-500/15 blur-2xl" />
 
                   <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 flex-wrap">
-                    <span className="inline-flex items-center gap-1.5 text-[9.5px] sm:text-[10px] font-black uppercase tracking-wider text-emerald-300 bg-emerald-900/60 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                    <span className="inline-flex items-center gap-1.5 text-[9.5px] sm:text-[10px] font-black uppercase tracking-wider text-[#07582f] bg-emerald-50 border border-emerald-900/10 px-2.5 py-0.5 rounded-full">
                       <Sparkles className="h-3 w-3 text-amber-300 shrink-0" />
                       <span>{activeHub.status}</span>
                     </span>
-                    <span className="text-[10px] sm:text-[11px] font-bold text-emerald-200/60">
+                    <span className="text-[10px] sm:text-[11px] font-bold text-[#3b5e48]">
                       {activeHub.state}
                     </span>
                   </div>
 
-                  <h3 className="font-['Space_Grotesk',sans-serif] text-xl sm:text-2xl lg:text-3xl font-black uppercase tracking-tight text-white leading-tight break-words">
+                  <h3 className="font-['Space_Grotesk',sans-serif] text-xl sm:text-2xl lg:text-3xl font-black uppercase tracking-tight text-[#083b20] leading-tight break-words">
                     {activeHub.name}
                   </h3>
-                  <p className="text-xs text-emerald-200/80 font-medium mt-0.5 break-words">
+                  <p className="text-xs text-[#3b5e48] font-medium mt-0.5 break-words">
                     {activeHub.distributors}
                   </p>
 
                   {/* 2-Cell Mini Specs */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 sm:mt-4 pt-3 border-t border-white/10">
                     <div className="rounded-xl bg-white/[0.03] border border-white/5 p-2 sm:p-2.5">
-                      <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-emerald-200/50 font-bold">
+                      <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-[#3b5e48] font-bold">
                         <Store className="h-3 w-3 text-emerald-400 shrink-0" />
                         <span>Network Capacity</span>
                       </div>
-                      <div className="text-xs sm:text-sm font-black text-white mt-1">
+                      <div className="text-xs sm:text-sm font-black text-[#083b20] mt-1">
                         {activeHub.stores}
                       </div>
                     </div>
 
                     <div className="rounded-xl bg-white/[0.03] border border-white/5 p-2 sm:p-2.5">
-                      <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-emerald-200/50 font-bold">
+                      <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-[#3b5e48] font-bold">
                         <Clock className="h-3 w-3 text-amber-300 shrink-0" />
                         <span>Fulfillment Lead</span>
                       </div>
@@ -652,7 +652,7 @@ export function InteractiveMap() {
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3 sm:p-3.5">
                 <form onSubmit={handleSearch} className="flex gap-2">
                   <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-emerald-200/40" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#07582f]/50" />
                     <input
                       type="text"
                       value={searchQuery}
@@ -661,12 +661,12 @@ export function InteractiveMap() {
                         setSearchFeedback(null);
                       }}
                       placeholder="Search city, district, or pin code..."
-                      className="w-full rounded-xl border border-white/10 bg-black/40 pl-8 pr-3 py-2 text-xs text-white placeholder:text-emerald-200/40 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400"
+                      className="w-full rounded-xl border border-emerald-900/10 bg-white pl-8 pr-3 py-2 text-xs text-[#083b20] placeholder:text-[#3b5e48]/50 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="rounded-xl bg-white/10 hover:bg-emerald-500 hover:text-black text-white px-3 py-2 text-xs font-bold transition-all shrink-0 cursor-pointer"
+                    className="rounded-xl bg-[#07582f] hover:bg-[#096d3a] text-white px-3 py-2 text-xs font-bold transition-all shrink-0 cursor-pointer"
                   >
                     Locate
                   </button>

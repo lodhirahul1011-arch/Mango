@@ -140,10 +140,25 @@ export function ScrollHero() {
     // 2. Mobile Configuration (< 768px)
     mm.add('(max-width: 767px)', () => {
       gsap.fromTo(
-        '.hero-mobile-art > *',
+        '.hero-mobile-reveal',
         { y: 18, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.72, stagger: 0.08, ease: 'power3.out' }
       );
+      gsap.to('.hero-mobile-packs', {
+        y: -8,
+        duration: 2.8,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
+      gsap.to('.hero-mobile-orbit', {
+        y: 10,
+        x: -8,
+        duration: 3.6,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      });
     });
 
     const refreshTimeout = setTimeout(() => {
@@ -186,20 +201,21 @@ export function ScrollHero() {
 
         {/* Mobile editorial hero: static, readable, product-first composition */}
         <div className="hero-mobile-art absolute inset-0 z-10 overflow-hidden px-5 pb-5 pt-[92px] text-center md:hidden">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_52%_20%,rgba(255,248,209,0.94),transparent_34%),radial-gradient(circle_at_18%_72%,rgba(22,122,74,0.30),transparent_28%),radial-gradient(circle_at_86%_66%,rgba(255,200,61,0.42),transparent_26%),linear-gradient(180deg,#fbfff1_0%,#fff4bc_42%,#ecffd9_100%)]" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] bg-[linear-gradient(180deg,transparent,#092f1c_88%)]" />
-          <div className="pointer-events-none absolute -left-20 top-4 h-56 w-44 rotate-12 rounded-[55%_45%_45%_55%] bg-[#0f7a43]/45 blur-xl" />
-          <div className="pointer-events-none absolute -right-10 top-16 h-20 w-11 rotate-[28deg] rounded-[80%_10%_80%_10%] bg-[#167A4A]/70 shadow-[0_12px_28px_rgba(7,61,44,0.20)]" />
-          <div className="pointer-events-none absolute left-7 bottom-[28%] h-28 w-28 rounded-[42%_58%_44%_56%] bg-[#ffc83d] shadow-[inset_-12px_-10px_0_rgba(180,94,0,0.15),0_18px_34px_rgba(146,64,14,0.22)]" />
-          <div className="pointer-events-none absolute left-9 bottom-[30%] grid h-20 w-20 rotate-[-12deg] grid-cols-3 gap-1 opacity-80">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_23%,rgba(255,255,255,0.96)_0%,rgba(255,250,218,0.86)_30%,transparent_58%),radial-gradient(circle_at_12%_42%,rgba(22,122,74,0.22),transparent_31%),radial-gradient(circle_at_90%_45%,rgba(244,63,94,0.18),transparent_28%),linear-gradient(180deg,#fbfff1_0%,#fff6c6_48%,#073d2c_100%)]" />
+          <div className="pointer-events-none absolute inset-x-0 top-[22%] h-[42%] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.70),transparent_58%)]" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-[linear-gradient(180deg,transparent,rgba(7,61,44,0.98)_92%)]" />
+          <div className="hero-mobile-orbit pointer-events-none absolute -left-20 top-4 h-56 w-44 rotate-12 rounded-[55%_45%_45%_55%] bg-[#0f7a43]/28 blur-2xl" />
+          <div className="hero-mobile-orbit pointer-events-none absolute -right-10 top-16 h-20 w-11 rotate-[28deg] rounded-[80%_10%_80%_10%] bg-[#167A4A]/50 shadow-[0_12px_28px_rgba(7,61,44,0.16)]" />
+          <div className="hero-mobile-orbit pointer-events-none absolute left-7 bottom-[28%] h-28 w-28 rounded-[42%_58%_44%_56%] bg-[#ffc83d] shadow-[inset_-12px_-10px_0_rgba(180,94,0,0.15),0_18px_34px_rgba(146,64,14,0.22)]" />
+          <div className="hero-mobile-orbit pointer-events-none absolute left-9 bottom-[30%] grid h-20 w-20 rotate-[-12deg] grid-cols-3 gap-1 opacity-70">
             {Array.from({ length: 9 }).map((_, index) => (
               <span key={index} className="rounded-[7px] bg-[#ffe27a]/80 shadow-[inset_-2px_-2px_0_rgba(146,64,14,0.12)]" />
             ))}
           </div>
-          <div className="pointer-events-none absolute right-5 bottom-[29%] h-32 w-12 rotate-[38deg] rounded-[100%_0_100%_0] bg-[#ffcf44] shadow-[inset_-10px_-6px_0_rgba(168,82,0,0.14),0_18px_34px_rgba(146,64,14,0.16)]" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-[17%] h-[34%] bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.76),transparent_10%),radial-gradient(circle_at_38%_52%,rgba(255,200,61,0.42),transparent_30%),radial-gradient(circle_at_65%_48%,rgba(255,255,255,0.54),transparent_25%)] opacity-90" />
+          <div className="hero-mobile-orbit pointer-events-none absolute right-5 bottom-[29%] h-32 w-12 rotate-[38deg] rounded-[100%_0_100%_0] bg-[#ffcf44] shadow-[inset_-10px_-6px_0_rgba(168,82,0,0.14),0_18px_34px_rgba(146,64,14,0.16)]" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-[17%] h-[34%] bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.56),transparent_10%),radial-gradient(circle_at_38%_52%,rgba(255,200,61,0.26),transparent_30%),radial-gradient(circle_at_65%_48%,rgba(255,255,255,0.40),transparent_25%)] opacity-75" />
 
-          <div className="relative z-10 mx-auto max-w-[340px]">
+          <div className="hero-mobile-reveal relative z-10 mx-auto max-w-[340px]">
             <p className="text-[10px] font-black uppercase tracking-[0.34em] text-[#167A4A]">Born in Assam</p>
             <h1 className="mt-2 text-[clamp(4rem,18vw,5.9rem)] leading-[0.76] text-[#073D2C]" style={{ fontFamily: 'var(--font-display)' }}>
               Har Sip.
@@ -210,14 +226,23 @@ export function ScrollHero() {
             </p>
           </div>
 
-          <img
-            src="/images/pio-mango.png"
-            alt="PIO Mango 160ml carton"
-            draggable={false}
-            className="absolute left-1/2 top-[37%] z-10 h-[38dvh] min-h-[245px] max-h-[360px] -translate-x-1/2 -rotate-[2deg] object-contain drop-shadow-[0_26px_36px_rgba(7,61,44,0.30)]"
-          />
+          <div className="hero-mobile-reveal hero-mobile-packs absolute inset-x-0 top-[36%] z-10 mx-auto h-[36dvh] min-h-[245px] max-h-[340px] max-w-[390px]">
+            <div className="pointer-events-none absolute inset-x-[12%] bottom-2 h-16 rounded-full bg-[#062816]/25 blur-2xl" />
+            <img
+              src="/images/pio-mango.png"
+              alt="PIO Mango 160ml carton"
+              draggable={false}
+              className="absolute bottom-0 left-[15%] h-full -rotate-[5deg] object-contain drop-shadow-[0_26px_36px_rgba(7,61,44,0.30)]"
+            />
+            <img
+              src="/images/pio-lychee.png"
+              alt="PIO Lychee 160ml carton"
+              draggable={false}
+              className="absolute bottom-2 right-[14%] h-[92%] rotate-[5deg] object-contain drop-shadow-[0_24px_34px_rgba(95,20,44,0.26)]"
+            />
+          </div>
 
-          <div className="absolute inset-x-5 bottom-[72px] z-20 mx-auto flex max-w-[310px] flex-col gap-2.5">
+          <div className="hero-mobile-reveal absolute inset-x-5 bottom-[72px] z-20 mx-auto flex max-w-[310px] flex-col gap-2.5">
             <button
               onClick={() => go('flavours')}
               className="inline-flex min-h-[48px] items-center justify-center gap-3 rounded-full bg-[#073D2C] px-6 py-3 text-[12px] font-black uppercase tracking-[0.18em] text-white shadow-[0_18px_38px_rgba(7,61,44,0.26)] active:scale-95"
@@ -227,14 +252,14 @@ export function ScrollHero() {
             </button>
             <button
               onClick={() => go('map')}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2.5 rounded-full border border-white/70 bg-white/88 px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.18em] text-[#073D2C] shadow-[0_12px_28px_rgba(7,61,44,0.14)] backdrop-blur-md active:scale-95"
+              className="inline-flex min-h-[44px] items-center justify-center gap-2.5 rounded-full border border-white bg-white px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.18em] text-[#073D2C] shadow-[0_14px_30px_rgba(0,0,0,0.22)] active:scale-95"
             >
               <MapPin className="h-4 w-4" />
               <span>Find Near You</span>
             </button>
           </div>
 
-          <div className="absolute inset-x-4 bottom-4 z-20 grid grid-cols-3 items-center gap-2 text-white/90">
+          <div className="hero-mobile-reveal absolute inset-x-4 bottom-4 z-20 grid grid-cols-3 items-center gap-2 text-white/90">
             {[
               { icon: Leaf, label: 'Real fruit juice' },
               { icon: Droplets, label: 'Refreshing goodness' },

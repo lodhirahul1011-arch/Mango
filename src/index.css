@@ -88,6 +88,7 @@ main > section {
   overflow: hidden;
   opacity: 0;
   mix-blend-mode: normal;
+  display: none !important;
 }
 
 .pio-scroll-veil__wash {
