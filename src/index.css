@@ -52,8 +52,32 @@ main {
 }
 
 main > section {
+  position: relative;
   transform-origin: center top;
   will-change: transform, clip-path;
+}
+
+.pio-cinematic-section {
+  isolation: isolate;
+  overflow: clip;
+  backface-visibility: hidden;
+}
+
+.pio-cinematic-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.62), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 30%);
+  transition: opacity 360ms ease;
+}
+
+.pio-cinematic-section:hover::before {
+  opacity: 0.34;
 }
 
 .pio-scroll-veil {
