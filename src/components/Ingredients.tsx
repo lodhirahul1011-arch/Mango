@@ -291,7 +291,7 @@ export function Ingredients() {
         <div className="mt-14 grid gap-6 lg:grid-cols-12 items-stretch">
           
           {/* Bento Card 1: Interactive Live Liquid Viscosity Lab (Col 7) */}
-          <div ref={labCardRef} className="lg:col-span-7 rounded-[34px] bg-[#fffdf6] shadow-[0_28px_70px_rgba(7,61,44,0.12)] p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden group ring-1 ring-emerald-950/10">
+          <div ref={labCardRef} data-local-motion="true" className="lg:col-span-7 rounded-[34px] bg-[#fffdf6] shadow-[0_28px_70px_rgba(7,61,44,0.12)] p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden group ring-1 ring-emerald-950/10">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_8%,rgba(255,214,102,0.48),transparent_28%),radial-gradient(circle_at_88%_12%,rgba(16,185,129,0.16),transparent_34%),linear-gradient(135deg,rgba(255,255,255,0.9),rgba(236,253,245,0.44))]" />
             <div className="lab-parallax-glow pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full blur-3xl opacity-55 transition-colors duration-700" style={{ background: flavor.glowColor }} />
             <div className="lab-parallax-glow pointer-events-none absolute -bottom-28 left-6 h-72 w-72 rounded-full bg-emerald-300/20 blur-3xl" />

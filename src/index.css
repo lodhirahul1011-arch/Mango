@@ -47,6 +47,52 @@ body {
   color: var(--text);
 }
 
+main {
+  overflow-x: clip;
+}
+
+main > section {
+  transform-origin: center top;
+  will-change: transform, clip-path;
+}
+
+.pio-scroll-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  mix-blend-mode: normal;
+}
+
+.pio-scroll-veil__wash {
+  position: absolute;
+  inset: -12%;
+  background: linear-gradient(115deg, #f8f6ef 0%, #fff4c7 42%, #ecfdf5 100%);
+  filter: saturate(1.08);
+}
+
+.pio-scroll-veil__wash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.72), transparent 28%),
+    radial-gradient(circle at 78% 62%, rgba(7, 88, 47, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+}
+
+.pio-scroll-veil__line {
+  position: absolute;
+  left: 12vw;
+  right: 12vw;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(7, 61, 44, 0.42), transparent);
+  box-shadow: 0 0 28px rgba(7, 88, 47, 0.2);
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   letter-spacing: -0.04em;
@@ -141,5 +187,13 @@ button {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  main > section {
+    clip-path: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .pio-scroll-veil {
+    display: none !important;
   }
 }
