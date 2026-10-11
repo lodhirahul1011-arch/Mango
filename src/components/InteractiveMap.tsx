@@ -305,7 +305,7 @@ export function InteractiveMap() {
   return (
     <section 
       id="map" 
-      className="relative py-12 sm:py-16 lg:py-20 overflow-hidden bg-gradient-to-b from-[#fbfaf2] via-[#eff8ef] to-[#fff7df] text-[#083b20] border-t border-emerald-900/10"
+      className="relative py-10 sm:py-16 lg:py-20 overflow-hidden bg-gradient-to-b from-[#fbfaf2] via-[#eff8ef] to-[#fff7df] text-[#083b20] border-t border-emerald-900/10"
     >
       {/* 1. Ambient Luxury Glows */}
       <div className="pointer-events-none absolute -top-24 left-1/4 h-80 w-80 rounded-full bg-emerald-300/22 blur-[100px]" />
@@ -416,10 +416,10 @@ export function InteractiveMap() {
             {/* ----------------------------------------------------
                 LEFT: LUXURY RADAR VECTOR MAP (Compact, High-Visual)
                 ---------------------------------------------------- */}
-            <div className="lg:col-span-7 relative p-4 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-emerald-900/10 min-h-[340px] sm:min-h-[400px]">
+            <div className="lg:col-span-7 relative p-3.5 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-emerald-900/10 min-h-[300px] sm:min-h-[400px]">
               
               {/* Radar Stage Container */}
-              <div className="relative w-full h-full min-h-[300px] sm:min-h-[350px] rounded-2xl bg-gradient-to-br from-[#eef8f1] via-[#f8fdf9] to-[#fff4d8] border border-emerald-900/10 overflow-hidden flex items-center justify-center">
+              <div className="relative w-full h-full min-h-[260px] sm:min-h-[350px] rounded-2xl bg-gradient-to-br from-[#eef8f1] via-[#f8fdf9] to-[#fff4d8] border border-emerald-900/10 overflow-hidden flex items-center justify-center">
                 
                 {/* 1. Radar Circular Target Rings */}
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -548,7 +548,7 @@ export function InteractiveMap() {
             {/* ----------------------------------------------------
                 RIGHT: LUXURY HUB INSPECTOR & SMART LOCATOR
                 ---------------------------------------------------- */}
-            <div className="lg:col-span-5 p-3.5 sm:p-5 lg:p-6 flex flex-col justify-between bg-[#f8fdf9] gap-4 sm:gap-5 min-w-0">
+            <div className="lg:col-span-5 p-3.5 sm:p-5 lg:p-6 flex flex-col justify-start bg-[#f8fdf9] gap-3.5 sm:gap-5 min-w-0">
               
               {/* Quick Hub Switcher Strip (Horizontal Scroll on Mobile) */}
               <div className="min-w-0">

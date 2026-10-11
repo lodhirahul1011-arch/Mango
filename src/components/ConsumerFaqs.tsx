@@ -84,8 +84,8 @@ export function ConsumerFaqs() {
 
       gsap.fromTo(
         '.faq-title',
-        { yPercent: 110, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.9, ease: 'power3.out' }
+        { y: 28, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' }
       );
 
       gsap.fromTo(
@@ -106,7 +106,8 @@ export function ConsumerFaqs() {
     <section
       ref={sectionRef}
       id="faq"
-      className="relative overflow-hidden bg-[#F8F6EF] py-[140px] text-[#10352B]"
+      data-local-motion="true"
+      className="relative overflow-hidden bg-[#F8F6EF] py-24 text-[#10352B] lg:py-[130px]"
     >
       <div className="pointer-events-none absolute inset-0 opacity-80">
         <div className="absolute -left-24 top-20 h-72 w-72 rounded-full bg-[#167A4A]/8 blur-3xl" />
@@ -115,10 +116,10 @@ export function ConsumerFaqs() {
       </div>
 
       <div className="relative mx-auto max-w-[1280px] px-5 sm:px-6 lg:px-8">
-        <div className="grid items-start gap-12 lg:grid-cols-[38%_62%] lg:gap-16">
-          <div className="lg:sticky lg:top-[140px]">
+        <div className="grid items-start gap-10 lg:grid-cols-[34%_66%] lg:gap-16">
+          <div className="lg:sticky lg:top-[128px]">
             <div className="faq-eyebrow eyebrow text-[#167A4A]">Consumer FAQ’s</div>
-            <h2 className="faq-title mt-5 max-w-[420px] text-[clamp(3.1rem,6vw,6.8rem)] leading-[0.82] text-[#073D2C]" style={{ fontFamily: 'var(--font-display)' }}>
+            <h2 className="faq-title mt-5 max-w-[380px] text-[clamp(3rem,5.2vw,5.9rem)] leading-[0.88] text-[#073D2C]" style={{ fontFamily: 'var(--font-display)' }}>
               Everything You
               <br />
               Need to Know.

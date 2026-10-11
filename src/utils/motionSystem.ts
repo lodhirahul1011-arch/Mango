@@ -5,15 +5,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 type Cleanup = () => void;
 
-const transitionPalette = [
-  { from: '#f8f6ef', via: '#fff4c7', to: '#ecfdf5' },
-  { from: '#fff7df', via: '#ffd990', to: '#fffaf0' },
-  { from: '#fff0f5', via: '#ffc2d2', to: '#fff8fb' },
-  { from: '#fbfbf2', via: '#d9f99d', to: '#f8fffb' },
-  { from: '#f8fffb', via: '#b7f7d6', to: '#ffffff' },
-  { from: '#fff8ec', via: '#f4d6a2', to: '#f9f4e8' },
-];
-
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -22,377 +13,197 @@ const isTouchDevice = () =>
   typeof window !== 'undefined' &&
   ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
-const withinLocalMotion = (el: Element) => Boolean(el.closest('[data-local-motion="true"]'));
+const inLocalMotion = (el: Element) =>
+  Boolean(el.closest('[data-local-motion="true"], canvas, .hero-mobile-art, .hero-desktop-box'));
 
-const isSelfAnimatedSection = (section: HTMLElement) =>
-  ['home', 'flavours', 'inside'].includes(section.id) ||
-  section.classList.contains('products-showcase') ||
-  Boolean(section.querySelector('.sticky, canvas, [data-local-motion="true"]'));
+function revealHeadings(root: HTMLElement, isMobile: boolean) {
+  const headings = Array.from(
+    root.querySelectorAll<HTMLElement>('main section:not(#home) h1, main section:not(#home) h2')
+  ).filter((heading) => !inLocalMotion(heading));
 
-function revealSelfAnimatedShell(section: HTMLElement, index: number, isDesktop: boolean) {
-  if (index === 0 || section.id === 'home') return;
-
-  section.classList.add('pio-cinematic-section');
-  section.style.zIndex = String(index + 1);
-
-  gsap.fromTo(
-    section,
-    {
-      yPercent: isDesktop ? 14 : 6,
-      scale: isDesktop ? 0.982 : 0.995,
-      borderRadius: isDesktop ? '34px 34px 0 0' : '22px 22px 0 0',
-      clipPath: isDesktop ? 'inset(4% 1.5% 0 1.5% round 34px)' : 'inset(2% 0.5% 0 0.5% round 22px)',
-      boxShadow: isDesktop ? '0 -26px 72px rgba(7, 61, 44, 0.1)' : '0 -14px 36px rgba(7, 61, 44, 0.08)',
-    },
-    {
-      yPercent: 0,
-      scale: 1,
-      borderRadius: '0px 0px 0px 0px',
-      clipPath: 'inset(0% 0% 0% 0% round 0px)',
-      boxShadow: '0 0 0 rgba(7, 61, 44, 0)',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 104%',
-        end: isDesktop ? 'top 88%' : 'top 90%',
-        scrub: 0.2,
-      },
-    }
-  );
-}
-
-export function revealEyebrow(section: HTMLElement) {
-  const eyebrow = section.querySelector<HTMLElement>(
-    '.eyebrow, [data-motion="eyebrow"], span[class*="tracking-"], div[class*="tracking-"]'
-  );
-  if (!eyebrow || withinLocalMotion(eyebrow)) return;
-
-  gsap.fromTo(
-    eyebrow,
-    { autoAlpha: 0, y: 10 },
-    {
-      autoAlpha: 1,
-      y: 0,
-      duration: 0.6,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 78%',
-        toggleActions: 'play none none reverse',
-      },
-    }
-  );
-}
-
-export function revealHeading(section: HTMLElement) {
-  const headings = Array.from(section.querySelectorAll<HTMLElement>('h1, h2')).filter(
-    (heading) => !withinLocalMotion(heading)
-  );
-  if (!headings.length) return;
-
-  gsap.set(headings, {
-    clipPath: 'inset(0 0 100% 0)',
-    yPercent: 26,
-    letterSpacing: '0.01em',
-  });
-
-  gsap.to(headings, {
-    clipPath: 'inset(0 0 0% 0)',
-    yPercent: 0,
-    letterSpacing: '-0.03em',
-    duration: 1,
-    ease: 'power4.out',
-    stagger: 0.1,
-    scrollTrigger: {
-      trigger: section,
-      start: 'top 74%',
-      toggleActions: 'play none none reverse',
-    },
-  });
-}
-
-export function revealBody(section: HTMLElement) {
-  const bodyCopy = Array.from(section.querySelectorAll<HTMLElement>('p')).filter(
-    (el) => !withinLocalMotion(el)
-  );
-  if (!bodyCopy.length) return;
-
-  gsap.fromTo(
-    bodyCopy,
-    { autoAlpha: 0, y: 24 },
-    {
-      autoAlpha: 1,
-      y: 0,
-      duration: 0.75,
-      ease: 'power3.out',
-      stagger: 0.06,
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 70%',
-        toggleActions: 'play none none reverse',
-      },
-    }
-  );
-}
-
-export function revealCards(section: HTMLElement) {
-  const candidates = Array.from(section.querySelectorAll<HTMLElement>('article, li, [data-motion-card="true"]')).filter((el) => {
-    const className = el.className.toString();
-    return (
-      !withinLocalMotion(el) &&
-      className.includes('rounded') &&
-      (className.includes('border') || className.includes('shadow') || className.includes('bg-')) &&
-      el.getBoundingClientRect().height > 46
-    );
-  });
-
-  const cards = candidates.slice(0, 10);
-  if (!cards.length) return;
-
-  gsap.fromTo(
-    cards,
-    { autoAlpha: 0, y: 32, scale: 0.985 },
-    {
-      autoAlpha: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.85,
-      ease: 'power3.out',
-      stagger: 0.08,
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 68%',
-        toggleActions: 'play none none reverse',
-      },
-    }
-  );
-}
-
-export function revealImage(section: HTMLElement) {
-  const images = Array.from(section.querySelectorAll<HTMLImageElement>('img')).filter(
-    (img) => !withinLocalMotion(img)
-  );
-  if (!images.length) return;
-
-  gsap.fromTo(
-    images,
-    { autoAlpha: 0, scale: 1.06, y: 28 },
-    {
-      autoAlpha: 1,
-      scale: 1,
-      y: 0,
-      duration: 1,
-      ease: 'power4.out',
-      stagger: 0.08,
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 72%',
-        toggleActions: 'play none none reverse',
-      },
-    }
-  );
-}
-
-export function parallaxElement(section: HTMLElement, isDesktop: boolean) {
-  if (!isDesktop) return;
-
-  const depthElements = Array.from(
-    section.querySelectorAll<HTMLElement>('img[src*="pio-"], [class*="absolute"][class*="blur"], [data-parallax]')
-  ).filter((el) => !withinLocalMotion(el));
-
-  depthElements.slice(0, 6).forEach((el, index) => {
-    const distance = el.tagName === 'IMG' ? 18 : 34 + index * 4;
-    gsap.to(el, {
-      y: index % 2 === 0 ? -distance : distance,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 1,
-      },
-    });
-  });
-}
-
-export function sectionTransition(section: HTMLElement, index: number) {
-  const palette = ['#f8f6ef', '#fff7df', '#fff0f5', '#fbfbf2', '#f8fffb', '#fff8ec'];
-  const color = palette[index % palette.length];
-
-  gsap.to(document.documentElement, {
-    '--warm-white': color,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: section,
-      start: 'top 80%',
-      end: 'top 20%',
-      scrub: 1.2,
-    },
-  });
-}
-
-function createScrollVeil(root: HTMLElement) {
-  const existing = root.querySelector<HTMLElement>('.pio-scroll-veil');
-  if (existing) return existing;
-
-  const veil = document.createElement('div');
-  veil.className = 'pio-scroll-veil';
-  veil.innerHTML = `
-    <div class="pio-scroll-veil__wash"></div>
-    <div class="pio-scroll-veil__line"></div>
-  `;
-  root.appendChild(veil);
-  return veil;
-}
-
-export function pageSectionReveal(section: HTMLElement, index: number, isDesktop: boolean) {
-  if (withinLocalMotion(section)) return;
-  if (index === 0 || isSelfAnimatedSection(section)) {
-    section.classList.add('pio-cinematic-section');
-    section.style.zIndex = String(index + 1);
-    revealSelfAnimatedShell(section, index, isDesktop);
-    return;
-  }
-
-  const isSignature = [1, 2, 4, 6].includes(index);
-  const yStart = isDesktop ? (isSignature ? 22 : 14) : 8;
-  const radius = isSignature ? 38 : 28;
-
-  section.classList.add('pio-cinematic-section');
-  section.style.zIndex = String(index + 1);
-
-  gsap.fromTo(
-    section,
-    {
-      yPercent: yStart,
-      scale: isDesktop ? (isSignature ? 0.955 : 0.972) : 0.99,
-      borderRadius: `${radius}px ${radius}px 0 0`,
-      clipPath: `inset(${isSignature ? 10 : 7}% ${isDesktop ? 3 : 1}% 0 ${isDesktop ? 3 : 1}% round ${radius}px)`,
-      boxShadow: isDesktop ? '0 -30px 80px rgba(7, 61, 44, 0.08)' : '0 -18px 42px rgba(7, 61, 44, 0.07)',
-      filter: isDesktop ? 'saturate(0.92) brightness(0.98)' : 'none',
-    },
-    {
-      yPercent: 0,
-      scale: 1,
-      borderRadius: '0px 0px 0px 0px',
-      clipPath: 'inset(0% 0% 0% 0% round 0px)',
-      boxShadow: '0 0 0 rgba(7, 61, 44, 0)',
-      filter: 'saturate(1) brightness(1)',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 102%',
-        end: isDesktop ? 'top 88%' : 'top 90%',
-        scrub: 0.2,
-      },
-    }
-  );
-
-  if (index === 0) return;
-
-  const previous = section.previousElementSibling as HTMLElement | null;
-  if (!previous) return;
-
-  gsap.to(previous, {
-    scale: isDesktop ? (isSignature ? 0.94 : 0.965) : 0.99,
-    y: isDesktop ? (isSignature ? -40 : -22) : -12,
-    autoAlpha: isSignature ? 0.68 : 0.82,
-    borderRadius: isDesktop ? (isSignature ? 24 : 16) : 12,
-    filter: isDesktop ? (isSignature ? 'blur(1.2px) saturate(0.78) brightness(0.94)' : 'saturate(0.84) brightness(0.97)') : 'none',
-    ease: 'none',
-    scrollTrigger: {
-      trigger: section,
-      start: 'top 96%',
-      end: isDesktop ? 'top 86%' : 'top 88%',
-      scrub: 0.2,
-    },
-  });
-
-  const sectionVisuals = Array.from(
-    section.querySelectorAll<HTMLElement>('img[src*="pio-"], canvas, [data-parallax]')
-  ).filter((el) => !withinLocalMotion(el));
-
-  sectionVisuals.slice(0, 4).forEach((visual, visualIndex) => {
+  headings.forEach((heading) => {
+    heading.classList.add('pio-motion-heading');
     gsap.fromTo(
-      visual,
+      heading,
       {
-        y: isDesktop ? 34 + visualIndex * 6 : 16,
-        x: isDesktop && isSignature ? (index % 2 === 0 ? 28 : -28) : 0,
-        scale: 0.96,
-        rotate: isDesktop ? (index % 2 === 0 ? 1.5 : -1.5) : 0,
+        autoAlpha: 0,
+        yPercent: isMobile ? 22 : 34,
+        clipPath: 'inset(0 0 100% 0)',
+        letterSpacing: '0.01em',
       },
       {
-        y: 0,
-        x: 0,
-        scale: 1,
-        rotate: 0,
-        ease: 'none',
+        autoAlpha: 1,
+        yPercent: 0,
+        clipPath: 'inset(0 0 0% 0)',
+        letterSpacing: '-0.035em',
+        duration: isMobile ? 0.75 : 1,
+        ease: 'power4.out',
         scrollTrigger: {
-          trigger: section,
-          start: 'top 92%',
-          end: 'top 84%',
-          scrub: 0.2,
+          trigger: heading,
+          start: isMobile ? 'top 88%' : 'top 82%',
+          toggleActions: 'play none none reverse',
         },
       }
     );
   });
 }
 
-export function scrollPageVeil(root: HTMLElement, sections: HTMLElement[]) {
-  const veil = createScrollVeil(root);
-  const wash = veil.querySelector<HTMLElement>('.pio-scroll-veil__wash');
-  const line = veil.querySelector<HTMLElement>('.pio-scroll-veil__line');
-  if (!wash || !line) return;
+function revealCopy(root: HTMLElement, isMobile: boolean) {
+  const copyBlocks = Array.from(
+    root.querySelectorAll<HTMLElement>(
+      'main section:not(#home) p, main section:not(#home) .eyebrow, main section:not(#home) [class*="tracking-"]'
+    )
+  ).filter((el) => !inLocalMotion(el) && el.textContent?.trim());
 
-  gsap.set(veil, { autoAlpha: 0, yPercent: 100 });
-  gsap.set(line, { scaleX: 0, transformOrigin: 'center' });
-
-  sections.slice(1).forEach((section, index) => {
-    if (section.id === 'flavours') return;
-    const colors = transitionPalette[index % transitionPalette.length];
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 92%',
-        end: 'top 52%',
-        scrub: 0.65,
-      },
-    });
-
-    tl.set(wash, {
-      background: `linear-gradient(115deg, ${colors.from} 0%, ${colors.via} 42%, ${colors.to} 100%)`,
-    })
-      .to(veil, { autoAlpha: 1, yPercent: 0, duration: 0.38, ease: 'power3.out' }, 0)
-      .to(line, { scaleX: 1, duration: 0.34, ease: 'power3.out' }, 0.04)
-      .to(veil, { yPercent: -100, duration: 0.5, ease: 'power4.inOut' }, 0.5)
-      .to(line, { scaleX: 0, duration: 0.2, ease: 'power2.out' }, 0.68)
-      .to(veil, { autoAlpha: 0, duration: 0.1 }, 0.95);
+  copyBlocks.forEach((el) => {
+    gsap.fromTo(
+      el,
+      { autoAlpha: 0, y: isMobile ? 14 : 22 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: isMobile ? 0.55 : 0.72,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: isMobile ? 'top 92%' : 'top 88%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
   });
 }
 
-export function magneticButton(root: ParentNode): Cleanup {
-  if (isTouchDevice() || prefersReducedMotion()) return () => undefined;
+function revealCards(root: HTMLElement, isMobile: boolean) {
+  const sections = Array.from(root.querySelectorAll<HTMLElement>('main section:not(#home)'));
 
-  const buttons = Array.from(
-    root.querySelectorAll<HTMLElement>('button, a[href]')
-  ).filter((el) => {
-    const className = el.className.toString();
-    return !withinLocalMotion(el) && className.includes('rounded') && el.getBoundingClientRect().width > 34;
+  sections.forEach((section) => {
+    const cards = Array.from(
+      section.querySelectorAll<HTMLElement>(
+        'article, li, [class*="rounded-2xl"], [class*="rounded-3xl"], [class*="rounded-["]'
+      )
+    ).filter((el) => {
+      const className = el.className.toString();
+      const rect = el.getBoundingClientRect();
+      return (
+        !inLocalMotion(el) &&
+        rect.height > 42 &&
+        rect.width > 90 &&
+        (className.includes('bg-') || className.includes('border') || className.includes('shadow'))
+      );
+    });
+
+    if (!cards.length) return;
+
+    gsap.fromTo(
+      cards.slice(0, isMobile ? 8 : 14),
+      {
+        autoAlpha: 0,
+        y: isMobile ? 18 : 32,
+        scale: isMobile ? 0.985 : 0.965,
+      },
+      {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: isMobile ? 0.58 : 0.82,
+        ease: 'power3.out',
+        stagger: isMobile ? 0.045 : 0.075,
+        scrollTrigger: {
+          trigger: section,
+          start: isMobile ? 'top 82%' : 'top 72%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
+  });
+}
+
+function revealImages(root: HTMLElement, isMobile: boolean) {
+  const images = Array.from(
+    root.querySelectorAll<HTMLImageElement>('main section:not(#home) img')
+  ).filter((img) => !inLocalMotion(img) && img.clientWidth > 80 && img.clientHeight > 80);
+
+  images.forEach((img) => {
+    img.parentElement?.classList.add('pio-image-reveal');
+
+    gsap.fromTo(
+      img,
+      {
+        autoAlpha: 0,
+        y: isMobile ? 16 : 28,
+        scale: 1.055,
+        filter: isMobile ? 'none' : 'blur(5px)',
+      },
+      {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        filter: 'blur(0px)',
+        duration: isMobile ? 0.7 : 1.05,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: img,
+          start: isMobile ? 'top 92%' : 'top 84%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
+  });
+}
+
+function addSectionAtmosphere(root: HTMLElement, isMobile: boolean) {
+  const sections = Array.from(root.querySelectorAll<HTMLElement>('main section:not(#home)'));
+
+  sections.forEach((section, index) => {
+    section.classList.add('pio-premium-section');
+    section.style.setProperty('--section-index', String(index));
+
+    if (isMobile) return;
+
+    const visuals = Array.from(
+      section.querySelectorAll<HTMLElement>('img[src*="pio-"], [data-parallax], [class*="blur-"]')
+    ).filter((el) => !inLocalMotion(el));
+
+    visuals.slice(0, 4).forEach((visual, visualIndex) => {
+      gsap.to(visual, {
+        y: visualIndex % 2 === 0 ? -18 : 18,
+        x: visualIndex % 2 === 0 ? 8 : -8,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.1,
+        },
+      });
+    });
+  });
+}
+
+function enhanceButtons(root: HTMLElement): Cleanup {
+  const buttons = Array.from(root.querySelectorAll<HTMLElement>('button, a[href]')).filter((el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.width > 38 && rect.height > 30 && el.className.toString().includes('rounded');
   });
 
-  const cleanups: Cleanup[] = buttons.map((button) => {
-    const xTo = gsap.quickTo(button, 'x', { duration: 0.35, ease: 'power3.out' });
-    const yTo = gsap.quickTo(button, 'y', { duration: 0.35, ease: 'power3.out' });
+  buttons.forEach((button) => button.classList.add('pio-premium-control'));
+
+  if (isTouchDevice()) return () => undefined;
+
+  const cleanups = buttons.map((button) => {
+    const xTo = gsap.quickTo(button, 'x', { duration: 0.32, ease: 'power3.out' });
+    const yTo = gsap.quickTo(button, 'y', { duration: 0.32, ease: 'power3.out' });
     const arrow = button.querySelector<HTMLElement>('svg:last-child');
-    const arrowXTo = arrow ? gsap.quickTo(arrow, 'x', { duration: 0.25, ease: 'power3.out' }) : null;
-    const arrowYTo = arrow ? gsap.quickTo(arrow, 'y', { duration: 0.25, ease: 'power3.out' }) : null;
+    const arrowXTo = arrow ? gsap.quickTo(arrow, 'x', { duration: 0.24, ease: 'power3.out' }) : null;
+    const arrowYTo = arrow ? gsap.quickTo(arrow, 'y', { duration: 0.24, ease: 'power3.out' }) : null;
 
     const move = (event: MouseEvent) => {
       const rect = button.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 10;
-      const y = ((event.clientY - rect.top) / rect.height - 0.5) * 8;
-      xTo(gsap.utils.clamp(-6, 6, x));
-      yTo(gsap.utils.clamp(-5, 5, y));
+      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 8;
+      const y = ((event.clientY - rect.top) / rect.height - 0.5) * 6;
+      xTo(gsap.utils.clamp(-5, 5, x));
+      yTo(gsap.utils.clamp(-4, 4, y));
       arrowXTo?.(3);
       arrowYTo?.(-2);
     };
@@ -418,12 +229,29 @@ export function magneticButton(root: ParentNode): Cleanup {
   return () => cleanups.forEach((cleanup) => cleanup());
 }
 
+function morphPageTone(root: HTMLElement) {
+  const tones = ['#f8f6ef', '#fff7df', '#fff1f5', '#f3faef', '#fbfaf2', '#ffffff'];
+  const sections = Array.from(root.querySelectorAll<HTMLElement>('main section:not(#home)'));
+
+  sections.forEach((section, index) => {
+    gsap.to(document.documentElement, {
+      '--warm-white': tones[index % tones.length],
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 78%',
+        end: 'top 22%',
+        scrub: 1.2,
+      },
+    });
+  });
+}
+
 export function initPioMotion(root: HTMLElement): Cleanup {
   if (prefersReducedMotion()) return () => undefined;
 
+  let cleanupButtons: Cleanup = () => undefined;
   const mm = gsap.matchMedia();
-  let magneticCleanup: Cleanup = () => undefined;
-
   const ctx = gsap.context(() => {
     mm.add(
       {
@@ -431,29 +259,26 @@ export function initPioMotion(root: HTMLElement): Cleanup {
         isMobile: '(max-width: 1023px)',
       },
       (context) => {
-        const isDesktop = Boolean(context.conditions?.isDesktop);
-        const sections = Array.from(root.querySelectorAll<HTMLElement>('main > section'));
+        const isMobile = Boolean(context.conditions?.isMobile);
+        addSectionAtmosphere(root, isMobile);
+        revealHeadings(root, isMobile);
+        revealCopy(root, isMobile);
+        revealCards(root, isMobile);
+        revealImages(root, isMobile);
+        morphPageTone(root);
+        cleanupButtons = enhanceButtons(root);
 
-        sections.forEach((section, index) => {
-          const selfAnimated = isSelfAnimatedSection(section);
-          pageSectionReveal(section, index, isDesktop);
-          if (!selfAnimated) {
-            revealEyebrow(section);
-            revealHeading(section);
-            revealBody(section);
-            revealCards(section);
-            revealImage(section);
-            parallaxElement(section, isDesktop);
-          }
-        });
-
-        magneticCleanup = magneticButton(root);
+        const refresh = window.setTimeout(() => ScrollTrigger.refresh(), 180);
+        return () => {
+          window.clearTimeout(refresh);
+          cleanupButtons();
+        };
       }
     );
   }, root);
 
   return () => {
-    magneticCleanup();
+    cleanupButtons();
     mm.revert();
     ctx.revert();
   };

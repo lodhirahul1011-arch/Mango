@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import { Navbar } from '@/components/Navbar';
 import { ScrollProgress } from '@/components/ScrollProgress';
@@ -14,10 +14,13 @@ import { ConsumerFaqs } from '@/components/ConsumerFaqs';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Footer } from '@/components/Footer';
+import { initPioMotion } from '@/utils/motionSystem';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
+  const appRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
     const lenis = new Lenis({
@@ -48,9 +51,14 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!appRef.current) return;
+    return initPioMotion(appRef.current);
+  }, []);
+
   return (
     <MouseProvider>
-      <div className="relative min-h-screen bg-white text-[#10271b] selection:bg-emerald-200 selection:text-emerald-950">
+      <div ref={appRef} className="relative min-h-screen bg-white text-[#10271b] selection:bg-emerald-200 selection:text-emerald-950">
         {/* Global Reading Scroll Progress */}
         <ScrollProgress />
 
