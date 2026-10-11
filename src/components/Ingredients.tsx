@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useSpring } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
   Sparkles, 
   Droplets, 
@@ -17,6 +19,8 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { fizzAudio } from '@/utils/audio';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Ingredient details data
 const INGREDIENTS_DATA = {
@@ -106,7 +110,89 @@ const PURITY_PILLARS = [
 export function Ingredients() {
   const [selectedFlavor, setSelectedFlavor] = useState<'mango' | 'lychee'>('mango');
   const [scanActive, setScanActive] = useState(true);
+  const labCardRef = useRef<HTMLDivElement>(null);
   const flavor = INGREDIENTS_DATA[selectedFlavor];
+
+  useEffect(() => {
+    const card = labCardRef.current;
+    if (!card) return;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    const ctx = gsap.context(() => {
+      gsap.set('.lab-reveal', { autoAlpha: 0, y: 26 });
+      gsap.set('.lab-liquid-stage', { scale: 0.94, rotateX: 4, transformPerspective: 900 });
+      gsap.set('.lab-orbit', { autoAlpha: 0, scale: 0.7, rotate: -18 });
+
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 78%',
+          end: 'bottom 62%',
+          toggleActions: 'play none none reverse',
+        },
+      })
+        .to('.lab-reveal', {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.72,
+          ease: 'power3.out',
+          stagger: 0.08,
+        })
+        .to('.lab-liquid-stage', {
+          scale: 1,
+          rotateX: 0,
+          duration: 0.85,
+          ease: 'expo.out',
+        }, '-=0.52')
+        .to('.lab-orbit', {
+          autoAlpha: 1,
+          scale: 1,
+          rotate: 0,
+          duration: 0.8,
+          ease: 'back.out(1.8)',
+          stagger: 0.08,
+        }, '-=0.65');
+
+      gsap.to('.lab-parallax-glow', {
+        yPercent: -18,
+        xPercent: 8,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.1,
+        },
+      });
+
+      gsap.to('.lab-liquid-svg', {
+        yPercent: -10,
+        scale: 1.08,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.9,
+        },
+      });
+
+      gsap.to('.lab-meter-card', {
+        yPercent: -12,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.8,
+        },
+      });
+    }, card);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section 
@@ -205,23 +291,29 @@ export function Ingredients() {
         <div className="mt-14 grid gap-6 lg:grid-cols-12 items-stretch">
           
           {/* Bento Card 1: Interactive Live Liquid Viscosity Lab (Col 7) */}
-          <div className="lg:col-span-7 rounded-[36px] bg-white border border-emerald-900/10 shadow-[0_20px_50px_rgba(7,88,47,0.06)] p-7 sm:p-9 flex flex-col justify-between relative overflow-hidden group">
+          <div ref={labCardRef} className="lg:col-span-7 rounded-[34px] bg-[#fffdf6] shadow-[0_28px_70px_rgba(7,61,44,0.12)] p-5 sm:p-7 flex flex-col justify-between relative overflow-hidden group ring-1 ring-emerald-950/10">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_8%,rgba(255,214,102,0.48),transparent_28%),radial-gradient(circle_at_88%_12%,rgba(16,185,129,0.16),transparent_34%),linear-gradient(135deg,rgba(255,255,255,0.9),rgba(236,253,245,0.44))]" />
+            <div className="lab-parallax-glow pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full blur-3xl opacity-55 transition-colors duration-700" style={{ background: flavor.glowColor }} />
+            <div className="lab-parallax-glow pointer-events-none absolute -bottom-28 left-6 h-72 w-72 rounded-full bg-emerald-300/20 blur-3xl" />
+            <div className="pointer-events-none absolute inset-x-8 top-1/2 h-px bg-gradient-to-r from-transparent via-emerald-700/20 to-transparent" />
             
             {/* Top Bar */}
-            <div className="flex items-center justify-between z-10">
-              <div className="flex items-center gap-2.5">
-                <span className="flex h-3 w-3 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[11px] font-black uppercase tracking-widest text-[#07582f]">
+            <div className="lab-reveal relative z-10 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/70 bg-white/70 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.85),0_14px_30px_rgba(7,61,44,0.06)] backdrop-blur-xl">
+              <div className="flex min-w-0 items-center gap-2.5">
+                <span className="relative flex h-3 w-3 rounded-full bg-emerald-500">
+                  <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping" />
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.22em] text-[#07582f]">
                   Liquid Viscosity & Sourcing Lab
                 </span>
               </div>
-              <span className={`text-[11px] font-black uppercase px-3 py-1 rounded-full border ${flavor.tagBg}`}>
+              <span className={`shrink-0 text-[10px] sm:text-[11px] font-black uppercase px-3 py-1 rounded-full border ${flavor.tagBg}`}>
                 {flavor.source}
               </span>
             </div>
 
             {/* Middle Title & Description */}
-            <div className="my-6 z-10 space-y-2">
+            <div className="relative z-10 my-6 grid gap-5 lg:grid-cols-[1fr_150px] lg:items-end">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={flavor.id}
@@ -229,23 +321,48 @@ export function Ingredients() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
+                  className="lab-reveal"
                 >
-                  <h3 className="font-['Space_Grotesk',sans-serif] text-2xl sm:text-4xl font-black text-[#083b20] tracking-tight">
+                  <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[#073d2c] px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-amber-100 shadow-sm">
+                    <Flame className="h-3.5 w-3.5 text-amber-300" />
+                    Peak harvest batch
+                  </div>
+                  <h3 className="max-w-xl font-['Space_Grotesk',sans-serif] text-3xl sm:text-5xl font-black text-[#083b20] tracking-tight leading-[0.98] text-balance">
                     {flavor.name}
                   </h3>
-                  <p className="mt-2 text-sm sm:text-base text-[#385b45] font-medium leading-relaxed max-w-lg">
+                  <p className="mt-3 max-w-lg text-sm sm:text-base text-[#385b45] font-semibold leading-relaxed">
                     {flavor.highlight}
                   </p>
                 </motion.div>
               </AnimatePresence>
+
+              <div className="lab-reveal lab-meter-card relative overflow-hidden rounded-[26px] border border-emerald-900/10 bg-white/75 p-4 shadow-[0_18px_34px_rgba(7,61,44,0.08)] backdrop-blur">
+                <div className="absolute -right-6 -top-8 h-20 w-20 rounded-full opacity-40 blur-2xl" style={{ background: flavor.color }} />
+                <div className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Viscosity</div>
+                <div className="mt-1 font-['Space_Grotesk',sans-serif] text-4xl font-black leading-none text-[#083b20]">
+                  {flavor.viscosity}<span className="text-xl">%</span>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-emerald-950/10">
+                  <motion.div
+                    key={`${flavor.id}-viscosity-meter`}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${flavor.viscosity}%` }}
+                    transition={{ duration: 0.7, ease: 'easeOut' }}
+                    className="h-full rounded-full"
+                    style={{ background: `linear-gradient(90deg, ${flavor.color}, #10b981)` }}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Interactive Liquid Wave Visualizer Box */}
-            <div className="relative w-full h-44 sm:h-52 rounded-3xl overflow-hidden bg-gradient-to-b from-[#f2fcf5] to-[#e6f7ec] border border-emerald-900/10 p-5 flex flex-col justify-between z-10">
+            <div className="lab-reveal lab-liquid-stage relative z-10 flex h-52 w-full flex-col justify-between overflow-hidden rounded-[28px] border border-white/80 bg-[#eaf8ee] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:h-56 sm:p-5">
+              <div className="pointer-events-none absolute inset-x-5 top-6 h-px bg-gradient-to-r from-transparent via-white/90 to-transparent" />
+              <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white/65 to-transparent" />
               
               {/* Dynamic Animated Liquid Wave SVG (GPU Composited) */}
               <div className="absolute inset-0 pointer-events-none opacity-80 overflow-hidden">
-                <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1200 400">
+                <svg className="lab-liquid-svg w-full h-full" preserveAspectRatio="none" viewBox="0 0 1200 400">
                   <defs>
                     <linearGradient id={`liquidGrad-${flavor.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor={flavor.color} stopOpacity="0.45" />
@@ -279,35 +396,53 @@ export function Ingredients() {
               </div>
 
               {/* Live Metric Badges Floating over liquid wave */}
-              <div className="relative z-10 flex items-center justify-between">
-                <div className="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-emerald-900/10 shadow-xs">
+              <div className="relative z-10 flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2 bg-white/90 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-emerald-900/10 shadow-xs">
                   <Waves className="w-4 h-4 text-emerald-700 animate-spin" style={{ animationDuration: '8s' }} />
                   <span className="text-xs font-black text-[#083b20]">Natural Viscosity: {flavor.viscosity}%</span>
                 </div>
-                <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-emerald-900/10 shadow-xs">
+                <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-emerald-900/10 shadow-xs">
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                   <span className="text-xs font-black text-[#083b20]">Lab Purity: {flavor.purity}%</span>
                 </div>
               </div>
 
               {/* Wave Footer Readout */}
-              <div className="relative z-10 flex items-center justify-between text-[11px] font-bold text-[#07582f] bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-emerald-900/10">
-                <span>Natural Fruit Density</span>
-                <span className="font-black text-[#083b20]">{flavor.calories}</span>
+              <div className="relative z-10 rounded-2xl border border-emerald-900/10 bg-white/85 p-3 backdrop-blur-sm">
+                <div className="mb-2 flex items-center justify-between text-[11px] font-black text-[#07582f]">
+                  <span>Natural Fruit Density</span>
+                  <span className="text-[#083b20]">{flavor.calories}</span>
+                </div>
+                <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+                  <div className="h-2 overflow-hidden rounded-full bg-emerald-950/10">
+                    <motion.div
+                      key={`${flavor.id}-density`}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${Math.min(96, flavor.viscosity + 9)}%` }}
+                      transition={{ duration: 0.75, ease: 'easeOut' }}
+                      className="h-full rounded-full"
+                      style={{ background: `linear-gradient(90deg, ${flavor.color}, rgba(16,185,129,0.85))` }}
+                    />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Live read</span>
+                </div>
               </div>
             </div>
 
             {/* Bottom 4 Key Fact Tiles */}
-            <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 z-10">
-              {flavor.traits.map((trait) => (
+            <div className="relative z-10 mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {flavor.traits.map((trait, index) => (
                 <div 
                   key={trait.label} 
-                  className="rounded-2xl bg-[#f8fdf9] border border-emerald-900/10 p-3 text-center transition-all hover:bg-white hover:shadow-xs"
+                  className="lab-orbit group/tile relative overflow-hidden rounded-2xl border border-emerald-900/10 bg-white/75 p-3 shadow-[0_10px_24px_rgba(7,61,44,0.05)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_18px_34px_rgba(7,61,44,0.1)]"
                 >
-                  <div className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                  <div className="absolute -right-3 -top-3 flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-[10px] font-black text-emerald-700 transition-transform group-hover/tile:scale-110">
+                    0{index + 1}
+                  </div>
+                  <div className="pr-5 text-[9px] font-black uppercase tracking-[0.16em] text-slate-400">
                     {trait.label}
                   </div>
-                  <div className="mt-1 text-xs sm:text-sm font-black text-[#083b20]">
+                  <div className="mt-2 text-sm font-black leading-tight text-[#083b20]">
                     {trait.value}
                   </div>
                 </div>

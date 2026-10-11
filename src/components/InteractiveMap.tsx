@@ -29,6 +29,14 @@ interface CityHub {
   y: number;
 }
 
+interface SearchMatch {
+  label: string;
+  aliases: string[];
+  pinPrefixes: string[];
+  hubId: string;
+  availability: 'active' | 'expanding';
+}
+
 const CITY_HUBS: CityHub[] = [
   {
     id: 'mangaldai',
@@ -140,6 +148,93 @@ const CITY_HUBS: CityHub[] = [
   },
 ];
 
+const SEARCH_INDEX: SearchMatch[] = [
+  {
+    label: 'Mangaldai',
+    aliases: ['mangaldai', 'darrang', 'ramhari'],
+    pinPrefixes: ['7841'],
+    hubId: 'mangaldai',
+    availability: 'active',
+  },
+  {
+    label: 'Guwahati',
+    aliases: ['guwahati', 'gauhati', 'kamrup'],
+    pinPrefixes: ['781'],
+    hubId: 'guwahati',
+    availability: 'active',
+  },
+  {
+    label: 'Dibrugarh',
+    aliases: ['dibrugarh', 'upper assam'],
+    pinPrefixes: ['7860'],
+    hubId: 'dibrugarh',
+    availability: 'active',
+  },
+  {
+    label: 'Jorhat',
+    aliases: ['jorhat'],
+    pinPrefixes: ['7850'],
+    hubId: 'jorhat',
+    availability: 'active',
+  },
+  {
+    label: 'Tezpur',
+    aliases: ['tezpur', 'sonitpur'],
+    pinPrefixes: ['7840'],
+    hubId: 'tezpur',
+    availability: 'active',
+  },
+  {
+    label: 'Silchar',
+    aliases: ['silchar', 'cachar', 'barak'],
+    pinPrefixes: ['788'],
+    hubId: 'silchar',
+    availability: 'active',
+  },
+  {
+    label: 'Kolkata',
+    aliases: ['kolkata', 'calcutta', 'west bengal'],
+    pinPrefixes: ['700', '701'],
+    hubId: 'kolkata',
+    availability: 'active',
+  },
+  {
+    label: 'Patna',
+    aliases: ['patna', 'bihar'],
+    pinPrefixes: ['800', '801'],
+    hubId: 'patna',
+    availability: 'active',
+  },
+  {
+    label: 'Delhi NCR',
+    aliases: ['delhi', 'new delhi', 'ncr', 'noida', 'gurgaon', 'gurugram', 'faridabad', 'ghaziabad'],
+    pinPrefixes: ['110', '201', '122', '121'],
+    hubId: 'delhi',
+    availability: 'active',
+  },
+  {
+    label: 'Bhopal',
+    aliases: ['bhopal'],
+    pinPrefixes: ['462'],
+    hubId: 'delhi',
+    availability: 'expanding',
+  },
+  {
+    label: 'Mumbai',
+    aliases: ['mumbai', 'bombay', 'thane', 'navi mumbai'],
+    pinPrefixes: ['400', '401', '410'],
+    hubId: 'delhi',
+    availability: 'expanding',
+  },
+  {
+    label: 'Bengaluru',
+    aliases: ['bengaluru', 'bangalore'],
+    pinPrefixes: ['560'],
+    hubId: 'kolkata',
+    availability: 'expanding',
+  },
+];
+
 const METRICS = [
   { label: 'Verified Retail Points', value: '15,000+', icon: Store },
   { label: 'Authorized Distributors', value: '120+', icon: Truck },
@@ -150,7 +245,11 @@ const METRICS = [
 export function InteractiveMap() {
   const [activeHub, setActiveHub] = useState<CityHub>(CITY_HUBS[0]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchFeedback, setSearchFeedback] = useState<string | null>(null);
+  const [searchFeedback, setSearchFeedback] = useState<{
+    title: string;
+    body: string;
+    tone: 'success' | 'expanding' | 'neutral';
+  } | null>(null);
   const [filterType, setFilterType] = useState<'all' | 'central' | 'hub'>('all');
 
   const filteredHubs = CITY_HUBS.filter((h) => {
@@ -164,16 +263,39 @@ export function InteractiveMap() {
     if (!searchQuery.trim()) return;
 
     const q = searchQuery.toLowerCase().trim();
-    const found = CITY_HUBS.find(
-      (h) => h.name.toLowerCase().includes(q) || h.state.toLowerCase().includes(q)
+    const digits = q.replace(/\D/g, '');
+    const match = SEARCH_INDEX.find(
+      (item) =>
+        item.aliases.some((alias) => alias.includes(q) || q.includes(alias)) ||
+        item.pinPrefixes.some((prefix) => digits.startsWith(prefix))
     );
 
-    if (found) {
-      setActiveHub(found);
-      setSearchFeedback(`Matched: ${found.name} (${found.status})`);
-    } else {
-      setSearchFeedback(`Route mapped for "${searchQuery}" via nearest regional corridor`);
+    if (match) {
+      const hub = CITY_HUBS.find((item) => item.id === match.hubId);
+      if (!hub) return;
+
+      setActiveHub(hub);
+      setSearchFeedback(
+        match.availability === 'active'
+          ? {
+              title: `${match.label} is in the active PIO network`,
+              body: `Nearest serving hub: ${hub.name}. ${hub.leadTime} dispatch is mapped for this location.`,
+              tone: 'success',
+            }
+          : {
+              title: `${match.label} is being mapped for expansion`,
+              body: `Nearest regional corridor: ${hub.name}. Send a supply request and the team can confirm distributor availability.`,
+              tone: 'expanding',
+            }
+      );
+      return;
     }
+
+    setSearchFeedback({
+      title: `No active hub found for "${searchQuery}" yet`,
+      body: 'Share your city through the partner form and the distribution team can check supply options for your area.',
+      tone: 'neutral',
+    });
   };
 
   const scrollToSection = (id: string) => {
@@ -554,10 +676,31 @@ export function InteractiveMap() {
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
-                    className="mt-2 text-[11px] text-emerald-300 font-semibold flex items-center gap-1.5"
+                    className={`mt-2 rounded-xl border p-2.5 text-[11px] font-semibold ${
+                      searchFeedback.tone === 'success'
+                        ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-200'
+                        : searchFeedback.tone === 'expanding'
+                        ? 'border-amber-300/20 bg-amber-300/10 text-amber-100'
+                        : 'border-white/10 bg-white/[0.04] text-emerald-100/75'
+                    }`}
                   >
-                    <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />
-                    <span>{searchFeedback}</span>
+                    <div className="flex items-start gap-1.5">
+                      <CheckCircle2 className="mt-0.5 h-3 w-3 text-emerald-400 shrink-0" />
+                      <div>
+                        <div className="font-black">{searchFeedback.title}</div>
+                        <div className="mt-0.5 leading-relaxed">{searchFeedback.body}</div>
+                      </div>
+                    </div>
+                    {searchFeedback.tone !== 'success' && (
+                      <button
+                        type="button"
+                        onClick={() => scrollToSection('partner')}
+                        className="mt-2 inline-flex items-center gap-1 rounded-lg bg-white/10 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white transition-colors hover:bg-emerald-500 hover:text-black"
+                      >
+                        Send Supply Request
+                        <ArrowRight className="h-3 w-3" />
+                      </button>
+                    )}
                   </motion.div>
                 )}
               </div>

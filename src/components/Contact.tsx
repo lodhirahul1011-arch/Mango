@@ -143,7 +143,10 @@ export function Contact() {
 
           {/* Right Column: Contact Form */}
           <div className="lg:col-span-6">
-            <div className="rounded-[32px] border border-emerald-900/10 bg-[#f4faf5] p-7 sm:p-10 shadow-lg">
+            <div
+              id="send-us-form"
+              className="scroll-mt-28 rounded-[32px] border border-emerald-900/10 bg-[#f4faf5] p-7 sm:p-10 shadow-lg"
+            >
               <h3 className="text-2xl font-black text-[#083b20] mb-2">
                 Send Us a Message
               </h3>
