@@ -22,6 +22,8 @@
   --pio-green-dark: #054022;
   --pio-green-light: #eef8f1;
   --ink: #082416;
+  --pio-pointer-x: 50vw;
+  --pio-pointer-y: 50vh;
 }
 
 html {
@@ -55,6 +57,7 @@ body::before {
   pointer-events: none;
   opacity: 0.28;
   background-image:
+    radial-gradient(460px circle at var(--pio-pointer-x) var(--pio-pointer-y), rgba(255, 255, 255, 0.42), transparent 56%),
     radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.48), transparent 22%),
     radial-gradient(circle at 84% 18%, rgba(245, 166, 35, 0.12), transparent 24%),
     radial-gradient(circle at 50% 84%, rgba(22, 122, 74, 0.10), transparent 28%);
@@ -220,6 +223,15 @@ button {
   animation: floatSubtle 4s ease-in-out infinite;
 }
 
+@keyframes pioSectionSheen {
+  0%, 100% {
+    background-position: 0% 0%, 50% 50%, 50% 50%;
+  }
+  50% {
+    background-position: 100% 0%, 50% 50%, 50% 50%;
+  }
+}
+
 .brand-logo-lift {
   filter: drop-shadow(0 10px 18px rgba(7, 61, 44, 0.12));
   transform: translateZ(0);
@@ -228,6 +240,21 @@ button {
 
 .pio-premium-section {
   isolation: isolate;
+}
+
+.pio-premium-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.42;
+  background:
+    linear-gradient(115deg, transparent 0 35%, rgba(255, 255, 255, 0.34) 45%, transparent 56%),
+    radial-gradient(ellipse at 12% 30%, rgba(245, 166, 35, 0.10), transparent 30%),
+    radial-gradient(ellipse at 84% 70%, rgba(235, 85, 116, 0.08), transparent 34%);
+  background-size: 260% 100%, 100% 100%, 100% 100%;
+  animation: pioSectionSheen 16s ease-in-out infinite;
 }
 
 .pio-premium-section::after {
@@ -241,6 +268,65 @@ button {
     radial-gradient(circle at calc(18% + var(--section-index, 0) * 8%) 10%, rgba(255, 255, 255, 0.58), transparent 18%),
     radial-gradient(circle at 86% 22%, rgba(245, 166, 35, 0.08), transparent 20%),
     radial-gradient(circle at 12% 92%, rgba(22, 122, 74, 0.08), transparent 24%);
+}
+
+.pio-spotlight-card {
+  position: relative;
+  isolation: isolate;
+  transform-style: preserve-3d;
+  transition: transform 260ms ease, box-shadow 260ms ease;
+}
+
+.pio-spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(360px circle at var(--pio-pointer-x) var(--pio-pointer-y), rgba(255, 255, 255, 0.82), transparent 46%),
+    linear-gradient(135deg, rgba(245, 166, 35, 0.22), rgba(22, 122, 74, 0.18), rgba(235, 85, 116, 0.16));
+  transition: opacity 260ms ease;
+}
+
+.pio-spotlight-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.34), transparent);
+  transform: translateX(-60%);
+  transition: opacity 280ms ease, transform 720ms ease;
+}
+
+.pio-spotlight-card:hover {
+  transform: translateY(-3px);
+}
+
+.pio-spotlight-card:hover::before {
+  opacity: 0.72;
+}
+
+.pio-spotlight-card:hover::after {
+  opacity: 1;
+  transform: translateX(60%);
+}
+
+.pio-product-glow {
+  transform-style: preserve-3d;
+  transition: filter 320ms ease;
+  will-change: transform, filter;
+}
+
+.pio-product-glow:hover {
+  filter:
+    drop-shadow(0 28px 38px rgba(7, 61, 44, 0.20))
+    drop-shadow(0 0 26px rgba(245, 166, 35, 0.18));
 }
 
 .pio-motion-heading {

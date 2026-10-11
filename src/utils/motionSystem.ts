@@ -78,6 +78,8 @@ function revealCards(root: HTMLElement, isMobile: boolean) {
   const sections = Array.from(root.querySelectorAll<HTMLElement>('main section:not(#home)'));
 
   sections.forEach((section) => {
+    if (section.id === 'map') return;
+
     const cards = Array.from(
       section.querySelectorAll<HTMLElement>(
         'article, li, [class*="rounded-2xl"], [class*="rounded-3xl"], [class*="rounded-["]'
@@ -94,6 +96,7 @@ function revealCards(root: HTMLElement, isMobile: boolean) {
     });
 
     if (!cards.length) return;
+    cards.forEach((card) => card.classList.add('pio-spotlight-card'));
 
     gsap.fromTo(
       cards.slice(0, isMobile ? 8 : 14),
@@ -166,6 +169,7 @@ function addSectionAtmosphere(root: HTMLElement, isMobile: boolean) {
     ).filter((el) => !inLocalMotion(el));
 
     visuals.slice(0, 4).forEach((visual, visualIndex) => {
+      if (visual.tagName === 'IMG') visual.classList.add('pio-product-glow');
       gsap.to(visual, {
         y: visualIndex % 2 === 0 ? -18 : 18,
         x: visualIndex % 2 === 0 ? 8 : -8,
@@ -178,7 +182,74 @@ function addSectionAtmosphere(root: HTMLElement, isMobile: boolean) {
         },
       });
     });
+
+    const floatingBits = Array.from(
+      section.querySelectorAll<HTMLElement>('.depth-near, .depth-far, .lab-orbit, [class*="Sparkles"]')
+    ).filter((el) => !inLocalMotion(el));
+
+    floatingBits.slice(0, 8).forEach((bit, bitIndex) => {
+      gsap.to(bit, {
+        y: bitIndex % 2 === 0 ? -7 : 7,
+        rotate: bitIndex % 2 === 0 ? 1.8 : -1.8,
+        duration: 4.8 + bitIndex * 0.35,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+      });
+    });
   });
+}
+
+function installPointerSpotlight(root: HTMLElement): Cleanup {
+  if (isTouchDevice()) return () => undefined;
+
+  const move = (event: PointerEvent) => {
+    root.style.setProperty('--pio-pointer-x', `${event.clientX}px`);
+    root.style.setProperty('--pio-pointer-y', `${event.clientY}px`);
+  };
+
+  window.addEventListener('pointermove', move, { passive: true });
+  return () => window.removeEventListener('pointermove', move);
+}
+
+function installProductTilt(root: HTMLElement): Cleanup {
+  if (isTouchDevice()) return () => undefined;
+
+  const products = Array.from(
+    root.querySelectorAll<HTMLImageElement>('main section:not(#home) img[src*="pio-"]')
+  ).filter((img) => !inLocalMotion(img));
+
+  const cleanups = products.map((product) => {
+    const rotateX = gsap.quickTo(product, 'rotateX', { duration: 0.4, ease: 'power3.out' });
+    const rotateY = gsap.quickTo(product, 'rotateY', { duration: 0.4, ease: 'power3.out' });
+    const scale = gsap.quickTo(product, 'scale', { duration: 0.35, ease: 'power3.out' });
+
+    const move = (event: PointerEvent) => {
+      const rect = product.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      rotateY(gsap.utils.clamp(-3, 3, x * 3));
+      rotateX(gsap.utils.clamp(-2, 2, y * -2));
+      scale(1.025);
+    };
+
+    const leave = () => {
+      rotateX(0);
+      rotateY(0);
+      scale(1);
+    };
+
+    product.addEventListener('pointermove', move);
+    product.addEventListener('pointerleave', leave);
+
+    return () => {
+      product.removeEventListener('pointermove', move);
+      product.removeEventListener('pointerleave', leave);
+      gsap.set(product, { clearProps: 'rotateX,rotateY,scale' });
+    };
+  });
+
+  return () => cleanups.forEach((cleanup) => cleanup());
 }
 
 function enhanceButtons(root: HTMLElement): Cleanup {
@@ -251,6 +322,8 @@ export function initPioMotion(root: HTMLElement): Cleanup {
   if (prefersReducedMotion()) return () => undefined;
 
   let cleanupButtons: Cleanup = () => undefined;
+  let cleanupSpotlight: Cleanup = () => undefined;
+  let cleanupTilt: Cleanup = () => undefined;
   const mm = gsap.matchMedia();
   const ctx = gsap.context(() => {
     mm.add(
@@ -267,11 +340,15 @@ export function initPioMotion(root: HTMLElement): Cleanup {
         revealImages(root, isMobile);
         morphPageTone(root);
         cleanupButtons = enhanceButtons(root);
+        cleanupSpotlight = installPointerSpotlight(root);
+        cleanupTilt = installProductTilt(root);
 
         const refresh = window.setTimeout(() => ScrollTrigger.refresh(), 180);
         return () => {
           window.clearTimeout(refresh);
           cleanupButtons();
+          cleanupSpotlight();
+          cleanupTilt();
         };
       }
     );
@@ -279,6 +356,8 @@ export function initPioMotion(root: HTMLElement): Cleanup {
 
   return () => {
     cleanupButtons();
+    cleanupSpotlight();
+    cleanupTilt();
     mm.revert();
     ctx.revert();
   };

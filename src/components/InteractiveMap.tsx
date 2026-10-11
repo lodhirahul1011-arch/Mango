@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
   MapPin, 
   Search, 
@@ -15,6 +17,8 @@ import {
   Clock, 
   SlidersHorizontal 
 } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface CityHub {
   id: string;
@@ -251,12 +255,71 @@ export function InteractiveMap() {
     tone: 'success' | 'expanding' | 'neutral';
   } | null>(null);
   const [filterType, setFilterType] = useState<'all' | 'central' | 'hub'>('all');
+  const mapStageRef = useRef<HTMLDivElement>(null);
 
   const filteredHubs = CITY_HUBS.filter((h) => {
     if (filterType === 'all') return true;
     if (filterType === 'central') return h.type === 'factory' || h.type === 'central';
     return h.type === 'hub';
   });
+
+  useEffect(() => {
+    const stage = mapStageRef.current;
+    if (!stage) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      const routes = gsap.utils.toArray<SVGPathElement>('.pio-route-path');
+      routes.forEach((path) => {
+        const length = path.getTotalLength();
+        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+      });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: stage,
+          start: 'top 76%',
+          once: true,
+        },
+      });
+
+      tl.from('.pio-map-grid', { autoAlpha: 0, duration: 0.55, ease: 'power2.out' })
+        .from('.pio-map-story', { autoAlpha: 0, y: 18, duration: 0.65, ease: 'power3.out' }, 0.05)
+        .from('.pio-origin-node', { autoAlpha: 0, scale: 0.72, duration: 0.8, ease: 'back.out(1.7)' }, 0.18)
+        .to(routes, {
+          strokeDashoffset: 0,
+          duration: 1.35,
+          ease: 'power2.out',
+          stagger: 0.12,
+        }, 0.5)
+        .from('.pio-city-node', { autoAlpha: 0, scale: 0.68, duration: 0.55, ease: 'back.out(1.8)', stagger: 0.06 }, 0.9)
+        .from('.pio-map-product', { autoAlpha: 0, y: 18, scale: 0.9, duration: 0.7, ease: 'power3.out' }, 1.05)
+        .from('.pio-map-legend', { autoAlpha: 0, y: 12, duration: 0.5, ease: 'power3.out' }, 1.2);
+
+      gsap.to('.pio-expansion-ring', {
+        scale: 1.08,
+        autoAlpha: 0,
+        duration: 5.5,
+        ease: 'sine.out',
+        repeat: -1,
+        stagger: 1.6,
+        transformOrigin: 'center',
+      });
+
+      gsap.to('.pio-route-bead', {
+        autoAlpha: 1,
+        duration: 0.8,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        stagger: 0.45,
+      });
+    }, stage);
+
+    return () => ctx.revert();
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -419,14 +482,27 @@ export function InteractiveMap() {
             <div className="lg:col-span-7 relative p-3.5 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-emerald-900/10 min-h-[300px] sm:min-h-[400px]">
               
               {/* Radar Stage Container */}
-              <div className="relative w-full h-full min-h-[260px] sm:min-h-[350px] rounded-2xl bg-gradient-to-br from-[#eef8f1] via-[#f8fdf9] to-[#fff4d8] border border-emerald-900/10 overflow-hidden flex items-center justify-center">
+              <div ref={mapStageRef} className="relative w-full h-full min-h-[260px] sm:min-h-[350px] rounded-2xl bg-[radial-gradient(circle_at_72%_38%,rgba(245,158,11,0.22),transparent_18%),radial-gradient(circle_at_28%_36%,rgba(16,185,129,0.12),transparent_26%),linear-gradient(135deg,#fffaf0_0%,#fbfff8_48%,#f4ecd2_100%)] border border-emerald-900/10 overflow-hidden flex items-center justify-center shadow-[inset_0_1px_0_rgba(255,255,255,0.92),inset_0_-40px_80px_rgba(7,61,44,0.05)]">
+                <div className="pio-map-grid pointer-events-none absolute inset-0 opacity-[0.018]" style={{ backgroundImage: 'linear-gradient(#073d2c 1px, transparent 1px), linear-gradient(90deg, #073d2c 1px, transparent 1px)', backgroundSize: '34px 34px' }} />
+                <div className="pointer-events-none absolute left-[8%] top-[10%] h-[58%] w-[38%] rotate-[4deg] rounded-[30%_70%_55%_45%] bg-emerald-200/20 blur-[1px]" />
+                <div className="pointer-events-none absolute right-[6%] top-[18%] h-[46%] w-[34%] rounded-full bg-white/42 blur-2xl" />
+                <div className="pointer-events-none absolute inset-x-[18%] bottom-[10%] h-24 rounded-full bg-emerald-900/10 blur-3xl" />
+                <div className="pio-map-story pointer-events-none absolute left-4 top-4 z-20 max-w-[220px] rounded-2xl border border-white/75 bg-white/62 p-4 text-left shadow-[0_18px_42px_rgba(7,61,44,0.10)] backdrop-blur-md">
+                  <div className="text-[9px] font-black uppercase tracking-[0.24em] text-[#0b8043]">PIO Distribution Network</div>
+                  <div className="mt-2 text-2xl font-black leading-[0.95] tracking-tight text-[#073d2c]" style={{ fontFamily: 'var(--font-display)' }}>
+                    From Assam,<br />Across India.
+                  </div>
+                  <p className="mt-2 text-[11px] font-semibold leading-relaxed text-[#3b5e48]">
+                    Born in Mangaldai and moving outward through a growing distribution network.
+                  </p>
+                </div>
                 
                 {/* 1. Radar Circular Target Rings */}
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <div className="h-[90%] aspect-square rounded-full border border-emerald-500/10" />
-                  <div className="absolute h-[65%] aspect-square rounded-full border border-emerald-500/15" />
-                  <div className="absolute h-[40%] aspect-square rounded-full border border-emerald-500/20" />
-                  <div className="absolute h-[15%] aspect-square rounded-full border border-emerald-400/30" />
+                  <div className="h-[90%] aspect-square rounded-full border border-emerald-500/10 shadow-[0_0_60px_rgba(16,185,129,0.08)]" />
+                  <div className="absolute h-[65%] aspect-square rounded-full border border-emerald-500/16" />
+                  <div className="absolute h-[40%] aspect-square rounded-full border border-emerald-500/24" />
+                  <div className="absolute h-[15%] aspect-square rounded-full border border-emerald-400/40 bg-white/25" />
                   {/* Crosshairs */}
                   <div className="absolute w-full h-px bg-emerald-500/10" />
                   <div className="absolute h-full w-px bg-emerald-500/10" />
@@ -441,35 +517,69 @@ export function InteractiveMap() {
                   <div 
                     className="w-1/2 h-1/2 absolute top-0 right-0 origin-bottom-left"
                     style={{
-                      background: 'conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(16, 185, 129, 0.18) 360deg)',
+                      background: 'conic-gradient(from 0deg, transparent 0deg, transparent 268deg, rgba(245, 158, 11, 0.16) 326deg, rgba(16,185,129,0.16) 346deg, transparent 360deg)',
                     }}
                   />
                 </motion.div>
 
                 {/* 3. Subtle India & Transit Vector Lines */}
                 <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full pointer-events-none">
+                  <defs>
+                    <linearGradient id="routeGold" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.95" />
+                      <stop offset="100%" stopColor="#10b981" stopOpacity="0.75" />
+                    </linearGradient>
+                    <filter id="routeGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="0.7" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <path
+                    d="M 21 22 C 36 13, 60 15, 74 25 C 91 37, 82 55, 64 61 C 49 66, 44 84, 37 84 C 30 76, 26 61, 20 47 C 16 38, 14 29, 21 22 Z"
+                    fill="rgba(255,255,255,0.32)"
+                    stroke="#073d2c"
+                    strokeWidth="0.28"
+                    className="opacity-20"
+                  />
                   {/* Subtle Coastline outline */}
                   <path
                     d="M 20 25 Q 35 18, 55 26 T 70 34 Q 85 30, 92 42 T 75 56 Q 60 62, 54 78 T 40 85 Q 28 65, 20 45 Z"
-                    fill="none"
+                    fill="rgba(16,185,129,0.055)"
                     stroke="#059669"
-                    strokeWidth="0.6"
-                    strokeDasharray="2 3"
-                    className="opacity-30"
+                    strokeWidth="0.45"
+                    strokeDasharray="1.6 2.4"
+                    className="opacity-55"
                   />
 
                   {/* Flowing Laser Transit Lines radiating from Mangaldai (72, 38) */}
-                  <g className="opacity-70">
-                    <line x1="72" y1="38" x2="69" y2="41" stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="1.5 2" />
-                    <line x1="72" y1="38" x2="82" y2="32" stroke="#10b981" strokeWidth="0.6" strokeDasharray="1 2" />
-                    <line x1="72" y1="38" x2="77" y2="36" stroke="#10b981" strokeWidth="0.6" strokeDasharray="1 2" />
-                    <line x1="72" y1="38" x2="73" y2="35" stroke="#10b981" strokeWidth="0.6" strokeDasharray="1 2" />
-                    <line x1="72" y1="38" x2="71" y2="49" stroke="#10b981" strokeWidth="0.6" strokeDasharray="1 2" />
-                    <line x1="69" y1="41" x2="58" y2="56" stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="2 2" />
-                    <line x1="58" y1="56" x2="48" y2="44" stroke="#10b981" strokeWidth="0.6" strokeDasharray="2 2" />
-                    <line x1="48" y1="44" x2="28" y2="36" stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="2 2" />
+                  <g className="opacity-90" filter="url(#routeGlow)">
+                    <path className="pio-route-path" d="M72 38 C70 40,70 40,69 41" fill="none" stroke="url(#routeGold)" strokeWidth="1" strokeLinecap="round" />
+                    <path className="pio-route-path" d="M72 38 C76 33,79 31,82 32" fill="none" stroke="#10b981" strokeWidth="0.78" strokeLinecap="round" />
+                    <path className="pio-route-path" d="M72 38 C74 35,76 35,77 36" fill="none" stroke="#10b981" strokeWidth="0.78" strokeLinecap="round" />
+                    <path className="pio-route-path" d="M72 38 C73 36,73 35,73 35" fill="none" stroke="#10b981" strokeWidth="0.78" strokeLinecap="round" />
+                    <path className="pio-route-path" d="M72 38 C74 44,73 48,71 49" fill="none" stroke="#10b981" strokeWidth="0.78" strokeLinecap="round" />
+                    <path className="pio-route-path" d="M69 41 C66 48,62 53,58 56" fill="none" stroke="url(#routeGold)" strokeWidth="1" strokeLinecap="round" />
+                    <path className="pio-route-path" d="M58 56 C55 49,52 45,48 44" fill="none" stroke="#10b981" strokeWidth="0.78" strokeLinecap="round" />
+                    <path className="pio-route-path" d="M48 44 C40 36,34 34,28 36" fill="none" stroke="url(#routeGold)" strokeWidth="1" strokeLinecap="round" />
+                    <circle className="pio-route-bead" r="1.2" fill="#fff7ad" opacity="0">
+                      <animateMotion dur="5.6s" repeatCount="indefinite" path="M72 38 C76 33,79 31,82 32" />
+                    </circle>
+                    <circle className="pio-route-bead" r="1.1" fill="#10b981" opacity="0">
+                      <animateMotion dur="6.8s" repeatCount="indefinite" path="M69 41 C66 48,62 53,58 56" />
+                    </circle>
                   </g>
                 </svg>
+
+                <div className="pointer-events-none absolute left-[67%] top-[32%] h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald-400/25 bg-emerald-300/10 shadow-[0_0_48px_rgba(16,185,129,0.22)]" />
+                <div className="pio-expansion-ring pointer-events-none absolute left-[72%] top-[38%] h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-400/40 bg-amber-300/10" />
+                <div className="pio-expansion-ring pointer-events-none absolute left-[72%] top-[38%] h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald-400/25" />
+                <div className="pio-map-product pointer-events-none absolute right-[8%] bottom-[16%] z-10 hidden items-end gap-0 sm:flex">
+                  <img src="/images/pio-mango.png" alt="" draggable={false} className="h-24 w-auto -rotate-[7deg] object-contain drop-shadow-[0_18px_24px_rgba(7,61,44,0.20)]" />
+                  <img src="/images/pio-lychee.png" alt="" draggable={false} className="-ml-8 h-20 w-auto rotate-[7deg] object-contain drop-shadow-[0_18px_24px_rgba(7,61,44,0.18)]" />
+                </div>
 
                 {/* 4. Interactive Glowing City Hub Nodes */}
                 {filteredHubs.map((hub) => {
@@ -481,7 +591,7 @@ export function InteractiveMap() {
                       key={hub.id}
                       onClick={() => setActiveHub(hub)}
                       style={{ left: `${hub.x}%`, top: `${hub.y}%` }}
-                      className="group absolute -translate-x-1/2 -translate-y-1/2 focus:outline-none z-20 cursor-pointer p-2"
+                      className={`${isFactory ? 'pio-origin-node' : 'pio-city-node'} group absolute -translate-x-1/2 -translate-y-1/2 focus:outline-none z-20 cursor-pointer p-2`}
                       aria-label={`Select hub ${hub.name}`}
                     >
                       {/* Pulse Ping */}
@@ -501,10 +611,10 @@ export function InteractiveMap() {
                         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                         className={`relative flex items-center justify-center rounded-full transition-all duration-200 ${
                           isSelected
-                            ? 'h-8 w-8 bg-gradient-to-tr from-emerald-500 to-teal-300 text-black shadow-[0_0_20px_rgba(16,185,129,0.8)] ring-2 ring-white'
+                            ? 'h-9 w-9 bg-gradient-to-tr from-emerald-500 to-teal-300 text-[#042414] shadow-[0_0_26px_rgba(16,185,129,0.75)] ring-4 ring-white/85'
                             : isFactory
-                            ? 'h-7 w-7 bg-gradient-to-tr from-amber-500 to-yellow-300 text-black shadow-[0_0_15px_rgba(245,158,11,0.6)] ring-1 ring-amber-200'
-                            : 'h-5 w-5 bg-[#041a10] text-emerald-400 border border-emerald-400/40 hover:border-emerald-300 hover:scale-110 shadow-xs'
+                            ? 'h-11 w-11 bg-gradient-to-tr from-amber-500 to-yellow-200 text-[#422006] shadow-[0_0_34px_rgba(245,158,11,0.72)] ring-4 ring-white/90'
+                            : 'h-5 w-5 bg-[#04301f] text-emerald-200 border border-white/50 hover:border-emerald-300 hover:scale-110 shadow-[0_8px_18px_rgba(7,61,44,0.18)]'
                         }`}
                       >
                         <MapPin className={`${isSelected ? 'h-4 w-4' : isFactory ? 'h-3.5 w-3.5' : 'h-3 w-3'}`} />
@@ -512,32 +622,38 @@ export function InteractiveMap() {
 
                       {/* Micro Pill Label */}
                       <span
-                        className={`absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md px-1.5 py-0.5 text-[8.5px] font-extrabold uppercase tracking-wider transition-all pointer-events-none shadow-md ${
+                        className={`absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2 py-1 text-[8.5px] font-extrabold uppercase tracking-wider transition-all pointer-events-none shadow-md ${
                           isSelected
-                            ? 'bg-emerald-400 text-black font-black scale-105 ring-1 ring-white/50'
-                            : 'bg-white/90 text-[#07582f] border border-emerald-900/10 group-hover:text-[#083b20] group-hover:border-emerald-500/40'
+                            ? 'bg-emerald-400 text-[#042414] font-black scale-105 ring-2 ring-white/70'
+                            : isFactory
+                            ? 'bg-amber-100 text-[#7c4a03] border border-amber-300/60'
+                            : 'bg-white/95 text-[#07582f] border border-emerald-900/10 opacity-0 group-hover:opacity-100 group-hover:text-[#083b20] group-hover:border-emerald-500/40'
                         }`}
                       >
-                        {hub.name}
+                        {isFactory ? (
+                          <>
+                            <span className="block">{hub.name}</span>
+                            <span className="block text-[7px] tracking-[0.18em] opacity-70">ORIGIN / ASSAM</span>
+                          </>
+                        ) : hub.name}
                       </span>
                     </button>
                   );
                 })}
 
-                {/* Map Bottom Quick Indicator */}
-                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] text-[#3b5e48] pointer-events-none bg-white/88 px-2.5 py-1 rounded-lg backdrop-blur-xs border border-emerald-900/10">
-                  <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-1.5 font-bold text-amber-300">
-                      <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
-                      Factory & Origin
-                    </span>
-                    <span className="flex items-center gap-1.5 font-bold text-emerald-300">
-                      <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
-                      Active Hubs
-                    </span>
-                  </div>
-                  <span className="hidden sm:inline-block text-[9px] uppercase tracking-widest text-[#3b5e48]/70">
-                    Touch any node
+                {/* Floating Legend */}
+                <div className="pio-map-legend absolute bottom-4 left-4 z-20 flex flex-wrap items-center gap-3 text-[10px] font-black uppercase tracking-[0.16em] text-[#3b5e48] pointer-events-none">
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.75)]" />
+                    Origin
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.65)]" />
+                    Active Hub
+                  </span>
+                  <span className="hidden sm:flex items-center gap-1.5">
+                    <span className="h-px w-5 bg-gradient-to-r from-amber-400 to-emerald-400" />
+                    Expanding Network
                   </span>
                 </div>
 

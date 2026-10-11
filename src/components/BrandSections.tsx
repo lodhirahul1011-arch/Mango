@@ -320,6 +320,8 @@ function ProductsShowcase() {
           <LiquidSplashLayer tone="mango" />
           <LiquidSplashLayer tone="lychee" />
 
+          <div className="depth-near pointer-events-none absolute inset-x-[12%] bottom-[18%] h-20 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(7,61,44,0.22),transparent_68%)] blur-2xl sm:bottom-[20%] sm:h-28" />
+
           <FruitLayer tone="leaf" className="depth-far left-[12%] top-[6%] h-10 w-20 rotate-[-28deg] rounded-[90%_10%_90%_10%] sm:top-[10%] sm:h-14 sm:w-28" />
           <FruitLayer tone="leaf" className="depth-near right-[5%] top-[9%] h-11 w-24 rotate-[32deg] rounded-[90%_10%_90%_10%] sm:top-[13%] sm:h-16 sm:w-32" />
           <FruitLayer tone="mango" className="depth-near left-[4%] bottom-[16%] h-16 w-20 rotate-[-14deg] rounded-[58%_42%_52%_48%] sm:left-[3%] sm:bottom-[22%] sm:h-20 sm:w-24" />
