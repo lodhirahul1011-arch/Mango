@@ -316,7 +316,7 @@ function ProductsShowcase() {
           <AnimatedCTA />
         </div>
 
-        <div ref={visualRef} className="relative z-10 -mt-4 min-h-[410px] overflow-visible sm:mt-0 sm:min-h-[650px] lg:min-h-[760px]">
+        <div ref={visualRef} className="relative z-10 -mt-4 min-h-[430px] overflow-hidden rounded-[28px] sm:mt-0 sm:min-h-[620px] sm:overflow-visible sm:rounded-none lg:min-h-[760px]">
           <LiquidSplashLayer tone="mango" />
           <LiquidSplashLayer tone="lychee" />
 
@@ -332,27 +332,48 @@ function ProductsShowcase() {
             src={PRODUCT_ASSETS.mango}
             alt="PIO Mango original carton"
             tone="mango"
-            className="product-mango left-[5%] top-[4%] h-[330px] w-[47%] max-w-[260px] -rotate-[5deg] sm:left-[10%] sm:top-[14%] sm:h-[560px] sm:max-w-[360px] lg:left-[7%] lg:top-[12%] lg:h-[610px]"
+            className="product-mango left-[10%] top-[6%] h-[330px] w-[44%] max-w-[220px] -rotate-[5deg] sm:left-[18%] sm:top-[12%] sm:h-[520px] sm:max-w-[320px] lg:left-[18%] lg:top-[12%] lg:h-[590px] xl:left-[12%] xl:h-[610px]"
           />
           <ProductVisual
             src={PRODUCT_ASSETS.lychee}
             alt="PIO Lychee original carton"
             tone="lychee"
-            className="product-lychee right-[4%] top-[12%] h-[320px] w-[47%] max-w-[250px] rotate-[5deg] sm:right-[8%] sm:top-[22%] sm:h-[545px] sm:max-w-[350px] lg:right-[5%] lg:top-[20%] lg:h-[590px]"
+            className="product-lychee right-[8%] top-[16%] h-[315px] w-[44%] max-w-[215px] rotate-[5deg] sm:right-[16%] sm:top-[22%] sm:h-[500px] sm:max-w-[310px] lg:right-[13%] lg:top-[22%] lg:h-[565px] xl:right-[8%] xl:h-[590px]"
           />
 
           <FlavourInfo
             tone="mango"
             title="Mango"
             copy="Golden tropical sip with a smooth fruit finish."
-            className="left-[2%] top-[6%] hidden sm:block"
+            className="left-[0%] top-[12%] hidden lg:block xl:left-[2%]"
           />
           <FlavourInfo
             tone="lychee"
             title="Lychee"
             copy="Fresh floral sweetness with a chilled feel."
-            className="right-[0%] bottom-[8%] hidden sm:block"
+            className="right-[0%] bottom-[10%] hidden lg:block xl:right-[1%]"
           />
+        </div>
+
+        <div className="-mt-6 grid gap-3 sm:-mt-10 sm:grid-cols-2 lg:hidden">
+          <div className="rounded-2xl border border-amber-300/70 bg-white/82 p-4 shadow-[0_14px_32px_rgba(180,83,9,0.11)] backdrop-blur-md">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#b45309]">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+              Mango
+            </div>
+            <p className="mt-2 text-xs font-semibold leading-relaxed text-[#1e293b]">
+              Golden tropical sip with a smooth fruit finish.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-rose-300/75 bg-white/86 p-4 shadow-[0_14px_32px_rgba(225,29,72,0.12)] backdrop-blur-md">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-rose-50 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#be123c]">
+              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+              Lychee
+            </div>
+            <p className="mt-2 text-xs font-semibold leading-relaxed text-[#1e293b]">
+              Fresh floral sweetness with a chilled feel.
+            </p>
+          </div>
         </div>
       </div>
     </section>
