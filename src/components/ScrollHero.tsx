@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const FRAME_COUNT = 240;
 const frameSrc = (index: number) => `/sequence-new/frame_${String(index).padStart(4, '0')}.jpg?v=4`;
+const HERO_BG = '/images/hero-fruit-bg.png';
 
 export function ScrollHero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -184,36 +185,43 @@ export function ScrollHero() {
     >
       <div 
         className="sticky top-0 h-[100svh] min-h-[100svh] w-full overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: `url(${frameSrc(0)})` }}
+        style={{ backgroundImage: `url(${HERO_BG})` }}
       >
-        {/* Fullscreen 3D Canvas with enhanced saturation & crisp contrast */}
+        {/* Fullscreen 3D Canvas retained for preloading compatibility, visually replaced by the clean fruit background */}
         <canvas
           ref={canvasRef}
           style={{
             filter: 'contrast(1.08) saturate(1.24) brightness(1.02)',
           }}
-          className="absolute inset-0 hidden h-full w-full object-cover transition-all md:block"
+          className="absolute inset-0 hidden h-full w-full object-cover opacity-0 transition-all"
           aria-label="PIO 3D animated cans and fruit splash"
         />
 
-        {/* Subtle cinematic vignette that makes center cartons pop with depth */}
-        <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(6,46,25,0.12)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.20)_0%,transparent_48%,rgba(6,46,25,0.12)_100%)]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] hidden h-[34%] bg-[linear-gradient(180deg,transparent,rgba(7,61,44,0.82))] md:block" />
+
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] hidden w-[58%] items-center justify-center md:flex">
+          <div className="absolute bottom-[10%] left-[10%] h-24 w-[64%] rounded-full bg-[#062816]/22 blur-3xl" />
+          <img
+            src="/images/pio-mango.png"
+            alt=""
+            draggable={false}
+            className="relative z-10 h-[56vh] max-h-[620px] min-h-[420px] -rotate-[7deg] object-contain drop-shadow-[0_34px_48px_rgba(7,61,44,0.28)]"
+          />
+          <img
+            src="/images/pio-lychee.png"
+            alt=""
+            draggable={false}
+            className="relative z-20 -ml-28 mt-12 h-[52vh] max-h-[580px] min-h-[390px] rotate-[6deg] object-contain drop-shadow-[0_34px_48px_rgba(95,20,44,0.24)]"
+          />
+        </div>
 
         {/* Mobile editorial hero: static, readable, product-first composition */}
         <div className="hero-mobile-art absolute inset-0 z-10 overflow-hidden px-5 pb-5 pt-[92px] text-center md:hidden">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_23%,rgba(255,255,255,0.96)_0%,rgba(255,250,218,0.86)_30%,transparent_58%),radial-gradient(circle_at_12%_42%,rgba(22,122,74,0.22),transparent_31%),radial-gradient(circle_at_90%_45%,rgba(244,63,94,0.18),transparent_28%),linear-gradient(180deg,#fbfff1_0%,#fff6c6_48%,#073d2c_100%)]" />
-          <div className="pointer-events-none absolute inset-x-0 top-[22%] h-[42%] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.70),transparent_58%)]" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-[linear-gradient(180deg,transparent,rgba(7,61,44,0.98)_92%)]" />
-          <div className="hero-mobile-orbit pointer-events-none absolute -left-20 top-4 h-56 w-44 rotate-12 rounded-[55%_45%_45%_55%] bg-[#0f7a43]/28 blur-2xl" />
-          <div className="hero-mobile-orbit pointer-events-none absolute -right-10 top-16 h-20 w-11 rotate-[28deg] rounded-[80%_10%_80%_10%] bg-[#167A4A]/50 shadow-[0_12px_28px_rgba(7,61,44,0.16)]" />
-          <div className="hero-mobile-orbit pointer-events-none absolute left-7 bottom-[28%] h-28 w-28 rounded-[42%_58%_44%_56%] bg-[#ffc83d] shadow-[inset_-12px_-10px_0_rgba(180,94,0,0.15),0_18px_34px_rgba(146,64,14,0.22)]" />
-          <div className="hero-mobile-orbit pointer-events-none absolute left-9 bottom-[30%] grid h-20 w-20 rotate-[-12deg] grid-cols-3 gap-1 opacity-70">
-            {Array.from({ length: 9 }).map((_, index) => (
-              <span key={index} className="rounded-[7px] bg-[#ffe27a]/80 shadow-[inset_-2px_-2px_0_rgba(146,64,14,0.12)]" />
-            ))}
-          </div>
-          <div className="hero-mobile-orbit pointer-events-none absolute right-5 bottom-[29%] h-32 w-12 rotate-[38deg] rounded-[100%_0_100%_0] bg-[#ffcf44] shadow-[inset_-10px_-6px_0_rgba(168,82,0,0.14),0_18px_34px_rgba(146,64,14,0.16)]" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-[17%] h-[34%] bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.56),transparent_10%),radial-gradient(circle_at_38%_52%,rgba(255,200,61,0.26),transparent_30%),radial-gradient(circle_at_65%_48%,rgba(255,255,255,0.40),transparent_25%)] opacity-75" />
+          <div className="pointer-events-none absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${HERO_BG})` }} />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,245,0.28)_0%,rgba(255,255,245,0.08)_48%,rgba(7,61,44,0.78)_100%)]" />
+          <div className="pointer-events-none absolute inset-x-0 top-[13%] h-[28%] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.72),transparent_64%)]" />
+          <div className="pointer-events-none absolute inset-x-[10%] bottom-[22%] h-16 rounded-full bg-[#062816]/18 blur-2xl" />
 
           <div className="hero-mobile-reveal relative z-10 mx-auto max-w-[340px]">
             <p className="text-[10px] font-black uppercase tracking-[0.34em] text-[#167A4A]">Born in Assam</p>
@@ -226,19 +234,19 @@ export function ScrollHero() {
             </p>
           </div>
 
-          <div className="hero-mobile-reveal hero-mobile-packs absolute inset-x-0 top-[36%] z-10 mx-auto h-[36dvh] min-h-[245px] max-h-[340px] max-w-[390px]">
+          <div className="hero-mobile-reveal hero-mobile-packs absolute inset-x-0 top-[35%] z-10 mx-auto h-[38dvh] min-h-[255px] max-h-[350px] max-w-[390px]">
             <div className="pointer-events-none absolute inset-x-[12%] bottom-2 h-16 rounded-full bg-[#062816]/25 blur-2xl" />
             <img
               src="/images/pio-mango.png"
               alt="PIO Mango 160ml carton"
               draggable={false}
-              className="absolute bottom-0 left-[15%] h-full -rotate-[5deg] object-contain drop-shadow-[0_26px_36px_rgba(7,61,44,0.30)]"
+              className="absolute bottom-0 left-[13%] h-full -rotate-[5deg] object-contain drop-shadow-[0_26px_36px_rgba(7,61,44,0.30)]"
             />
             <img
               src="/images/pio-lychee.png"
               alt="PIO Lychee 160ml carton"
               draggable={false}
-              className="absolute bottom-2 right-[14%] h-[92%] rotate-[5deg] object-contain drop-shadow-[0_24px_34px_rgba(95,20,44,0.26)]"
+              className="absolute bottom-2 right-[12%] h-[92%] rotate-[5deg] object-contain drop-shadow-[0_24px_34px_rgba(95,20,44,0.26)]"
             />
           </div>
 
