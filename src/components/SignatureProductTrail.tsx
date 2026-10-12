@@ -13,16 +13,15 @@ export function SignatureProductTrail() {
     const layer = layerRef.current;
     const mango = mangoRef.current;
     const lychee = lycheeRef.current;
-    const home = document.getElementById('home');
     const flavours = document.getElementById('flavours');
-    if (!layer || !mango || !lychee || !home || !flavours) return;
+    if (!layer || !mango || !lychee || !flavours) return;
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduceMotion) return;
 
     const mm = gsap.matchMedia();
 
-    mm.add('(min-width: 900px)', () => {
+    mm.add('(min-width: 1024px)', () => {
       gsap.set(layer, {
         autoAlpha: 0,
         xPercent: -50,
@@ -37,12 +36,14 @@ export function SignatureProductTrail() {
 
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: home,
-          start: '58% top',
-          endTrigger: flavours,
-          end: '42% center',
-          scrub: 0.8,
+          trigger: flavours,
+          start: 'top top',
+          end: '75% top',
+          scrub: 0.35,
           invalidateOnRefresh: true,
+          // Hide immediately outside Products, including while scrub catches up
+          // during reverse scrolling into the hero.
+          onToggle: (self) => { layer.style.display = self.isActive ? 'block' : 'none'; },
         },
       });
 
@@ -81,7 +82,10 @@ export function SignatureProductTrail() {
         .to(lychee, { autoAlpha: 1, duration: 0.24, ease: 'none' }, 0.58)
         .to(layer, { autoAlpha: 0, duration: 0.12, ease: 'none' }, 0.9);
 
-      return () => tl.kill();
+      return () => {
+        tl.kill();
+        layer.style.removeProperty('display');
+      };
     });
 
     return () => mm.revert();
@@ -91,6 +95,7 @@ export function SignatureProductTrail() {
     <div
       ref={layerRef}
       className="pointer-events-none fixed left-0 top-0 z-30 hidden h-[360px] w-[210px] will-change-transform lg:block"
+      style={{ opacity: 0, visibility: 'hidden' }}
       aria-hidden="true"
     >
       <div className="absolute left-1/2 top-1/2 h-[280px] w-[210px] -translate-x-1/2 -translate-y-1/2 rounded-[44%] bg-[#FFC83D]/18 blur-3xl" />

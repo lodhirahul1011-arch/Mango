@@ -7,6 +7,7 @@ import { ScrollHero } from '@/components/ScrollHero';
 import { SignatureProductTrail } from '@/components/SignatureProductTrail';
 import { Flavours } from '@/components/BrandSections';
 import { Ingredients } from '@/components/Ingredients';
+import { FlavourFrameStories } from '@/components/FlavourFrameStories';
 import { InteractiveMap } from '@/components/InteractiveMap';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
@@ -74,6 +75,8 @@ function App() {
 
           {/* 2. Signature Flavours Showcase (Alphonso Mango & Floral Lychee) */}
           <Flavours />
+
+          <FlavourFrameStories />
 
           {/* 5. What's Inside: 3D Orbiting Natural Ingredients Universe */}
           <Ingredients />

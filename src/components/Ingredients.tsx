@@ -19,6 +19,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { fizzAudio } from '@/utils/audio';
+import { ScannerFrameSequence } from '@/components/ScannerFrameSequence';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -109,7 +110,6 @@ const PURITY_PILLARS = [
 
 export function Ingredients() {
   const [selectedFlavor, setSelectedFlavor] = useState<'mango' | 'lychee'>('mango');
-  const [scanActive, setScanActive] = useState(true);
   const labCardRef = useRef<HTMLDivElement>(null);
   const flavor = INGREDIENTS_DATA[selectedFlavor];
 
@@ -451,78 +451,9 @@ export function Ingredients() {
 
           </div>
 
-          {/* Bento Card 2: Interactive 3D Pack Scanner with Laser Inspection (Col 5) */}
-          <div className="lg:col-span-5 rounded-[36px] bg-gradient-to-br from-white via-[#f7fcf9] to-[#edf9f1] border border-emerald-900/10 shadow-[0_20px_50px_rgba(7,88,47,0.06)] p-7 sm:p-9 flex flex-col justify-between relative overflow-hidden">
-            
-            {/* Header */}
-            <div className="flex items-center justify-between z-10">
-              <div className="flex items-center gap-2">
-                <Scan className="w-4 h-4 text-[#0b8043]" />
-                <span className="text-[11px] font-black uppercase tracking-widest text-[#07582f]">
-                  Aseptic Pack Scanner
-                </span>
-              </div>
-              <button
-                onClick={() => setScanActive(!scanActive)}
-                className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 hover:bg-emerald-200 transition-colors cursor-pointer"
-              >
-                {scanActive ? 'Laser ON' : 'Paused'}
-              </button>
-            </div>
-
-            {/* Center Product Showcase with Real PIO Pack & Scanning Beam */}
-            <div className="relative my-8 flex items-center justify-center min-h-[260px]">
-              
-              {/* Radial Glow Halo */}
-              <div 
-                className="absolute inset-0 rounded-full blur-2xl opacity-40 transition-colors duration-700 pointer-events-none"
-                style={{ background: flavor.glowColor }}
-              />
-
-              {/* Real Pack with Hover Float */}
-              <motion.div
-                animate={{ y: [-6, 6, -6] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                className="relative z-10"
-              >
-                <img 
-                  src={flavor.packImage} 
-                  alt={`PIO ${flavor.name} pack`}
-                  className="h-56 sm:h-64 w-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.2)] select-none"
-                />
-
-                {/* Animated Laser Scanning Line */}
-                {scanActive && (
-                  <motion.div 
-                    animate={{ y: [0, 220, 0] }}
-                    transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
-                    className="absolute top-2 inset-x-[-15px] h-1 bg-gradient-to-r from-transparent via-[#10b981] to-transparent shadow-[0_0_15px_#10b981] pointer-events-none"
-                  />
-                )}
-              </motion.div>
-
-              {/* Hotspot 1: Straw Port */}
-              <div className="absolute top-6 right-2 sm:right-6 bg-white/95 backdrop-blur-md border border-emerald-900/10 shadow-sm px-3 py-1.5 rounded-2xl flex items-center gap-1.5 z-20">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span className="text-[10px] font-black text-[#083b20]">Straw Ready</span>
-              </div>
-
-              {/* Hotspot 2: 6-Layer Shield */}
-              <div className="absolute bottom-6 left-2 sm:left-6 bg-white/95 backdrop-blur-md border border-emerald-900/10 shadow-sm px-3 py-1.5 rounded-2xl flex items-center gap-1.5 z-20">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span className="text-[10px] font-black text-[#083b20]">Zero Preservatives</span>
-              </div>
-            </div>
-
-            {/* Bottom Carton Spec Bar */}
-            <div className="rounded-2xl bg-white border border-emerald-900/10 p-3.5 flex items-center justify-between text-xs font-black text-[#083b20] shadow-2xs z-10">
-              <span className="text-slate-400 font-bold uppercase text-[10px]">Net Volume</span>
-              <span className="text-[#07582f]">160 ml Grab & Go</span>
-              <span className="text-slate-300">|</span>
-              <span className="text-slate-400 font-bold uppercase text-[10px]">Price</span>
-              <span className="text-amber-600 font-black">₹10 Only</span>
-            </div>
-
+          {/* Full-bleed flavour film */}
+          <div className="lg:col-span-5 min-w-0" data-local-motion="true">
+            <ScannerFrameSequence key={selectedFlavor} flavour={selectedFlavor} />
           </div>
 
         </div>
