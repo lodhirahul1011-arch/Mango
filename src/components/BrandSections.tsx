@@ -290,12 +290,89 @@ function ProductsShowcase() {
     <section
       ref={sectionRef}
       id="flavours"
-      className="products-showcase relative isolate overflow-hidden bg-[#fbfaf2] py-10 text-[#064F32] sm:py-24 lg:min-h-[100svh] lg:bg-[#FAFCF7] lg:py-0"
+      className="products-showcase relative isolate overflow-hidden bg-[#fbfaf2] py-0 text-[#064F32] lg:min-h-[100svh] lg:bg-[#FAFCF7]"
     >
-      <div className="products-bg-shift pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(255,255,255,0.82),transparent_32%),radial-gradient(circle_at_18%_58%,rgba(245,158,11,0.16),transparent_30%),radial-gradient(circle_at_86%_55%,rgba(244,63,94,0.13),transparent_28%),linear-gradient(180deg,#fbfaf2_0%,#fff8dc_48%,#eef8ed_100%)] bg-[length:140%_140%] lg:bg-[radial-gradient(circle_at_72%_28%,rgba(246,171,197,0.30),transparent_26%),radial-gradient(circle_at_56%_54%,rgba(255,200,61,0.30),transparent_30%),linear-gradient(120deg,#FAFCF7_0%,#F4FAF0_52%,#ECF7EE_100%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[linear-gradient(180deg,rgba(251,250,242,0.96),transparent)] lg:bg-[linear-gradient(180deg,rgba(250,252,247,0.96),transparent)]" />
+      <div className="products-bg-shift pointer-events-none absolute inset-0 hidden bg-[radial-gradient(circle_at_72%_28%,rgba(246,171,197,0.30),transparent_26%),radial-gradient(circle_at_56%_54%,rgba(255,200,61,0.30),transparent_30%),linear-gradient(120deg,#FAFCF7_0%,#F4FAF0_52%,#ECF7EE_100%)] bg-[length:140%_140%] lg:block" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 hidden h-36 bg-[linear-gradient(180deg,rgba(250,252,247,0.96),transparent)] lg:block" />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-4 px-5 sm:gap-12 sm:px-8 lg:min-h-[100svh] lg:grid-cols-[0.88fr_1.12fr] lg:gap-8 lg:py-24">
+      <div className="relative min-h-[980px] overflow-hidden bg-[#fbfaf2] px-7 pb-10 pt-16 lg:hidden">
+        <img
+          src="/images/mobile-products-backdrop.png"
+          alt=""
+          draggable={false}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,247,0.14)_0%,rgba(255,255,247,0.02)_48%,rgba(255,255,247,0.70)_100%)]" />
+
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-3 text-[12px] font-black uppercase tracking-[0.34em] text-[#064F32]">
+            <span>The Goodness Inside</span>
+            <span className="h-0.5 w-16 bg-[#a3d7b4]" />
+          </div>
+
+          <h2 className="mt-7 font-['Space_Grotesk',sans-serif] text-[clamp(4.25rem,18vw,6rem)] font-black uppercase leading-[0.82] tracking-tight text-[#064F32]">
+            Real Fruit,<br />
+            Ready To<br />
+            <span className="text-[#0F9A48]">Shine.</span>
+          </h2>
+
+          <p className="mt-5 text-[1.55rem] font-medium leading-tight text-[#073D2C]">
+            Two fruity favourites. One refreshing feeling.
+          </p>
+        </div>
+
+        <div className="relative z-10 mt-12 h-[440px]">
+          <div className="pointer-events-none absolute inset-x-[4%] bottom-6 h-16 rounded-full bg-[#062816]/18 blur-2xl" />
+          <img
+            src={PRODUCT_ASSETS.mango}
+            alt="PIO Mango pack"
+            draggable={false}
+            className="absolute bottom-9 left-[5%] z-10 h-[390px] w-auto -rotate-[5deg] object-contain drop-shadow-[0_30px_38px_rgba(91,67,11,0.22)]"
+          />
+          <img
+            src={PRODUCT_ASSETS.lychee}
+            alt="PIO Lychee pack"
+            draggable={false}
+            className="absolute bottom-5 right-[1%] z-20 h-[360px] w-auto rotate-[5deg] object-contain drop-shadow-[0_30px_38px_rgba(95,20,44,0.20)]"
+          />
+        </div>
+
+        <div className="relative z-10 mt-2 grid grid-cols-2 items-center gap-4 text-center">
+          <div>
+            <div className="text-xl font-black uppercase tracking-wide text-[#08934a]">
+              01 / <span className="text-[#073D2C]">Mango</span>
+            </div>
+            <div className="mx-auto mt-2 h-1 w-24 bg-[#f5b51f]" />
+          </div>
+          <div>
+            <div className="text-xl font-black uppercase tracking-wide text-[#08934a]">
+              02 / <span className="text-[#073D2C]">Lychee</span>
+            </div>
+            <div className="mx-auto mt-2 h-1 w-24 bg-[#f48aa5]" />
+          </div>
+        </div>
+
+        <div className="relative z-10 mt-12 grid grid-cols-2 gap-4 text-[#073D2C]">
+          <div className="flex items-center justify-center gap-3 border-r border-[#073D2C]/22">
+            <Leaf className="h-9 w-9" />
+            <span className="text-sm font-black uppercase leading-tight tracking-[0.24em]">Real<br />Fruit</span>
+          </div>
+          <div className="flex items-center justify-center gap-3">
+            <MapPin className="h-9 w-9" />
+            <span className="text-sm font-black uppercase leading-tight tracking-[0.24em]">Made In<br />Assam</span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => go('mango-story')}
+          className="relative z-10 mt-11 inline-flex min-h-[66px] w-full items-center justify-center gap-4 rounded-full bg-[#064F32] px-8 text-2xl font-semibold text-white shadow-[0_24px_44px_rgba(6,79,50,0.24)] active:scale-[0.98]"
+        >
+          <span>Explore flavours</span>
+          <ArrowRight className="h-8 w-8" />
+        </button>
+      </div>
+
+      <div className="relative mx-auto hidden max-w-7xl items-center gap-4 px-5 sm:gap-12 sm:px-8 lg:grid lg:min-h-[100svh] lg:grid-cols-[0.88fr_1.12fr] lg:gap-8 lg:py-24">
         <div className="relative z-20 max-w-xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#064F32]/10 bg-white/70 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-[#064F32] shadow-[0_16px_38px_rgba(6,79,50,0.08)] backdrop-blur-md">
             <Sparkles className="h-3.5 w-3.5" />
