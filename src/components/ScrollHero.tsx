@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, Droplets, Leaf, MapPin, Play, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Droplets, Leaf, Play, ShieldCheck } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const FRAME_COUNT = 240;
 const frameSrc = (index: number) => `/sequence-new/frame_${String(index).padStart(4, '0')}.jpg?v=4`;
-const HERO_BG = '/images/hero-fruit-bg.png';
+const MOBILE_HERO = '/images/mobile-luxury-hero.png';
 
 export function ScrollHero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -185,99 +185,44 @@ export function ScrollHero() {
     >
       <div 
         className="sticky top-0 h-[100svh] min-h-[100svh] w-full overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: `url(${HERO_BG})` }}
+        style={{ backgroundImage: `url(${frameSrc(0)})` }}
       >
-        {/* Fullscreen 3D Canvas retained for preloading compatibility, visually replaced by the clean fruit background */}
+        {/* Fullscreen 3D Canvas with enhanced saturation & crisp contrast */}
         <canvas
           ref={canvasRef}
           style={{
             filter: 'contrast(1.08) saturate(1.24) brightness(1.02)',
           }}
-          className="absolute inset-0 hidden h-full w-full object-cover opacity-0 transition-all"
+          className="absolute inset-0 hidden h-full w-full object-cover transition-all md:block"
           aria-label="PIO 3D animated cans and fruit splash"
         />
 
-        <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.20)_0%,transparent_48%,rgba(6,46,25,0.12)_100%)]" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] hidden h-[34%] bg-[linear-gradient(180deg,transparent,rgba(7,61,44,0.82))] md:block" />
-
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] hidden w-[58%] items-center justify-center md:flex">
-          <div className="absolute bottom-[10%] left-[10%] h-24 w-[64%] rounded-full bg-[#062816]/22 blur-3xl" />
-          <img
-            src="/images/pio-mango.png"
-            alt=""
-            draggable={false}
-            className="relative z-10 h-[56vh] max-h-[620px] min-h-[420px] -rotate-[7deg] object-contain drop-shadow-[0_34px_48px_rgba(7,61,44,0.28)]"
-          />
-          <img
-            src="/images/pio-lychee.png"
-            alt=""
-            draggable={false}
-            className="relative z-20 -ml-28 mt-12 h-[52vh] max-h-[580px] min-h-[390px] rotate-[6deg] object-contain drop-shadow-[0_34px_48px_rgba(95,20,44,0.24)]"
-          />
-        </div>
+        <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(6,46,25,0.12)_100%)]" />
 
         {/* Mobile editorial hero: static, readable, product-first composition */}
-        <div className="hero-mobile-art absolute inset-0 z-10 overflow-hidden px-5 pb-5 pt-[92px] text-center md:hidden">
-          <div className="pointer-events-none absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${HERO_BG})` }} />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,245,0.28)_0%,rgba(255,255,245,0.08)_48%,rgba(7,61,44,0.78)_100%)]" />
-          <div className="pointer-events-none absolute inset-x-0 top-[13%] h-[28%] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.72),transparent_64%)]" />
-          <div className="pointer-events-none absolute inset-x-[10%] bottom-[22%] h-16 rounded-full bg-[#062816]/18 blur-2xl" />
+        <div className="hero-mobile-art absolute inset-0 z-10 overflow-hidden text-center md:hidden">
+          <img
+            src={MOBILE_HERO}
+            alt="PIO Har Sip luxury mango and lychee hero"
+            draggable={false}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
 
-          <div className="hero-mobile-reveal relative z-10 mx-auto max-w-[340px]">
-            <p className="text-[10px] font-black uppercase tracking-[0.34em] text-[#167A4A]">Born in Assam</p>
-            <h1 className="mt-2 text-[clamp(4rem,18vw,5.9rem)] leading-[0.76] text-[#073D2C]" style={{ fontFamily: 'var(--font-display)' }}>
-              Har Sip.
-              <span className="block text-[#F5A623]">PIO.</span>
-            </h1>
-            <p className="mx-auto mt-2 max-w-[230px] text-[15px] font-semibold leading-[1.08] text-[#28503e]">
-              Real fruit refreshment in every sip.
-            </p>
-          </div>
-
-          <div className="hero-mobile-reveal hero-mobile-packs absolute inset-x-0 top-[35%] z-10 mx-auto h-[38dvh] min-h-[255px] max-h-[350px] max-w-[390px]">
-            <div className="pointer-events-none absolute inset-x-[12%] bottom-2 h-16 rounded-full bg-[#062816]/25 blur-2xl" />
-            <img
-              src="/images/pio-mango.png"
-              alt="PIO Mango 160ml carton"
-              draggable={false}
-              className="absolute bottom-0 left-[13%] h-full -rotate-[5deg] object-contain drop-shadow-[0_26px_36px_rgba(7,61,44,0.30)]"
-            />
-            <img
-              src="/images/pio-lychee.png"
-              alt="PIO Lychee 160ml carton"
-              draggable={false}
-              className="absolute bottom-2 right-[12%] h-[92%] rotate-[5deg] object-contain drop-shadow-[0_24px_34px_rgba(95,20,44,0.26)]"
-            />
-          </div>
-
-          <div className="hero-mobile-reveal absolute inset-x-5 bottom-[72px] z-20 mx-auto flex max-w-[310px] flex-col gap-2.5">
+          <div className="absolute inset-x-5 bottom-[126px] z-20 mx-auto flex max-w-[310px] flex-col gap-2.5 opacity-0">
             <button
               onClick={() => go('flavours')}
-              className="inline-flex min-h-[48px] items-center justify-center gap-3 rounded-full bg-[#073D2C] px-6 py-3 text-[12px] font-black uppercase tracking-[0.18em] text-white shadow-[0_18px_38px_rgba(7,61,44,0.26)] active:scale-95"
+              className="min-h-[58px] rounded-full"
+              aria-label="Explore flavours"
             >
-              <span>Explore PIO</span>
-              <ArrowRight className="h-4 w-4" />
+              Explore flavours
             </button>
             <button
               onClick={() => go('map')}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2.5 rounded-full border border-white bg-white px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.18em] text-[#073D2C] shadow-[0_14px_30px_rgba(0,0,0,0.22)] active:scale-95"
+              className="min-h-[48px] rounded-full"
+              aria-label="Find near you"
             >
-              <MapPin className="h-4 w-4" />
-              <span>Find Near You</span>
+              Find near you
             </button>
-          </div>
-
-          <div className="hero-mobile-reveal absolute inset-x-4 bottom-4 z-20 grid grid-cols-3 items-center gap-2 text-white/90">
-            {[
-              { icon: Leaf, label: 'Real fruit juice' },
-              { icon: Droplets, label: 'Refreshing goodness' },
-              { icon: ShieldCheck, label: 'Born in Assam' },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center justify-center gap-1.5 border-r border-white/35 last:border-r-0">
-                <Icon className="h-4 w-4 shrink-0 text-white/80" />
-                <span className="max-w-[68px] text-left text-[8px] font-black uppercase leading-[1.05] tracking-[0.12em]">{label}</span>
-              </div>
-            ))}
           </div>
         </div>
 

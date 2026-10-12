@@ -290,12 +290,12 @@ function ProductsShowcase() {
     <section
       ref={sectionRef}
       id="flavours"
-      className="products-showcase relative isolate overflow-hidden bg-[#fbfaf2] py-20 text-[#064F32] sm:py-24 lg:min-h-[100svh] lg:bg-[#FAFCF7] lg:py-0"
+      className="products-showcase relative isolate overflow-hidden bg-[#fbfaf2] py-10 text-[#064F32] sm:py-24 lg:min-h-[100svh] lg:bg-[#FAFCF7] lg:py-0"
     >
       <div className="products-bg-shift pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(255,255,255,0.82),transparent_32%),radial-gradient(circle_at_18%_58%,rgba(245,158,11,0.16),transparent_30%),radial-gradient(circle_at_86%_55%,rgba(244,63,94,0.13),transparent_28%),linear-gradient(180deg,#fbfaf2_0%,#fff8dc_48%,#eef8ed_100%)] bg-[length:140%_140%] lg:bg-[radial-gradient(circle_at_72%_28%,rgba(246,171,197,0.30),transparent_26%),radial-gradient(circle_at_56%_54%,rgba(255,200,61,0.30),transparent_30%),linear-gradient(120deg,#FAFCF7_0%,#F4FAF0_52%,#ECF7EE_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[linear-gradient(180deg,rgba(251,250,242,0.96),transparent)] lg:bg-[linear-gradient(180deg,rgba(250,252,247,0.96),transparent)]" />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-8 lg:min-h-[100svh] lg:grid-cols-[0.88fr_1.12fr] lg:gap-8 lg:py-24">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-4 px-5 sm:gap-12 sm:px-8 lg:min-h-[100svh] lg:grid-cols-[0.88fr_1.12fr] lg:gap-8 lg:py-24">
         <div className="relative z-20 max-w-xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#064F32]/10 bg-white/70 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-[#064F32] shadow-[0_16px_38px_rgba(6,79,50,0.08)] backdrop-blur-md">
             <Sparkles className="h-3.5 w-3.5" />
@@ -316,7 +316,7 @@ function ProductsShowcase() {
           <AnimatedCTA />
         </div>
 
-        <div ref={visualRef} className="relative z-10 -mt-4 min-h-[430px] overflow-hidden rounded-[28px] sm:mt-0 sm:min-h-[620px] sm:overflow-visible sm:rounded-none lg:min-h-[760px]">
+        <div ref={visualRef} className="relative z-10 -mt-2 min-h-[330px] overflow-hidden rounded-[28px] sm:mt-0 sm:min-h-[620px] sm:overflow-visible sm:rounded-none lg:min-h-[760px]">
           <LiquidSplashLayer tone="mango" />
           <LiquidSplashLayer tone="lychee" />
 
@@ -332,13 +332,13 @@ function ProductsShowcase() {
             src={PRODUCT_ASSETS.mango}
             alt="PIO Mango original carton"
             tone="mango"
-            className="product-mango left-[10%] top-[6%] h-[330px] w-[44%] max-w-[220px] -rotate-[5deg] sm:left-[18%] sm:top-[12%] sm:h-[520px] sm:max-w-[320px] lg:left-[18%] lg:top-[12%] lg:h-[590px] xl:left-[12%] xl:h-[610px]"
+            className="product-mango left-[10%] top-[0%] h-[300px] w-[44%] max-w-[210px] -rotate-[5deg] sm:left-[18%] sm:top-[12%] sm:h-[520px] sm:max-w-[320px] lg:left-[18%] lg:top-[12%] lg:h-[590px] xl:left-[12%] xl:h-[610px]"
           />
           <ProductVisual
             src={PRODUCT_ASSETS.lychee}
             alt="PIO Lychee original carton"
             tone="lychee"
-            className="product-lychee right-[8%] top-[16%] h-[315px] w-[44%] max-w-[215px] rotate-[5deg] sm:right-[16%] sm:top-[22%] sm:h-[500px] sm:max-w-[310px] lg:right-[13%] lg:top-[22%] lg:h-[565px] xl:right-[8%] xl:h-[590px]"
+            className="product-lychee right-[8%] top-[8%] h-[285px] w-[44%] max-w-[205px] rotate-[5deg] sm:right-[16%] sm:top-[22%] sm:h-[500px] sm:max-w-[310px] lg:right-[13%] lg:top-[22%] lg:h-[565px] xl:right-[8%] xl:h-[590px]"
           />
 
           <FlavourInfo
@@ -355,7 +355,7 @@ function ProductsShowcase() {
           />
         </div>
 
-        <div className="-mt-6 grid gap-3 sm:-mt-10 sm:grid-cols-2 lg:hidden">
+        <div className="-mt-2 grid gap-3 sm:-mt-10 sm:grid-cols-2 lg:hidden">
           <div className="rounded-2xl border border-amber-300/70 bg-white/82 p-4 shadow-[0_14px_32px_rgba(180,83,9,0.11)] backdrop-blur-md">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#b45309]">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
