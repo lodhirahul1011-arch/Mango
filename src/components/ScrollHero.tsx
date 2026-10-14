@@ -22,8 +22,17 @@ export function ScrollHero() {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
     if (!section || !canvas || !ctx) return;
+    let disposed = false;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Refs survive StrictMode effect replay; clear the previous loader's state.
+    imagesRef.current = [];
+    loadedRef.current.clear();
+    const mobileSequence = window.innerWidth < 768;
+    const frameStep = mobileSequence ? 3 : 1;
+    const sampleFrame = (index: number) => index === FRAME_COUNT - 1 ? index : Math.floor(index / frameStep) * frameStep;
 
     const draw = (index: number) => {
+      if (disposed) return;
       // Find nearest loaded frame if current frame is still downloading
       let targetIndex = index;
       if (!loadedRef.current.has(targetIndex)) {
@@ -52,56 +61,75 @@ export function ScrollHero() {
         const w = img.naturalWidth * scale;
         const h = img.naturalHeight * scale;
         const x = (canvas.width - w) / 2;
-        // On mobile portrait, shift canvas image down slightly so product sits comfortably in lower 65% of viewport
-        const yOffset = isMobile ? canvas.height * 0.05 : 0;
-        const y = (canvas.height - h) / 2 + yOffset;
+        const y = (canvas.height - h) / 2;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = true;
-        ctx.drawImage(img, x, y, w, h);
+        if (isMobile) {
+          // Soft full-screen backdrop plus a fitted foreground: both cartons stay visible.
+          ctx.save();
+          ctx.filter = 'blur(18px)';
+          ctx.drawImage(img, x - 20, y - 20, w + 40, h + 40);
+          ctx.restore();
+          ctx.fillStyle = 'rgba(246,250,234,0.55)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          const sourceX = img.naturalWidth * 0.25;
+          const sourceWidth = img.naturalWidth - sourceX;
+          const fit = Math.min(canvas.width / sourceWidth, canvas.height * 0.72 / img.naturalHeight);
+          const fw = sourceWidth * fit;
+          const fh = img.naturalHeight * fit;
+          ctx.drawImage(img, sourceX, 0, sourceWidth, img.naturalHeight,
+            (canvas.width - fw) / 2, (canvas.height - fh) / 2, fw, fh);
+        } else {
+          ctx.drawImage(img, x, y, w, h);
+        }
       });
     };
 
     const load = (i: number, high = false) => {
+      i = sampleFrame(i);
       if (imagesRef.current[i]) return;
       const img = new Image();
       img.decoding = 'async';
       if (high) img.fetchPriority = 'high';
       img.onload = () => {
+        if (disposed) return;
         loadedRef.current.add(i);
-        if (i === frameRef.current || i === 0) draw(i);
+        draw(frameRef.current);
       };
-      img.src = frameSrc(i);
+      img.src = mobileSequence ? `/sequence-mobile/frame_${String(i).padStart(4, '0')}.webp` : frameSrc(i);
       imagesRef.current[i] = img;
     };
 
     const preload = (center: number) => {
       const isMobile = window.innerWidth < 768;
       const radius = isMobile ? 14 : 28;
-      for (let i = Math.max(0, center - radius); i <= Math.min(FRAME_COUNT - 1, center + radius); i++) {
+      for (let i = Math.max(0, center - radius); i <= Math.min(FRAME_COUNT - 1, center + radius); i += frameStep) {
         load(i);
       }
+      load(center);
     };
 
     const resize = () => {
       const isMobile = window.innerWidth < 768;
       const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.35 : 1.75);
-      canvas.width = Math.round(window.innerWidth * dpr);
-      canvas.height = Math.round(window.innerHeight * dpr);
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
+      const bounds = canvas.parentElement!.getBoundingClientRect();
+      canvas.width = Math.round(bounds.width * dpr);
+      canvas.height = Math.round(bounds.height * dpr);
       draw(frameRef.current);
     };
 
     // Preload key frames immediately
     load(0, true);
-    [5, 15, 30, 50, 75, 100, 130, 160, 190, 220, 239].forEach((i) => load(i));
-    preload(0);
+    if (!reducedMotion) {
+      [5, 15, 30, 50, 75, 100, 130, 160, 190, 220, 239].forEach((i) => load(i));
+      preload(0);
+    }
     resize();
 
     const mm = gsap.matchMedia();
 
     // 1. Desktop & Tablet Configuration (>= 768px)
-    mm.add('(min-width: 768px)', () => {
+    mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
       ScrollTrigger.create({
         trigger: section,
         start: 'top top',
@@ -139,26 +167,24 @@ export function ScrollHero() {
     });
 
     // 2. Mobile Configuration (< 768px)
-    mm.add('(max-width: 767px)', () => {
-      gsap.fromTo(
-        '.hero-mobile-reveal',
-        { y: 18, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.72, stagger: 0.08, ease: 'power3.out' }
-      );
-      gsap.to('.hero-mobile-packs', {
-        y: -8,
-        duration: 2.8,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
+    mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
+      const playhead = { frame: 0 };
+      gsap.to(playhead, {
+        frame: FRAME_COUNT - 1,
+        ease: 'none',
+        onUpdate: () => {
+          const frame = sampleFrame(Math.round(playhead.frame));
+          frameRef.current = frame;
+          preload(frame);
+          draw(frame);
+        },
+        scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.3 },
       });
-      gsap.to('.hero-mobile-orbit', {
-        y: 10,
-        x: -8,
-        duration: 3.6,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
+      gsap.to(section.querySelector('.hero-mobile-art'), {
+        autoAlpha: 0,
+        scale: 1.06,
+        ease: 'none',
+        scrollTrigger: { trigger: section, start: 'top top', end: '15% top', scrub: true },
       });
     });
 
@@ -168,6 +194,7 @@ export function ScrollHero() {
 
     window.addEventListener('resize', resize);
     return () => {
+      disposed = true;
       clearTimeout(refreshTimeout);
       window.removeEventListener('resize', resize);
       mm.revert();
@@ -181,7 +208,7 @@ export function ScrollHero() {
     <section 
       ref={sectionRef} 
       id="home" 
-      className="relative h-[100svh] md:h-[220vh] lg:h-[300vh] w-full"
+      className="relative h-[240svh] md:h-[220vh] lg:h-[300vh] motion-reduce:!h-[100svh] w-full"
     >
       <div 
         className="sticky top-0 h-[100svh] min-h-[100svh] w-full overflow-hidden bg-cover bg-center"
@@ -193,13 +220,13 @@ export function ScrollHero() {
           style={{
             filter: 'contrast(1.08) saturate(1.24) brightness(1.02)',
           }}
-          className="absolute inset-0 hidden h-full w-full object-cover transition-all md:block"
+          className="absolute inset-0 h-full w-full object-cover"
           aria-label="PIO 3D animated cans and fruit splash"
         />
 
         <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(6,46,25,0.12)_100%)]" />
 
-        {/* Mobile editorial hero: static, readable, product-first composition */}
+        {/* Mobile artwork fades into the touch-driven frame sequence. */}
         <div className="hero-mobile-art absolute inset-0 z-10 overflow-hidden text-center md:hidden">
           <img
             src={MOBILE_HERO}
@@ -326,7 +353,7 @@ export function ScrollHero() {
 
 
         {/* Desktop Bottom Center: Scroll Cue */}
-        <div className="hidden md:flex absolute bottom-5 left-1/2 -translate-x-1/2 flex-col items-center gap-1 pointer-events-none z-20 opacity-90">
+        <div className="flex motion-reduce:hidden absolute bottom-5 left-1/2 -translate-x-1/2 flex-col items-center gap-1 pointer-events-none z-20 opacity-90">
           <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/95 px-3 py-1 rounded-full border border-emerald-900/15 shadow-xs">
             Scroll To Animate 3D
           </span>

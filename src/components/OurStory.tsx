@@ -107,6 +107,16 @@ export function OurStory() {
         <div className="heritage-intro__rule" />
       </div>
 
+      <div className="heritage-journey-scene" data-chapter={activeChapter}>
+        <div className="heritage-scene-background" aria-hidden="true">
+          <div className="heritage-scene-background__sticky">
+            {['story-tea-v1', 'story-bakery-v1', 'products-orchard-v2'].map((image, index) => (
+              <div className="heritage-scene-photo" data-active={activeChapter === index} key={image}>
+                <img src={`/images/${image}.webp`} alt="" loading="lazy" decoding="async" />
+              </div>
+            ))}
+          </div>
+        </div>
       <div className="heritage-journey">
         <div className="heritage-stage" data-chapter={activeChapter} aria-hidden="true">
           <div className="heritage-stage__top"><span>THE STORY SO FAR</span><span>0{activeChapter + 1} / 03</span></div>
@@ -127,6 +137,7 @@ export function OurStory() {
             </div>
           </article>)}
         </div>
+      </div>
       </div>
 
       <div className="heritage-promise">

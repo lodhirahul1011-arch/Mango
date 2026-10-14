@@ -21,6 +21,10 @@ function FlavourScene({ flavour }: { flavour: typeof flavours[number] }) {
   return (
     <section ref={sectionRef} id={`${flavour.id}-story`} className={`flavour-film flavour-film--${flavour.id}`} data-local-motion="true" aria-labelledby={`${flavour.id}-film-title`}>
       <div className="flavour-film__sticky">
+        <div className="flavour-film__backdrop" aria-hidden="true">
+          <img src={`/images/${flavour.id}-story-bg-v1.webp`} alt="" loading="lazy" decoding="async" width="1672" height="941" />
+        </div>
+        <div className="flavour-film__wash" aria-hidden="true" />
         <div className="flavour-film__copy">
           <p className="flavour-film__eyebrow"><span>{flavour.number} /</span> {flavour.label}</p>
           <h2 id={`${flavour.id}-film-title`}>{flavour.title.split('\n').map(line => <span key={line}>{line}</span>)}</h2>
