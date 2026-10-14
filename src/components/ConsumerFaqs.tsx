@@ -28,11 +28,11 @@ const FAQ_ITEMS = [
           Pio has an extended shelf life because it is aseptically processed and packed in a multilayer Tetra Pak carton that helps protect the beverage from light, oxygen and microbial contamination.
         </p>
         <p>
-          Consumers should always follow the best-before date printed on the pack.
+          The exact shelf life of Pio is validated for each product and printed on the pack. Always follow the best-before date printed on your pack.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="rounded-full border border-[#f5a623]/40 bg-[#fff7e9] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#7c4b00]">Mango 9 months</span>
-          <span className="rounded-full border border-[#eb5574]/40 bg-[#fff2f5] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#8a2149]">Lychee 6 months</span>
+          <span className="rounded-full border border-[#f5a623]/40 bg-[#fff7e9] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#7c4b00]">Mango: 9 months</span>
+          <span className="rounded-full border border-[#eb5574]/40 bg-[#fff2f5] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#8a2149]">Lychee: 6 months</span>
         </div>
       </>
     ),
@@ -118,7 +118,7 @@ export function ConsumerFaqs() {
       <div className="relative mx-auto max-w-[1280px] px-5 sm:px-6 lg:px-8">
         <div className="grid items-start gap-10 lg:grid-cols-[34%_66%] lg:gap-16">
           <div className="lg:sticky lg:top-[128px]">
-            <div className="faq-eyebrow eyebrow text-[#167A4A]">Consumer FAQ’s</div>
+            <div className="faq-eyebrow eyebrow text-[#167A4A]">Consumer FAQs</div>
             <h2 className="faq-title mt-5 max-w-[380px] text-[clamp(3rem,5.2vw,5.9rem)] leading-[0.88] text-[#073D2C]" style={{ fontFamily: 'var(--font-display)' }}>
               Everything You
               <br />

@@ -5,6 +5,7 @@ import { useScrolled, useActiveSection } from '@/hooks/useScrollReveal';
 const NAV_LINKS = [
   { id: 'home', label: 'Home' },
   { id: 'flavours', label: 'Products' },
+  { id: 'story', label: 'Our Story' },
   { id: 'partner', label: 'Partner With Us' },
   { id: 'contact', label: 'Contact Us' },
 ];
@@ -54,7 +55,7 @@ export function Navbar() {
               : 'bg-[#f8f6ef]/70 backdrop-blur-md border border-[#0a3d2d]/10'
           }`}
         >
-          <nav className="grid grid-cols-[auto_auto] items-center justify-between gap-3 px-4 py-2.5 sm:px-6 lg:grid-cols-[190px_1fr_230px] lg:px-5 lg:py-2 min-h-[56px] lg:min-h-[58px]">
+          <nav className="grid grid-cols-[auto_auto] items-center justify-between gap-3 px-4 py-2.5 sm:px-6 lg:grid-cols-[100px_1fr_230px] xl:grid-cols-[150px_1fr_230px] lg:px-5 lg:py-2 min-h-[56px] lg:min-h-[58px]">
             
             {/* Brand Logo */}
             <button 

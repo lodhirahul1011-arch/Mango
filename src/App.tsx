@@ -6,12 +6,12 @@ import { MouseProvider } from '@/components/MouseProvider';
 import { ScrollHero } from '@/components/ScrollHero';
 import { SignatureProductTrail } from '@/components/SignatureProductTrail';
 import { Flavours } from '@/components/BrandSections';
-import { Ingredients } from '@/components/Ingredients';
 import { FlavourFrameStories } from '@/components/FlavourFrameStories';
 import { InteractiveMap } from '@/components/InteractiveMap';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
 import { ConsumerFaqs } from '@/components/ConsumerFaqs';
+import { OurStory } from '@/components/OurStory';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Footer } from '@/components/Footer';
@@ -78,9 +78,7 @@ function App() {
 
           <FlavourFrameStories />
 
-          {/* 5. What's Inside: 3D Orbiting Natural Ingredients Universe */}
-          <Ingredients />
-
+          <OurStory />
 
           {/* 8. Interactive Distribution Network & Store Locator Map */}
           <InteractiveMap />
