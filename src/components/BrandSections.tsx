@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Droplets, Leaf, ShieldCheck, Sparkles, MapPin, School, Users, Plane, Check, Info, Zap, Wheat, Box } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import './ProductsShowcase.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -41,6 +42,7 @@ function AnimatedCTA() {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const moveMagnet = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const button = buttonRef.current;
     if (!button) return;
     const rect = button.getBoundingClientRect();
@@ -71,43 +73,6 @@ function AnimatedCTA() {
   );
 }
 
-function FruitLayer({ tone, className = '' }: { tone: 'mango' | 'lychee' | 'leaf'; className?: string }) {
-  const toneClass = {
-    mango: 'bg-[#FFC83D]',
-    lychee: 'bg-[#F6ABC5]',
-    leaf: 'bg-[#0F7A43]',
-  }[tone];
-
-  return (
-    <span
-      data-placeholder="fruit-or-leaf-asset"
-      className={`fruit-layer absolute block ${toneClass} ${className}`}
-      aria-hidden="true"
-    />
-  );
-}
-
-function LiquidSplashLayer({ tone }: { tone: 'mango' | 'lychee' }) {
-  const color = tone === 'mango' ? 'rgba(255,200,61,0.42)' : 'rgba(246,171,197,0.46)';
-  const accent = tone === 'mango' ? 'rgba(255,154,31,0.2)' : 'rgba(219,52,96,0.2)';
-
-  return (
-    <div className={`liquid-splash liquid-splash-${tone} pointer-events-none absolute inset-0 hidden sm:block`} aria-hidden="true">
-      <span
-        data-placeholder="transparent-liquid-splash-asset"
-        className="absolute inset-x-[8%] top-[24%] h-[44%] rounded-[54%_46%_58%_42%] blur-[2px]"
-        style={{
-          background: `radial-gradient(circle at 36% 44%, ${color}, transparent 38%), radial-gradient(circle at 64% 52%, ${accent}, transparent 42%)`,
-          clipPath: 'polygon(4% 48%, 20% 28%, 42% 38%, 64% 18%, 88% 42%, 76% 70%, 48% 62%, 22% 78%)',
-        }}
-      />
-      <span
-        className="absolute left-[20%] top-[28%] h-14 w-14 rounded-full border border-white/50 bg-white/20 backdrop-blur-sm"
-      />
-    </div>
-  );
-}
-
 function FlavourInfo({
   tone,
   title,
@@ -129,7 +94,7 @@ function FlavourInfo({
     : 'text-[#be123c] bg-rose-50 border-rose-200';
 
   return (
-    <div className={`flavour-info absolute z-30 w-[196px] rounded-2xl border p-3.5 backdrop-blur-xl transition-all duration-300 ${containerStyle} ${className}`}>
+    <div className={`flavour-info flavour-info-${tone} rounded-2xl border p-3.5 ${containerStyle} ${className}`}>
       <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-[0.2em] ${badgeStyle}`}>
         <span className={`w-1.5 h-1.5 rounded-full ${isMango ? 'bg-amber-500' : 'bg-rose-500'}`} />
         <span>{title}</span>
@@ -155,12 +120,14 @@ function ProductVisual({
   return (
     <div className={`product-visual absolute ${className}`}>
       <div className="absolute inset-x-[8%] bottom-2 h-14 rounded-full bg-[#062816]/22 blur-2xl" />
+      <div className={`product-float product-float-${tone}`}>
       <img
         src={src}
         alt={alt}
         className={`relative z-10 h-full w-full object-contain ${tone === 'mango' ? 'drop-shadow-[0_34px_46px_rgba(149,91,0,0.22)]' : 'drop-shadow-[0_34px_46px_rgba(128,20,54,0.24)]'}`}
         draggable={false}
       />
+      </div>
     </div>
   );
 }
@@ -182,7 +149,7 @@ function ProductsShowcase() {
     prefersReducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const ctx = gsap.context(() => {
       if (prefersReducedMotion.current) {
-        gsap.set('.products-heading-line, .products-copy, .products-badges, .products-cta, .product-visual, .liquid-splash, .fruit-layer, .flavour-info', {
+        gsap.set('.products-heading-line, .products-copy, .products-badges, .products-cta, .product-visual, .flavour-info', {
           clearProps: 'all',
           opacity: 1,
           y: 0,
@@ -205,10 +172,8 @@ function ProductsShowcase() {
         .from('.products-heading-line', { yPercent: 112, opacity: 0, duration: 0.9, stagger: 0.11, ease: 'power4.out' })
         .from('.products-copy', { y: 22, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45')
         .from('.products-badges span', { y: 18, opacity: 0, duration: 0.55, stagger: 0.08, ease: 'power3.out' }, '-=0.35')
-        .from('.liquid-splash', { clipPath: 'inset(0 100% 0 0)', opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out' }, '-=0.35')
         .from('.product-mango', { y: 120, rotate: -5, opacity: 0, duration: 0.95, ease: 'power3.out' }, '-=0.55')
         .from('.product-lychee', { y: 130, rotate: 5, opacity: 0, duration: 0.95, ease: 'power3.out' }, '-=0.68')
-        .from('.fruit-layer', { y: 28, scale: 0.72, opacity: 0, duration: 0.75, stagger: 0.06, ease: 'back.out(1.7)' }, '-=0.62')
         .from('.flavour-info', { y: 24, scale: 0.95, opacity: 0, duration: 0.6, stagger: 0.12, ease: 'power3.out' }, '-=0.42')
         .from('.products-cta', { y: 20, opacity: 0, duration: 0.55, ease: 'power3.out' }, '-=0.38');
 
@@ -221,23 +186,6 @@ function ProductsShowcase() {
         y: 26,
         ease: 'none',
         scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 0.8 },
-      });
-      gsap.to('.fruit-layer.depth-far', {
-        y: -54,
-        x: 18,
-        ease: 'none',
-        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 1.1 },
-      });
-      gsap.to('.fruit-layer.depth-near', {
-        y: 46,
-        x: -26,
-        ease: 'none',
-        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 0.9 },
-      });
-      gsap.to('.products-bg-shift', {
-        backgroundPosition: '64% 52%',
-        ease: 'none',
-        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 1.2 },
       });
     }, section);
 
@@ -255,9 +203,11 @@ function ProductsShowcase() {
         rotateX: currentY * -4,
         transformPerspective: 900,
       });
-      gsap.set(visual.querySelectorAll('.depth-near'), { x: currentX * -26, y: currentY * -18 });
-      gsap.set(visual.querySelectorAll('.depth-far'), { x: currentX * 16, y: currentY * 12 });
-      raf = requestAnimationFrame(tick);
+      if (Math.abs(targetX - currentX) + Math.abs(targetY - currentY) > 0.001) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        raf = 0;
+      }
     };
 
     const onMove = (event: PointerEvent) => {
@@ -265,15 +215,16 @@ function ProductsShowcase() {
       const rect = visual.getBoundingClientRect();
       targetX = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
       targetY = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      if (!raf) raf = requestAnimationFrame(tick);
     };
 
     const onLeave = () => {
       targetX = 0;
       targetY = 0;
+      if (!prefersReducedMotion.current && !raf) raf = requestAnimationFrame(tick);
     };
 
     if (!prefersReducedMotion.current) {
-      raf = requestAnimationFrame(tick);
       visual.addEventListener('pointermove', onMove);
       visual.addEventListener('pointerleave', onLeave);
     }
@@ -290,14 +241,14 @@ function ProductsShowcase() {
     <section
       ref={sectionRef}
       id="flavours"
+      data-local-motion="true"
       className="products-showcase relative isolate overflow-hidden bg-[#fbfaf2] py-0 text-[#064F32] lg:min-h-[100svh] lg:bg-[#FAFCF7]"
     >
-      <div className="products-bg-shift pointer-events-none absolute inset-0 hidden bg-[radial-gradient(circle_at_72%_28%,rgba(246,171,197,0.30),transparent_26%),radial-gradient(circle_at_56%_54%,rgba(255,200,61,0.30),transparent_30%),linear-gradient(120deg,#FAFCF7_0%,#F4FAF0_52%,#ECF7EE_100%)] bg-[length:140%_140%] lg:block" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 hidden h-36 bg-[linear-gradient(180deg,rgba(250,252,247,0.96),transparent)] lg:block" />
+      <div className="products-bg-shift" aria-hidden="true" />
 
-      <div className="relative min-h-[980px] overflow-hidden bg-[#fbfaf2] px-7 pb-10 pt-16 lg:hidden">
+      <div className="products-mobile relative min-h-[980px] overflow-hidden px-7 pb-10 pt-16 lg:hidden">
         <img
-          src="/images/mobile-products-backdrop.png"
+          src="/images/products-orchard-v2.webp"
           alt=""
           draggable={false}
           className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
@@ -327,13 +278,13 @@ function ProductsShowcase() {
             src={PRODUCT_ASSETS.mango}
             alt="PIO Mango pack"
             draggable={false}
-            className="absolute bottom-9 left-[5%] z-10 h-[390px] w-auto -rotate-[5deg] object-contain drop-shadow-[0_30px_38px_rgba(91,67,11,0.22)]"
+            className="mobile-pack mobile-pack-mango absolute bottom-9 left-[5%] z-10 h-[390px] w-auto -rotate-[5deg] object-contain drop-shadow-[0_30px_38px_rgba(91,67,11,0.22)]"
           />
           <img
             src={PRODUCT_ASSETS.lychee}
             alt="PIO Lychee pack"
             draggable={false}
-            className="absolute bottom-5 right-[1%] z-20 h-[360px] w-auto rotate-[5deg] object-contain drop-shadow-[0_30px_38px_rgba(95,20,44,0.20)]"
+            className="mobile-pack mobile-pack-lychee absolute bottom-5 right-[1%] z-20 h-[360px] w-auto rotate-[5deg] object-contain drop-shadow-[0_30px_38px_rgba(95,20,44,0.20)]"
           />
         </div>
 
@@ -372,7 +323,7 @@ function ProductsShowcase() {
         </button>
       </div>
 
-      <div className="relative mx-auto hidden max-w-7xl items-center gap-4 px-5 sm:gap-12 sm:px-8 lg:grid lg:min-h-[100svh] lg:grid-cols-[0.88fr_1.12fr] lg:gap-8 lg:py-24">
+      <div className="products-desktop relative mx-auto hidden max-w-7xl items-center gap-4 px-5 sm:gap-12 sm:px-8 lg:grid lg:min-h-[100svh] lg:grid-cols-[0.88fr_1.12fr] lg:gap-8 lg:py-24">
         <div className="relative z-20 max-w-xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#064F32]/10 bg-white/70 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-[#064F32] shadow-[0_16px_38px_rgba(6,79,50,0.08)] backdrop-blur-md">
             <Sparkles className="h-3.5 w-3.5" />
@@ -393,17 +344,11 @@ function ProductsShowcase() {
           <AnimatedCTA />
         </div>
 
-        <div ref={visualRef} className="relative z-10 -mt-2 min-h-[330px] overflow-hidden rounded-[28px] sm:mt-0 sm:min-h-[620px] sm:overflow-visible sm:rounded-none lg:min-h-[760px]">
-          <LiquidSplashLayer tone="mango" />
-          <LiquidSplashLayer tone="lychee" />
+        <div ref={visualRef} className="products-stage relative z-10 -mt-2 min-h-[330px] overflow-hidden rounded-[28px] sm:mt-0 sm:min-h-[620px] sm:overflow-visible sm:rounded-none lg:min-h-[760px]">
+          <div className="products-sip-seal" aria-hidden="true"><Sparkles size={22} /><span>GOOD MOOD</span><strong>on the go.</strong></div>
 
           <div className="depth-near pointer-events-none absolute inset-x-[12%] bottom-[18%] h-20 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(7,61,44,0.22),transparent_68%)] blur-2xl sm:bottom-[20%] sm:h-28" />
 
-          <FruitLayer tone="leaf" className="depth-far left-[12%] top-[6%] h-10 w-20 rotate-[-28deg] rounded-[90%_10%_90%_10%] sm:top-[10%] sm:h-14 sm:w-28" />
-          <FruitLayer tone="leaf" className="depth-near right-[5%] top-[9%] h-11 w-24 rotate-[32deg] rounded-[90%_10%_90%_10%] sm:top-[13%] sm:h-16 sm:w-32" />
-          <FruitLayer tone="mango" className="depth-near left-[4%] bottom-[16%] h-16 w-20 rotate-[-14deg] rounded-[58%_42%_52%_48%] sm:left-[3%] sm:bottom-[22%] sm:h-20 sm:w-24" />
-          <FruitLayer tone="lychee" className="depth-far right-[8%] bottom-[12%] h-16 w-16 rounded-full border-[8px] border-white/30 sm:bottom-[18%] sm:h-20 sm:w-20 sm:border-[10px]" />
-          <FruitLayer tone="leaf" className="depth-far left-[44%] bottom-[4%] h-8 w-20 rotate-[18deg] rounded-[90%_10%_90%_10%] sm:bottom-[7%] sm:h-10 sm:w-24" />
 
           <ProductVisual
             src={PRODUCT_ASSETS.mango}
@@ -418,18 +363,18 @@ function ProductsShowcase() {
             className="product-lychee right-[8%] top-[8%] h-[285px] w-[44%] max-w-[205px] rotate-[5deg] sm:right-[16%] sm:top-[22%] sm:h-[500px] sm:max-w-[310px] lg:right-[13%] lg:top-[22%] lg:h-[565px] xl:right-[8%] xl:h-[590px]"
           />
 
+          <div className="products-flavour-notes">
           <FlavourInfo
             tone="mango"
             title="Mango"
             copy="Golden tropical sip with a smooth fruit finish."
-            className="left-[0%] top-[12%] hidden lg:block xl:left-[2%]"
           />
           <FlavourInfo
             tone="lychee"
             title="Lychee"
             copy="Fresh floral sweetness with a chilled feel."
-            className="right-[0%] bottom-[10%] hidden lg:block xl:right-[1%]"
           />
+          </div>
         </div>
 
         <div className="-mt-2 grid gap-3 sm:-mt-10 sm:grid-cols-2 lg:hidden">

@@ -82,6 +82,7 @@ export function OurStory() {
         gsap.fromTo('.heritage-intro__rule', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.heritage-intro', start: 'top 80%', end: 'bottom 65%', scrub: 0.3 } });
         gsap.to('.heritage-progress span', { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.heritage-journey', start: 'top 35%', end: 'bottom 65%', scrub: true } });
         gsap.to('.heritage-closing__word', { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '.heritage-closing', start: 'top bottom', end: 'bottom top', scrub: 0.5 } });
+        gsap.fromTo('.heritage-closing__landscape', { yPercent: -3 }, { yPercent: 3, ease: 'none', scrollTrigger: { trigger: '.heritage-closing', start: 'top bottom', end: 'bottom top', scrub: 0.8 } });
         gsap.timeline({ scrollTrigger: { trigger: '.heritage-closing', start: 'top 80%', once: true } })
           .from('.heritage-closing__line > span', { yPercent: 110, rotate: 2, duration: 1, stagger: 0.16, ease: 'power3.out' })
           .from('.heritage-closing__copy, .heritage-closing__cta', { y: 20, opacity: 0, duration: 0.65, stagger: 0.12, ease: 'power2.out' }, '-=0.45')
@@ -134,7 +135,7 @@ export function OurStory() {
         <p className="heritage-promise__note heritage-reveal">Quality is our foundation. Generations of experience meet modern manufacturing in Assam, with care in every ingredient, process and pack.</p>
       </div>
       <div className="heritage-closing">
-        <div className="heritage-closing__light" aria-hidden="true" />
+        <div className="heritage-closing__landscape" aria-hidden="true" />
         <span className="heritage-closing__word" aria-hidden="true">Har Sip Jio.</span>
         <div className="heritage-closing__layout">
           <div className="heritage-closing__content">
