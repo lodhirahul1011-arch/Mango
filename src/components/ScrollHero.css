@@ -1,0 +1,40 @@
+@media (max-width: 767px) {
+  #home .hero-viewport {
+    background-image: radial-gradient(ellipse at 12% 48%, #ffe8a6aa, transparent 48%), radial-gradient(ellipse at 92% 54%, #f8d4dd88, transparent 45%), linear-gradient(180deg, #f7faef, #fffbed 65%, #f2f7e7) !important;
+  }
+  #home .hero-sequence {
+    top: 29%;
+    bottom: auto;
+    height: 45%;
+    width: 100%;
+    filter: saturate(1.08) !important;
+  }
+  .hero-mobile-layout { position: absolute; inset: 0; z-index: 10; pointer-events: none; color: #073d2c; text-align: center; }
+  .hero-mobile-heading { position: absolute; top: max(100px, 12svh); left: 20px; right: 20px; }
+  .hero-mobile-heading p { font-size: 9px; font-weight: 800; letter-spacing: .22em; color: #39734d; }
+  .hero-mobile-heading h1 { margin: 8px 0 6px; font-family: 'Cormorant Garamond', serif; font-size: clamp(46px, 14vw, 72px); font-weight: 600; line-height: 1; letter-spacing: -.055em; }
+  .hero-mobile-heading em { color: #168447; }
+  .hero-mobile-heading > span { font-size: 12px; font-weight: 500; }
+  .hero-mobile-actions { position: absolute; bottom: max(14px, env(safe-area-inset-bottom)); left: 24px; right: 24px; display: flex; align-items: center; flex-direction: column; gap: 7px; }
+  .hero-mobile-facts { display: flex; justify-content: center; gap: 14px; margin-bottom: 5px; font-size: 10px; font-weight: 700; }
+  .hero-mobile-facts span + span { border-left: 1px solid #073d2c30; padding-left: 14px; }
+  .hero-mobile-actions button { pointer-events: auto; display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 12px; font-weight: 700; }
+  .hero-mobile-primary { width: 100%; max-width: 340px; min-height: 48px; border-radius: 30px; background: #075431; color: white; box-shadow: 0 8px 24px #07543120; }
+  .hero-mobile-secondary { min-height: 44px; padding: 0 20px; }
+  .hero-mobile-actions button:focus-visible { outline: 2px solid #075431; outline-offset: 4px; }
+  .hero-mobile-hint { font-size: 8px; letter-spacing: .18em; color: #55735f; }
+}
+@media (max-width: 767px) and (max-height: 700px) {
+  .hero-mobile-heading { top: 92px; }
+  .hero-mobile-heading h1 { font-size: 44px; }
+  #home .hero-sequence { top: 30%; height: 42%; }
+  .hero-mobile-actions { gap: 2px; bottom: 10px; }
+  .hero-mobile-hint { display: none; }
+}
+@media (max-width: 767px) and (max-height: 480px) {
+  .hero-mobile-heading { left: 20px; right: 52%; top: 94px; }
+  .hero-mobile-heading h1 { font-size: 38px; }
+  .hero-mobile-heading > span, .hero-mobile-facts { display: none; }
+  #home .hero-sequence { left: 48%; width: 52%; top: 22%; height: 75%; }
+  .hero-mobile-actions { left: 20px; right: 54%; bottom: 12px; }
+}

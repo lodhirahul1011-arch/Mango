@@ -3,11 +3,13 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Droplets, Leaf, Play, ShieldCheck } from 'lucide-react';
 
+import './ScrollHero.css';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const FRAME_COUNT = 240;
 const frameSrc = (index: number) => `/sequence-new/frame_${String(index).padStart(4, '0')}.jpg?v=4`;
-const MOBILE_HERO = '/images/mobile-luxury-hero.png';
+
 
 export function ScrollHero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -65,20 +67,23 @@ export function ScrollHero() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = true;
         if (isMobile) {
-          // Soft full-screen backdrop plus a fitted foreground: both cartons stay visible.
-          ctx.save();
-          ctx.filter = 'blur(18px)';
-          ctx.drawImage(img, x - 20, y - 20, w + 40, h + 40);
-          ctx.restore();
-          ctx.fillStyle = 'rgba(246,250,234,0.55)';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          const sourceX = img.naturalWidth * 0.25;
+          const sourceX = img.naturalWidth * 0.24;
           const sourceWidth = img.naturalWidth - sourceX;
-          const fit = Math.min(canvas.width / sourceWidth, canvas.height * 0.72 / img.naturalHeight);
+          const fit = Math.min(canvas.width / sourceWidth, canvas.height / img.naturalHeight);
           const fw = sourceWidth * fit;
           const fh = img.naturalHeight * fit;
           ctx.drawImage(img, sourceX, 0, sourceWidth, img.naturalHeight,
             (canvas.width - fw) / 2, (canvas.height - fh) / 2, fw, fh);
+          ctx.save();
+          ctx.globalCompositeOperation = 'destination-in';
+          const fade = ctx.createLinearGradient(0, (canvas.height - fh) / 2, 0, (canvas.height + fh) / 2);
+          fade.addColorStop(0, 'transparent');
+          fade.addColorStop(0.1, '#000');
+          fade.addColorStop(0.9, '#000');
+          fade.addColorStop(1, 'transparent');
+          ctx.fillStyle = fade;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.restore();
         } else {
           ctx.drawImage(img, x, y, w, h);
         }
@@ -112,7 +117,7 @@ export function ScrollHero() {
     const resize = () => {
       const isMobile = window.innerWidth < 768;
       const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.35 : 1.75);
-      const bounds = canvas.parentElement!.getBoundingClientRect();
+      const bounds = canvas.getBoundingClientRect();
       canvas.width = Math.round(bounds.width * dpr);
       canvas.height = Math.round(bounds.height * dpr);
       draw(frameRef.current);
@@ -180,12 +185,7 @@ export function ScrollHero() {
         },
         scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.3 },
       });
-      gsap.to(section.querySelector('.hero-mobile-art'), {
-        autoAlpha: 0,
-        scale: 1.06,
-        ease: 'none',
-        scrollTrigger: { trigger: section, start: 'top top', end: '15% top', scrub: true },
-      });
+
     });
 
     const refreshTimeout = setTimeout(() => {
@@ -211,7 +211,7 @@ export function ScrollHero() {
       className="relative h-[240svh] md:h-[220vh] lg:h-[300vh] motion-reduce:!h-[100svh] w-full"
     >
       <div 
-        className="sticky top-0 h-[100svh] min-h-[100svh] w-full overflow-hidden bg-cover bg-center"
+        className="hero-viewport sticky top-0 h-[100svh] min-h-[100svh] w-full overflow-hidden bg-cover bg-center"
         style={{ backgroundImage: `url(${frameSrc(0)})` }}
       >
         {/* Fullscreen 3D Canvas with enhanced saturation & crisp contrast */}
@@ -220,36 +220,23 @@ export function ScrollHero() {
           style={{
             filter: 'contrast(1.08) saturate(1.24) brightness(1.02)',
           }}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="hero-sequence absolute inset-0 h-full w-full object-cover"
           aria-label="PIO 3D animated cans and fruit splash"
         />
 
         <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(6,46,25,0.12)_100%)]" />
 
-        {/* Mobile artwork fades into the touch-driven frame sequence. */}
-        <div className="hero-mobile-art absolute inset-0 z-10 overflow-hidden text-center md:hidden">
-          <img
-            src={MOBILE_HERO}
-            alt="PIO Har Sip luxury mango and lychee hero"
-            draggable={false}
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
-
-          <div className="absolute inset-x-5 bottom-[126px] z-20 mx-auto flex max-w-[310px] flex-col gap-2.5 opacity-0">
-            <button
-              onClick={() => go('flavours')}
-              className="min-h-[58px] rounded-full"
-              aria-label="Explore flavours"
-            >
-              Explore flavours
-            </button>
-            <button
-              onClick={() => go('map')}
-              className="min-h-[48px] rounded-full"
-              aria-label="Find near you"
-            >
-              Find near you
-            </button>
+        <div className="hero-mobile-layout md:hidden">
+          <div className="hero-mobile-heading">
+            <p>REAL FRUIT. REAL GOOD.</p>
+            <h1>Har Sip. <em>PIO.</em></h1>
+            <span>Mango sunshine. Lychee freshness.</span>
+          </div>
+          <div className="hero-mobile-actions">
+            <div className="hero-mobile-facts"><span>Real fruit</span><span>160 ml</span><span>&#8377;10 a pack</span></div>
+            <button onClick={() => go('flavours')} className="hero-mobile-primary">Explore flavours <ArrowRight size={18} /></button>
+            <button onClick={() => go('map')} className="hero-mobile-secondary">Find near you <ArrowRight size={15} /></button>
+            <span className="hero-mobile-hint motion-reduce:hidden">SCROLL TO SEE THE SPLASH</span>
           </div>
         </div>
 
@@ -353,7 +340,7 @@ export function ScrollHero() {
 
 
         {/* Desktop Bottom Center: Scroll Cue */}
-        <div className="flex motion-reduce:hidden absolute bottom-5 left-1/2 -translate-x-1/2 flex-col items-center gap-1 pointer-events-none z-20 opacity-90">
+        <div className="hidden md:flex motion-reduce:hidden absolute bottom-5 left-1/2 -translate-x-1/2 flex-col items-center gap-1 pointer-events-none z-20 opacity-90">
           <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/95 px-3 py-1 rounded-full border border-emerald-900/15 shadow-xs">
             Scroll To Animate 3D
           </span>
