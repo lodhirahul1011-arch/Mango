@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Store, Truck, Building2, Globe, ArrowRight, Check } from 'lucide-react';
+import { Store, Truck, Building2, ArrowRight, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const reveal = {
@@ -43,14 +42,6 @@ const PARTNER_TYPES: PartnerType[] = [
     benefits: ['Customized bulk packaging', 'Aseptic shelf-stability (no chillers required for storage)', 'Dedicated account manager'],
     badge: 'Institutional',
   },
-  {
-    id: 'export',
-    title: 'Export Enquiries',
-    icon: Globe,
-    description: 'Introduce Assam’s authentic tropical fruit flavors to consumers in global international markets.',
-    benefits: ['Export compliant documentation', 'Extended 6-9 months shelf life', 'International safety certifications'],
-    badge: 'Global Trade',
-  },
 ];
 
 export function Partner() {
@@ -63,7 +54,6 @@ export function Partner() {
         if (id === 'distributor') select.value = 'Become a Distributor';
         else if (id === 'retailer') select.value = 'Become a Retailer';
         else if (id === 'b2b') select.value = 'B2B / Institutional';
-        else if (id === 'export') select.value = 'Export Enquiries';
       }
     }
   };

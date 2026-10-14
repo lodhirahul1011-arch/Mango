@@ -25,7 +25,6 @@ const PARTNER_OPTIONS = [
   'Become a Distributor',
   'Become a Retailer',
   'B2B / Institutional',
-  'Export Enquiries',
   'General Consumer Feedback',
 ];
 

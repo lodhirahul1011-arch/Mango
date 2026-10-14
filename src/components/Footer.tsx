@@ -10,10 +10,9 @@ const LINKS = {
     { label: 'FAQs', id: 'faq' },
   ],
   business: [
-    { label: 'Become a Distributor', id: 'partner' },
-    { label: 'Retailer Enquiry', id: 'partner' },
-    { label: 'B2B Enquiry', id: 'partner' },
-    { label: 'Export Enquiry', id: 'partner' },
+    { label: 'Become a Distributor', id: 'distributor', formValue: 'Become a Distributor' },
+    { label: 'Retailer Enquiry', id: 'retailer', formValue: 'Become a Retailer' },
+    { label: 'B2B Enquiry', id: 'b2b', formValue: 'B2B / Institutional' },
   ],
 };
 
@@ -58,6 +57,22 @@ export function Footer() {
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleBusinessLinkClick = (id: string, formValue: string) => {
+    const partnerSection = document.getElementById('contact');
+    if (partnerSection) {
+      partnerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    const select = document.getElementById('partner-type-select') as HTMLSelectElement | null;
+    if (select) {
+      select.value = formValue;
+    }
+
+    if (id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
@@ -130,7 +145,7 @@ export function Footer() {
               {LINKS.business.map((link) => (
                 <li key={link.label}>
                   <button
-                    onClick={() => scrollTo(link.id)}
+                    onClick={() => handleBusinessLinkClick(link.id, link.formValue)}
                     className="group inline-flex items-center gap-1.5 text-[13px] font-medium text-[#364d43] transition-colors duration-300 hover:text-[#0d3d2d]"
                   >
                     <span className="relative after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-[#0d3d2d] after:transition-transform after:duration-300 group-hover:after:scale-x-100">
