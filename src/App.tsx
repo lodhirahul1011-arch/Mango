@@ -4,7 +4,7 @@ import { Navbar } from '@/components/Navbar';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { MouseProvider } from '@/components/MouseProvider';
 import { ScrollHero } from '@/components/ScrollHero';
-import { SignatureProductTrail } from '@/components/SignatureProductTrail';
+import { OrangeTraveller } from '@/components/OrangeTraveller';
 import { Flavours } from '@/components/BrandSections';
 import { FlavourFrameStories } from '@/components/FlavourFrameStories';
 import { InteractiveMap } from '@/components/InteractiveMap';
@@ -62,8 +62,7 @@ function App() {
         {/* Global Reading Scroll Progress */}
         <ScrollProgress />
 
-        {/* Signature product scroll transition between Hero and Products */}
-        <SignatureProductTrail />
+        <OrangeTraveller />
 
         {/* Sleek Navigation Bar */}
         <Navbar />

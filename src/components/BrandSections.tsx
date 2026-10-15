@@ -172,21 +172,11 @@ function ProductsShowcase() {
         .from('.products-heading-line', { yPercent: 112, opacity: 0, duration: 0.9, stagger: 0.11, ease: 'power4.out' })
         .from('.products-copy', { y: 22, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45')
         .from('.products-badges span', { y: 18, opacity: 0, duration: 0.55, stagger: 0.08, ease: 'power3.out' }, '-=0.35')
-        .from('.product-mango', { y: 120, rotate: -5, opacity: 0, duration: 0.95, ease: 'power3.out' }, '-=0.55')
-        .from('.product-lychee', { y: 130, rotate: 5, opacity: 0, duration: 0.95, ease: 'power3.out' }, '-=0.68')
+        .from('.product-mango', { scale: 0.96, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.55')
+        .from('.product-lychee', { scale: 0.96, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.55')
         .from('.flavour-info', { y: 24, scale: 0.95, opacity: 0, duration: 0.6, stagger: 0.12, ease: 'power3.out' }, '-=0.42')
         .from('.products-cta', { y: 20, opacity: 0, duration: 0.55, ease: 'power3.out' }, '-=0.38');
 
-      gsap.to('.product-mango', {
-        y: -28,
-        ease: 'none',
-        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 0.8 },
-      });
-      gsap.to('.product-lychee', {
-        y: 26,
-        ease: 'none',
-        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 0.8 },
-      });
     }, section);
 
     let raf = 0;
