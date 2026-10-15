@@ -28,13 +28,13 @@ interface SearchMatch {
 }
 
 const CITY_HUBS: CityHub[] = [
-  { id: 'mangaldai', name: 'Mangaldai', state: 'Assam', type: 'factory', stores: 'Factory & Origin', distributors: 'Main aseptic facility', status: 'Origin - Our Home', leadTime: 'Production source', x: 88, y: 35 },
-  { id: 'delhi', name: 'Delhi', state: 'North India', type: 'central', stores: '850+ Outlets', distributors: 'Institutional hub', status: 'Active Hub', leadTime: 'Direct institutional', x: 60, y: 28 },
-  { id: 'patna', name: 'Patna', state: 'Bihar', type: 'hub', stores: '1,100+ Outlets', distributors: 'Express corridor', status: 'Active Hub', leadTime: 'Express freight', x: 73, y: 39 },
-  { id: 'kolkata', name: 'Kolkata', state: 'West Bengal', type: 'central', stores: '3,200+ Outlets', distributors: 'Regional distribution', status: 'Active Hub', leadTime: '24-hour corridor', x: 82, y: 49 },
-  { id: 'mumbai', name: 'Mumbai', state: 'Maharashtra', type: 'hub', stores: 'Expanding Retail', distributors: 'West India route', status: 'Expanding Network', leadTime: 'Mapped corridor', x: 45, y: 47 },
-  { id: 'hyderabad', name: 'Hyderabad', state: 'Telangana', type: 'hub', stores: 'Expanding Retail', distributors: 'Central-south route', status: 'Expanding Network', leadTime: 'Mapped corridor', x: 60, y: 59 },
-  { id: 'bengaluru', name: 'Bengaluru', state: 'Karnataka', type: 'hub', stores: 'Expanding Retail', distributors: 'South India route', status: 'Expanding Network', leadTime: 'Mapped corridor', x: 61, y: 72 },
+  { id: 'mangaldai', name: 'Mangaldai', state: 'Assam', type: 'factory', stores: 'Factory & Origin', distributors: 'Main aseptic facility', status: 'Origin - Our Home', leadTime: 'Production source', x: 75, y: 34 },
+  { id: 'delhi', name: 'Delhi', state: 'North India', type: 'central', stores: '850+ Outlets', distributors: 'Institutional hub', status: 'Active Hub', leadTime: 'Direct institutional', x: 30, y: 28 },
+  { id: 'patna', name: 'Patna', state: 'Bihar', type: 'hub', stores: '1,100+ Outlets', distributors: 'Express corridor', status: 'Active Hub', leadTime: 'Express freight', x: 54, y: 37 },
+  { id: 'kolkata', name: 'Kolkata', state: 'West Bengal', type: 'central', stores: '3,200+ Outlets', distributors: 'Regional distribution', status: 'Active Hub', leadTime: '24-hour corridor', x: 63, y: 45 },
+  { id: 'mumbai', name: 'Mumbai', state: 'Maharashtra', type: 'hub', stores: 'Expanding Retail', distributors: 'West India route', status: 'Expanding Network', leadTime: 'Mapped corridor', x: 16, y: 56 },
+  { id: 'hyderabad', name: 'Hyderabad', state: 'Telangana', type: 'hub', stores: 'Expanding Retail', distributors: 'Central-south route', status: 'Expanding Network', leadTime: 'Mapped corridor', x: 34, y: 61 },
+  { id: 'bengaluru', name: 'Bengaluru', state: 'Karnataka', type: 'hub', stores: 'Expanding Retail', distributors: 'South India route', status: 'Expanding Network', leadTime: 'Mapped corridor', x: 31, y: 74 },
 ];
 
 const SEARCH_INDEX: SearchMatch[] = [
@@ -53,13 +53,72 @@ const SEARCH_INDEX: SearchMatch[] = [
 ];
 
 const MAP_ROUTES = [
-  'M84 35 C73 24,60 22,48 25',
-  'M84 35 C78 33,70 34,64 38',
-  'M84 35 C82 43,79 48,75 50',
-  'M84 35 C67 34,49 37,32 48',
-  'M84 35 C74 43,58 50,48 62',
-  'M84 35 C73 50,61 67,49 78',
+  'M75 34 C66 23,45 23,30 28',
+  'M75 34 C68 32,60 35,54 37',
+  'M75 34 C76 42,70 45,63 45',
+  'M75 34 C56 37,35 45,16 56',
+  'M75 34 C65 47,47 54,34 61',
+  'M75 34 C62 48,44 65,31 74',
 ];
+
+function IndiaMapPanel({
+  className,
+  mobile = false,
+  activeHub,
+  onSelectHub,
+}: {
+  className: string;
+  mobile?: boolean;
+  activeHub: CityHub;
+  onSelectHub: (hub: CityHub) => void;
+}) {
+  return (
+    <div className={`pio-map-panel overflow-visible ${className}`}>
+      <img
+        src="/images/india-network-map.svg"
+        alt=""
+        draggable={false}
+        className="pio-india-shape absolute inset-0 h-full w-full select-none object-fill"
+      />
+
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
+        <defs>
+          <linearGradient id={mobile ? 'pioMobileRouteGlow' : 'pioRouteGlow'} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#e9ff9d" />
+            <stop offset="55%" stopColor="#fff7a0" />
+            <stop offset="100%" stopColor="#ffae12" />
+          </linearGradient>
+        </defs>
+        {MAP_ROUTES.map((route) => (
+          <path key={route} d={route} className="pio-route-path" fill="none" stroke={`url(#${mobile ? 'pioMobileRouteGlow' : 'pioRouteGlow'})`} strokeWidth="0.9" strokeLinecap="round" />
+        ))}
+        <circle className="pio-route-bead" r="0.72" fill="#fff47a" opacity="0">
+          <animateMotion dur="6.2s" repeatCount="indefinite" path={MAP_ROUTES[0]} />
+        </circle>
+      </svg>
+
+      {CITY_HUBS.filter((hub) => hub.type !== 'factory').map((hub) => {
+        const isSelected = activeHub.id === hub.id;
+        return (
+          <button
+            key={`${mobile ? 'mobile' : 'desktop'}-${hub.id}`}
+            onClick={() => onSelectHub(hub)}
+            style={{ left: `${hub.x}%`, top: `${hub.y}%` }}
+            className={`pio-city-node absolute z-10 -translate-x-1/2 -translate-y-1/2 p-1 ${mobile ? '' : 'hidden md:block'}`}
+            aria-label={`Select hub ${hub.name}`}
+          >
+            <span className={`${mobile ? '' : 'relative'} mx-auto flex h-9 w-9 items-center justify-center rounded-full text-white shadow-[0_12px_22px_rgba(23,85,49,0.24)] ${isSelected ? 'bg-[#f59e0b]' : 'bg-[#207d46]'}`}>
+              <MapPin className="h-4 w-4" />
+            </span>
+            <span className={`mt-1 block whitespace-nowrap rounded-xl bg-[#fffbe9]/95 px-3 py-1.5 text-xs font-extrabold text-[#15241b] shadow-[0_10px_18px_rgba(14,54,31,0.12)] ${mobile ? '' : 'md:px-4 md:py-2 md:text-base'}`}>
+              {hub.name}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 export function InteractiveMap() {
   const [activeHub, setActiveHub] = useState<CityHub>(CITY_HUBS[0]);
@@ -218,7 +277,7 @@ export function InteractiveMap() {
             </div>
           </div>
 
-          <div className="relative z-20 mx-5 mt-1 h-[420px] overflow-hidden rounded-[1.6rem] border border-white/70 bg-white/28 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_18px_38px_rgba(29,76,41,0.12)] md:hidden">
+          <div className="relative z-20 mx-5 mt-1 hidden h-[420px] overflow-hidden rounded-[1.6rem] border border-white/70 bg-white/28 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_18px_38px_rgba(29,76,41,0.12)] md:hidden">
             <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
               <defs>
                 <linearGradient id="pioMobileMapLand" x1="0" y1="0" x2="1" y2="1">
@@ -271,7 +330,26 @@ export function InteractiveMap() {
             })}
           </div>
 
-          <svg viewBox="0 0 100 100" className="absolute inset-0 z-10 hidden h-full w-full md:block">
+          <IndiaMapPanel
+            mobile
+            activeHub={activeHub}
+            onSelectHub={(hub) => {
+              setActiveHub(hub);
+              setSearchFeedback(null);
+            }}
+            className="relative z-20 mx-5 mt-1 aspect-[768/976] overflow-visible rounded-[1.6rem] border border-white/70 bg-white/28 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_18px_38px_rgba(29,76,41,0.12)] md:hidden"
+          />
+
+          <IndiaMapPanel
+            activeHub={activeHub}
+            onSelectHub={(hub) => {
+              setActiveHub(hub);
+              setSearchFeedback(null);
+            }}
+            className="absolute left-[40%] top-[2%] z-10 hidden h-[96%] aspect-[768/976] md:block"
+          />
+
+          <svg viewBox="0 0 100 100" className="hidden">
             <defs>
               <linearGradient id="pioMapLand" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stopColor="#f8efbe" />
@@ -330,8 +408,8 @@ export function InteractiveMap() {
 
           <div className="pointer-events-none absolute left-[65%] top-[38%] z-0 hidden h-[38rem] w-[38rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/45 md:block" />
           <div className="pointer-events-none absolute left-[73%] top-[41%] z-0 hidden h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/35 md:block" />
-          <div className="pio-expansion-ring pointer-events-none absolute left-[88%] top-[35%] z-20 hidden h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#ffb21c]/50 bg-[#ffb21c]/10 md:block" />
-          <div className="pio-expansion-ring pointer-events-none absolute left-[88%] top-[35%] z-20 hidden h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/50 md:block" />
+          <div className="pio-expansion-ring pointer-events-none absolute left-[70%] top-[35%] z-20 hidden h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#ffb21c]/50 bg-[#ffb21c]/10 md:block" />
+          <div className="pio-expansion-ring pointer-events-none absolute left-[70%] top-[35%] z-20 hidden h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/50 md:block" />
 
           {CITY_HUBS.filter((hub) => hub.type !== 'factory').map((hub) => {
             const isSelected = activeHub.id === hub.id;
@@ -343,7 +421,7 @@ export function InteractiveMap() {
                   setSearchFeedback(null);
                 }}
                 style={{ left: `${hub.x}%`, top: `${hub.y}%` }}
-                className="pio-city-node group absolute z-30 hidden -translate-x-1/2 -translate-y-1/2 cursor-pointer p-2 focus:outline-none md:block"
+                className="hidden"
                 aria-label={`Select hub ${hub.name}`}
               >
                 <span className={`absolute inset-2 rounded-full ${isSelected ? 'animate-ping bg-[#f9b51d]/70' : 'bg-white/0'}`} />
@@ -357,17 +435,9 @@ export function InteractiveMap() {
             );
           })}
 
-          <div className="pio-map-product pointer-events-none absolute right-[8%] top-[8%] z-30 hidden items-end md:flex">
+          <div className="pio-map-product pointer-events-none absolute right-[8%] top-[8%] z-30 hidden items-end">
             <img src="/images/pio-mango.png" alt="" draggable={false} className="h-44 w-auto -rotate-[8deg] object-contain drop-shadow-[0_26px_30px_rgba(38,67,31,0.28)] lg:h-56" />
             <img src="/images/pio-lychee.png" alt="" draggable={false} className="-ml-14 h-40 w-auto rotate-[5deg] object-contain drop-shadow-[0_26px_30px_rgba(38,67,31,0.24)] lg:h-52" />
-          </div>
-
-          <div className="pointer-events-none absolute right-0 top-0 z-20 hidden h-full w-[33%] md:block">
-            <div className="absolute right-8 top-14 h-20 w-44 rotate-[-18deg] rounded-full bg-[#2f7d2f]/22 blur-xl" />
-            <div className="absolute right-10 top-20 h-7 w-28 rotate-[-18deg] rounded-[100%] bg-[#2f7d2f]/75" />
-            <div className="absolute right-5 top-[40%] h-8 w-24 rotate-[-28deg] rounded-[100%] bg-[#2f7d2f]/70" />
-            <div className="absolute right-[18%] top-[45%] h-28 w-28 rounded-full border-[16px] border-[#e83b57]/60 bg-white/70 shadow-lg" />
-            <div className="absolute right-[10%] top-[40%] h-28 w-20 rotate-[30deg] rounded-[70%_20%_70%_30%] bg-[#ffca37]/85" />
           </div>
 
           <form onSubmit={handleSearch} className="absolute bottom-8 right-5 z-40 hidden w-[23rem] rounded-3xl border border-white/70 bg-white/52 p-4 shadow-[0_18px_42px_rgba(29,76,41,0.14)] backdrop-blur-md lg:block">

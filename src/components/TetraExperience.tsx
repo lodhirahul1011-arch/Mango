@@ -249,14 +249,15 @@ function ProductStage({
 
         <div className="tetra-stage-lines pointer-events-none absolute inset-10 rounded-[32px] border border-[#073D2C]/10 [background-image:linear-gradient(rgba(7,61,44,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(7,61,44,0.08)_1px,transparent_1px)] [background-size:42px_42px]" />
 
-        <motion.div
+        <div className="tetra-pack-motion relative z-10">
+          <motion.div
           style={{
             rotateX: mouseY,
             rotateY: mouseX,
             transformStyle: 'preserve-3d',
           }}
-          className="tetra-pack-motion relative z-10"
-        >
+          className="relative"
+          >
           <motion.div
             initial={false}
             animate={{
@@ -304,7 +305,8 @@ function ProductStage({
               />
             </motion.div>
           </AnimatePresence>
-        </motion.div>
+          </motion.div>
+        </div>
 
         <div className="tetra-floor absolute bottom-24 h-6 w-[58%] rounded-full bg-[#073D2C]/18 blur-xl" />
       </div>

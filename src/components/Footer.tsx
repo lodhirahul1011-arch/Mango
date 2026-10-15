@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Facebook, Instagram, MapPin, MessageCircle } from 'lucide-react';
 import gsap from 'gsap';
 
@@ -33,6 +33,8 @@ const LOCATION_LINK = '#';
 
 export function Footer() {
   const footerRef = useRef<HTMLElement>(null);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -73,6 +75,11 @@ export function Footer() {
     if (id) {
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
+
+  const handleNewsletterSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setNewsletterSubmitted(true);
   };
 
   return (
@@ -189,6 +196,34 @@ export function Footer() {
                   </span>
                 </a>
               ))}
+
+              {newsletterSubmitted ? (
+                <p role="status" className="w-full rounded-xl border border-[#0d3d2d]/10 bg-white/60 px-3 py-3 text-center text-[13px] font-medium text-[#364d43]">
+                  Thanks for your interest.
+                </p>
+              ) : (
+                <form
+                  onSubmit={handleNewsletterSubmit}
+                  className="flex w-full items-center gap-1 rounded-xl border border-[#0d3d2d]/10 bg-white/60 p-1.5"
+                >
+                  <label className="sr-only" htmlFor="footer-newsletter-email">Your email</label>
+                  <input
+                    id="footer-newsletter-email"
+                    type="email"
+                    required
+                    value={newsletterEmail}
+                    onChange={(event) => setNewsletterEmail(event.target.value)}
+                    placeholder="Your email"
+                    className="min-w-0 flex-1 rounded-lg bg-transparent px-2 py-3 text-[13px] font-medium text-[#364d43] outline-none placeholder:text-[#536a60]"
+                  />
+                  <button
+                    type="submit"
+                    className="min-h-11 rounded-lg bg-[#0d3d2d] px-3 text-[13px] font-medium text-white transition-colors hover:bg-[#07582f] focus:outline-none focus:ring-2 focus:ring-[#07582f]/30 focus:ring-offset-2"
+                  >
+                    Join
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>

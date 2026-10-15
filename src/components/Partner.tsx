@@ -74,7 +74,7 @@ export function Partner() {
           </p>
         </motion.div>
 
-        <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-5xl gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 lg:[&>*]:justify-self-center">
           {PARTNER_TYPES.map((p, idx) => (
             <motion.div
               key={p.id}
@@ -82,7 +82,7 @@ export function Partner() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="rounded-3xl border border-emerald-900/10 bg-white p-5 sm:p-7 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              className="w-full rounded-3xl border border-emerald-900/10 bg-white p-5 sm:p-7 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
             >
               <div>
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e8f6ed] text-[#07582f]">

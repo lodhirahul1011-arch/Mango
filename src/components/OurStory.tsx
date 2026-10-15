@@ -2,6 +2,7 @@
 import { ArrowDown, ArrowUpRight, MapPin } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Marquee } from './Marquee';
 import './OurStory.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -107,6 +108,8 @@ export function OurStory() {
         <div className="heritage-intro__rule" />
       </div>
 
+      <Marquee />
+
       <div className="heritage-journey-scene" data-chapter={activeChapter}>
         <div className="heritage-scene-background" aria-hidden="true">
           <div className="heritage-scene-background__sticky">
@@ -140,11 +143,6 @@ export function OurStory() {
       </div>
       </div>
 
-      <div className="heritage-promise">
-        <p className="heritage-kicker heritage-reveal">OUR FAMILY STANDARD</p>
-        <blockquote className="heritage-reveal">If we wouldn't serve it to <em>our family,</em><br className="heritage-wide-break" /> we wouldn't put it in yours.</blockquote>
-        <p className="heritage-promise__note heritage-reveal">Quality is our foundation. Generations of experience meet modern manufacturing in Assam, with care in every ingredient, process and pack.</p>
-      </div>
       <div className="heritage-closing">
         <div className="heritage-closing__landscape" aria-hidden="true" />
         <span className="heritage-closing__word" aria-hidden="true">Har Sip Jio.</span>
