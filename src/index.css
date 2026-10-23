@@ -409,3 +409,5 @@ button {
     display: none;
   }
 }
+
+main > section[data-local-motion="true"] { will-change: auto; transform: none; }

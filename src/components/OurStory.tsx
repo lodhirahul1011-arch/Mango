@@ -1,9 +1,10 @@
-﻿import { useEffect, useRef, useState } from 'react';
+﻿import { Fragment, useEffect, useRef } from 'react';
 import { ArrowDown, ArrowUpRight, MapPin } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Marquee } from './Marquee';
 import './OurStory.css';
+import { useStoryStack } from '@/hooks/useStoryStack';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -61,7 +62,7 @@ function ChapterArt({ index }: { index: number }) {
 
 export function OurStory() {
   const rootRef = useRef<HTMLElement>(null);
-  const [activeChapter, setActiveChapter] = useState(0);
+  useStoryStack(rootRef);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -72,16 +73,13 @@ export function OurStory() {
     observer.observe(root);
     const media = gsap.matchMedia();
     const context = gsap.context(() => {
-      const chapters = gsap.utils.toArray<HTMLElement>('.heritage-chapter');
-      chapters.forEach((chapter, index) => {
-        ScrollTrigger.create({ trigger: chapter, start: 'top 55%', end: 'bottom 55%', onEnter: () => setActiveChapter(index), onEnterBack: () => setActiveChapter(index) });
-      });
+
       media.add('(prefers-reduced-motion: no-preference)', () => {
         gsap.utils.toArray<HTMLElement>('.heritage-reveal').forEach(element => {
           gsap.fromTo(element, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: element, start: 'top 90%', once: true } });
         });
         gsap.fromTo('.heritage-intro__rule', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.heritage-intro', start: 'top 80%', end: 'bottom 65%', scrub: 0.3 } });
-        gsap.to('.heritage-progress span', { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.heritage-journey', start: 'top 35%', end: 'bottom 65%', scrub: true } });
+
         gsap.to('.heritage-closing__word', { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '.heritage-closing', start: 'top bottom', end: 'bottom top', scrub: 0.5 } });
         gsap.fromTo('.heritage-closing__landscape', { yPercent: -3 }, { yPercent: 3, ease: 'none', scrollTrigger: { trigger: '.heritage-closing', start: 'top bottom', end: 'bottom top', scrub: 0.8 } });
         gsap.timeline({ scrollTrigger: { trigger: '.heritage-closing', start: 'top 80%', once: true } })
@@ -110,37 +108,28 @@ export function OurStory() {
 
       <Marquee />
 
-      <div className="heritage-journey-scene" data-chapter={activeChapter}>
-        <div className="heritage-scene-background" aria-hidden="true">
-          <div className="heritage-scene-background__sticky">
-            {['story-tea-v1', 'story-bakery-v1', 'products-orchard-v2'].map((image, index) => (
-              <div className="heritage-scene-photo" data-active={activeChapter === index} key={image}>
-                <img src={`/images/${image}.webp`} alt="" loading="lazy" decoding="async" />
+      <div className="heritage-stack" aria-label="Three chapters of the PIO story">
+        {CHAPTERS.map((chapter, index) => <Fragment key={chapter.label}>
+          <div className="heritage-stack__marker" id={`story-chapter-${index}`} aria-hidden="true" />
+          <article className={`heritage-stack__panel heritage-stack__panel--${index}`} style={{ zIndex: index + 1 }} aria-labelledby={`story-title-${index}`}>
+            <div className="heritage-stack__inner">
+              <div className="heritage-stack__copy">
+                <p className="heritage-kicker"><span>0{index + 1}</span> {chapter.label}</p>
+                <h3 id={`story-title-${index}`}>{chapter.title.split('\n').map(line => <span key={line}>{line}</span>)}</h3>
+                <p className="heritage-chapter__lead">{chapter.copy}</p>
+                <p className="heritage-chapter__detail">{chapter.detail}</p>
+                {index === 1 && <div className="heritage-stats" aria-label="Repose network"><div><strong>15,000<span>+</span></strong><p>Repose retail outlets across Assam</p></div><div><strong>16</strong><p>Repose bakery outlets in Guwahati</p></div></div>}
+                <span className="heritage-chapter__foot">{chapter.foot}</span>
+                <a className="heritage-stack__cta" href={index < 2 ? `#story-chapter-${index + 1}` : '#flavours'}>{index < 2 ? 'The next chapter' : 'Meet your next favourite'}<ArrowUpRight size={18} /></a>
               </div>
-            ))}
-          </div>
-        </div>
-      <div className="heritage-journey">
-        <div className="heritage-stage" data-chapter={activeChapter} aria-hidden="true">
-          <div className="heritage-stage__top"><span>THE STORY SO FAR</span><span>0{activeChapter + 1} / 03</span></div>
-          <div className="heritage-stage__art">{CHAPTERS.map((chapter, index) => <div className="heritage-layer" data-active={activeChapter === index} key={chapter.label}><ChapterArt index={index} /></div>)}</div>
-          <div className="heritage-stage__bottom"><span>{CHAPTERS[activeChapter].year}</span><span>{CHAPTERS[activeChapter].label}</span></div>
-          <div className="heritage-progress"><span /></div>
-        </div>
-        <div className="heritage-chapters">
-          {CHAPTERS.map((chapter, index) => <article className="heritage-chapter" id={`story-chapter-${index}`} key={chapter.label} aria-labelledby={`story-title-${index}`}>
-            <div className="heritage-mobile-art"><ChapterArt index={index} /></div>
-            <div className="heritage-reveal">
-              <p className="heritage-kicker"><span>0{index + 1}</span> {chapter.label}</p>
-              <h3 id={`story-title-${index}`}>{chapter.title.split('\n').map(line => <span key={line}>{line}</span>)}</h3>
-              <p className="heritage-chapter__lead">{chapter.copy}</p>
-              <p className="heritage-chapter__detail">{chapter.detail}</p>
-              {index === 1 && <div className="heritage-stats" aria-label="Repose network"><div><strong>15,000<span>+</span></strong><p>Repose retail outlets across Assam</p></div><div><strong>16</strong><p>Repose bakery outlets in Guwahati</p></div></div>}
-              <span className="heritage-chapter__foot">{chapter.foot}</span>
+              <div className="heritage-stack__visual">
+                <div className="heritage-stack__visual-meta"><span>{chapter.year}</span><span>0{index + 1} / 03</span></div>
+                <div className="heritage-stack__art"><ChapterArt index={index} /></div>
+              </div>
             </div>
-          </article>)}
-        </div>
-      </div>
+          </article>
+        </Fragment>)}
+        <div className="heritage-stack__release" aria-hidden="true" />
       </div>
 
       <div className="heritage-closing">

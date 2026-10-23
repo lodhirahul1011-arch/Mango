@@ -43,7 +43,7 @@ export function Navbar() {
 
   return (
     <>
-      <header 
+      <header data-pio-nav 
         className={`fixed z-50 transition-all duration-300 ${
           'top-2.5 left-3 right-3 lg:top-3 lg:left-1/2 lg:right-auto lg:w-[min(1280px,calc(100vw-48px))] lg:-translate-x-1/2'
         }`}

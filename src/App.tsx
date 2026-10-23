@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import Lenis from 'lenis';
+
 import { Navbar } from '@/components/Navbar';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { MouseProvider } from '@/components/MouseProvider';
@@ -11,6 +11,7 @@ import { InteractiveMap } from '@/components/InteractiveMap';
 import { Partner } from '@/components/Partner';
 import { Contact } from '@/components/Contact';
 import { OurStory } from '@/components/OurStory';
+import { PioMoments } from '@/components/PioMoments';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Footer } from '@/components/Footer';
@@ -20,36 +21,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   const appRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    const lenis = new Lenis({
-      duration: isTouch ? 0.75 : 1.15,
-      smoothWheel: true,
-      touchMultiplier: isTouch ? 1.0 : 1.1,
-      syncTouch: false,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
-
-    lenis.on('scroll', ScrollTrigger.update);
-
-    let raf = 0;
-    const tick = (time: number) => {
-      lenis.raf(time);
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-
-    const refreshTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 200);
-
-    return () => {
-      clearTimeout(refreshTimer);
-      cancelAnimationFrame(raf);
-      lenis.destroy();
-    };
-  }, []);
 
   useEffect(() => {
     if (!appRef.current) return;
@@ -77,6 +48,8 @@ function App() {
           <FlavourFrameStories />
 
           <OurStory />
+
+          <PioMoments />
 
           {/* 8. Interactive Distribution Network & Store Locator Map */}
           <InteractiveMap />

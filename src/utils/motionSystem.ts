@@ -159,6 +159,7 @@ function addSectionAtmosphere(root: HTMLElement, isMobile: boolean) {
   const sections = Array.from(root.querySelectorAll<HTMLElement>('main section:not(#home)'));
 
   sections.forEach((section, index) => {
+    if (inLocalMotion(section)) return;
     section.classList.add('pio-premium-section');
     section.style.setProperty('--section-index', String(index));
 
@@ -213,6 +214,7 @@ function installPointerSpotlight(root: HTMLElement): Cleanup {
 
 function enhanceButtons(root: HTMLElement): Cleanup {
   const buttons = Array.from(root.querySelectorAll<HTMLElement>('button, a[href]')).filter((el) => {
+    if (inLocalMotion(el)) return false;
     const rect = el.getBoundingClientRect();
     return rect.width > 38 && rect.height > 30 && el.className.toString().includes('rounded');
   });
