@@ -1,8 +1,11 @@
-﻿import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { frameUrl, useFlavourFrames } from '@/hooks/useFlavourFrames';
 import './FlavourFrameStories.css';
 
+gsap.registerPlugin(ScrollTrigger);
 
 
 const flavours = [
@@ -17,6 +20,45 @@ function FlavourScene({ flavour }: { flavour: typeof flavours[number] }) {
   const progressRef = useRef<HTMLDivElement>(null);
 
   useFlavourFrames({ flavour: flavour.id, count: flavour.count, sectionRef, canvasRef, progressRef });
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const media = gsap.matchMedia();
+    const context = gsap.context(() => {
+      media.add('(prefers-reduced-motion: no-preference)', () => {
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 72%',
+            once: true,
+          },
+        })
+          .from('.flavour-film__eyebrow', { y: 14, autoAlpha: 0, duration: 0.55, ease: 'power3.out' })
+          .from('.flavour-film__copy h2 span', {
+            yPercent: 110,
+            autoAlpha: 0,
+            clipPath: 'inset(0 0 100% 0)',
+            duration: 0.8,
+            stagger: 0.12,
+            ease: 'power4.out',
+          }, '-=0.25')
+          .from('.flavour-film__description, .flavour-film__facts, .flavour-film__link', {
+            y: 16,
+            autoAlpha: 0,
+            duration: 0.55,
+            stagger: 0.08,
+            ease: 'power3.out',
+          }, '-=0.35');
+      });
+    }, section);
+
+    return () => {
+      media.revert();
+      context.revert();
+    };
+  }, []);
 
   return (
     <section ref={sectionRef} id={`${flavour.id}-story`} className={`flavour-film flavour-film--${flavour.id}`} data-local-motion="true" aria-labelledby={`${flavour.id}-film-title`}>
@@ -50,4 +92,3 @@ function FlavourScene({ flavour }: { flavour: typeof flavours[number] }) {
 export function FlavourFrameStories() {
   return <>{flavours.map(flavour => <FlavourScene key={flavour.id} flavour={flavour} />)}</>;
 }
-

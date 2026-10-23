@@ -1,3 +1,20 @@
+@media (min-width: 768px) {
+  #home .hero-desktop-box h1 {
+    font-size: clamp(4.1rem, 7vw, 6.6rem);
+    line-height: 0.86;
+  }
+  #home .hero-title-mask {
+    display: block;
+    overflow: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #home .hero-title-mask {
+    overflow: visible;
+  }
+}
+
 @media (max-width: 767px) {
   #home .hero-viewport {
     background-image: radial-gradient(ellipse at 12% 48%, #ffe8a6aa, transparent 48%), radial-gradient(ellipse at 92% 54%, #f8d4dd88, transparent 45%), linear-gradient(180deg, #f7faef, #fffbed 65%, #f2f7e7) !important;

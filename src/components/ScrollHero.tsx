@@ -26,6 +26,11 @@ export function ScrollHero() {
     if (!section || !canvas || !ctx) return;
     let disposed = false;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const queue: number[] = [];
+    const requested = new Set<number>();
+    const failed = new Set<number>();
+    let activeLoads = 0;
+    let targetFrame = 0;
     // Refs survive StrictMode effect replay; clear the previous loader's state.
     imagesRef.current = [];
     loadedRef.current.clear();
@@ -90,28 +95,50 @@ export function ScrollHero() {
       });
     };
 
+    const pump = () => {
+      if (disposed) return;
+      queue.sort((a, b) => Math.abs(a - targetFrame) - Math.abs(b - targetFrame));
+      while (activeLoads < 6 && queue.length) {
+        const index = queue.shift()!;
+        activeLoads++;
+        const img = new Image();
+        img.decoding = 'async';
+        if (index === 0) img.fetchPriority = 'high';
+        img.onload = () => {
+          activeLoads--;
+          if (disposed) return;
+          loadedRef.current.add(index);
+          draw(frameRef.current);
+          pump();
+        };
+        img.onerror = () => {
+          activeLoads--;
+          failed.add(index);
+          pump();
+        };
+        img.src = mobileSequence ? `/sequence-mobile/frame_${String(index).padStart(4, '0')}.webp` : frameSrc(index);
+        imagesRef.current[index] = img;
+      }
+    };
+
     const load = (i: number, high = false) => {
       i = sampleFrame(i);
-      if (imagesRef.current[i]) return;
-      const img = new Image();
-      img.decoding = 'async';
-      if (high) img.fetchPriority = 'high';
-      img.onload = () => {
-        if (disposed) return;
-        loadedRef.current.add(i);
-        draw(frameRef.current);
-      };
-      img.src = mobileSequence ? `/sequence-mobile/frame_${String(i).padStart(4, '0')}.webp` : frameSrc(i);
-      imagesRef.current[i] = img;
+      if (requested.has(i) || failed.has(i)) return;
+      requested.add(i);
+      if (high) queue.unshift(i);
+      else queue.push(i);
+      pump();
     };
 
     const preload = (center: number) => {
       const isMobile = window.innerWidth < 768;
       const radius = isMobile ? 14 : 28;
+      targetFrame = sampleFrame(center);
       for (let i = Math.max(0, center - radius); i <= Math.min(FRAME_COUNT - 1, center + radius); i += frameStep) {
         load(i);
       }
-      load(center);
+      load(targetFrame);
+      pump();
     };
 
     const resize = () => {
@@ -148,24 +175,27 @@ export function ScrollHero() {
         },
       });
 
+      const entrance = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      entrance
+        .fromTo('.hero-title-line', { yPercent: 112, autoAlpha: 0, clipPath: 'inset(0 0 100% 0)' }, {
+          yPercent: 0, autoAlpha: 1, clipPath: 'inset(0 0 0% 0)', duration: 0.82, stagger: 0.12,
+        })
+        .fromTo('.hero-copy-reveal', { y: 18, autoAlpha: 0 }, {
+          y: 0, autoAlpha: 1, duration: 0.58, stagger: 0.08,
+        }, '-=0.36');
+
       gsap.fromTo(
         '.hero-desktop-box',
         { y: 0, opacity: 1 },
         {
-          y: -30,
-          opacity: 0,
+          y: -22,
+          opacity: 0.2,
           ease: 'power1.out',
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: '18% top',
+            end: '24% top',
             scrub: 0.25,
-            onLeaveBack: () => {
-              gsap.to('.hero-desktop-box', { opacity: 1, y: 0, duration: 0.25, overwrite: 'auto' });
-            },
-            onEnterBack: () => {
-              gsap.to('.hero-desktop-box', { opacity: 1, y: 0, duration: 0.25, overwrite: 'auto' });
-            },
           },
         }
       );
@@ -208,7 +238,7 @@ export function ScrollHero() {
     <section 
       ref={sectionRef} 
       id="home" 
-      className="relative h-[240svh] md:h-[220vh] lg:h-[300vh] motion-reduce:!h-[100svh] w-full"
+      className="relative h-[240svh] md:h-[250vh] lg:h-[260vh] motion-reduce:!h-[100svh] w-full"
     >
       <div 
         className="hero-viewport sticky top-0 h-[100svh] min-h-[100svh] w-full overflow-hidden bg-cover bg-center"
@@ -247,18 +277,18 @@ export function ScrollHero() {
           <div className="hero-desktop-box pointer-events-auto mt-14 sm:mt-8 max-w-sm sm:max-w-md lg:max-w-[440px] xl:max-w-[480px] space-y-5 rounded-[32px] border border-white/70 bg-white/78 p-6 sm:p-7 shadow-[0_24px_70px_rgba(7,88,47,0.15)] backdrop-blur-md">
 
             {/* 2. Main Title: Har Sip PIO! */}
-            <div className="space-y-0 select-none">
-              <span className="block display-heading text-[#073D2C] leading-[0.72]">
-                Har Sip.
+            <h1 className="space-y-0 select-none display-heading text-[#073D2C] leading-[0.82]">
+              <span className="hero-title-mask block">
+                <span className="hero-title-line block">Har Sip.</span>
               </span>
-              <div className="flex items-center gap-2 text-[#073D2C] leading-[0.72]">
-                <span className="display-heading">PIO.</span>
+              <span className="hero-title-mask flex items-center gap-2">
+                <span className="hero-title-line block">PIO.</span>
                 <Leaf className="w-8 h-8 sm:w-10 sm:h-10 text-[#167A4A] fill-[#167A4A] -rotate-12 inline-block shrink-0" />
-              </div>
-            </div>
+              </span>
+            </h1>
 
             {/* 3. Subtitle */}
-            <div className="space-y-2">
+            <div className="hero-copy-reveal space-y-2">
               <p className="eyebrow text-[#167A4A]">REPOSE / PIO</p>
               <p className="text-base sm:text-lg text-[#264b34] font-medium leading-relaxed max-w-md">
                 Real fruit refreshment in every sip.
@@ -266,7 +296,7 @@ export function ScrollHero() {
             </div>
 
             {/* 4. Four Badges */}
-            <div className="grid grid-cols-4 gap-2 pt-1">
+            <div className="hero-copy-reveal grid grid-cols-4 gap-2 pt-1">
               <div className="flex flex-col items-center text-center">
                 <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-emerald-900/15 bg-white flex items-center justify-center text-[#07582f] shadow-2xs">
                   <Leaf className="w-4 h-4 text-[#07582f]" />
@@ -305,7 +335,7 @@ export function ScrollHero() {
             </div>
 
             {/* 5. Action Buttons & Quick Flavor Badges */}
-            <div className="pt-2 space-y-3">
+            <div className="hero-copy-reveal pt-2 space-y-3">
               <div className="flex flex-wrap items-center gap-2.5">
                 <button
                   onClick={() => go('flavours')}
@@ -338,16 +368,6 @@ export function ScrollHero() {
         </div>
 
 
-
-        {/* Desktop Bottom Center: Scroll Cue */}
-        <div className="hidden md:flex motion-reduce:hidden absolute bottom-5 left-1/2 -translate-x-1/2 flex-col items-center gap-1 pointer-events-none z-20 opacity-90">
-          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 bg-white/95 px-3 py-1 rounded-full border border-emerald-900/15 shadow-xs">
-            Scroll To Animate 3D
-          </span>
-          <div className="w-5 h-8 rounded-full border-2 border-emerald-800/40 flex items-start justify-center p-1 bg-white/80 shadow-xs">
-            <div className="w-1.5 h-2 rounded-full bg-emerald-800 animate-bounce" />
-          </div>
-        </div>
 
       </div>
     </section>

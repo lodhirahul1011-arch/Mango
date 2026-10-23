@@ -80,7 +80,10 @@ export function Contact() {
                     className="overflow-hidden rounded-2xl border border-emerald-900/10 bg-[#f9fcf9] transition-all"
                   >
                     <button
+                      type="button"
                       onClick={() => setOpenFaq(isOpen ? null : i)}
+                      aria-expanded={isOpen}
+                      aria-controls={`contact-faq-panel-${i}`}
                       className="flex w-full items-center justify-between p-5 text-left font-extrabold text-sm sm:text-base text-[#083b20] hover:text-[#0b8043] transition-colors"
                     >
                       <span>{faq.q}</span>
@@ -90,19 +93,21 @@ export function Contact() {
                         }`}
                       />
                     </button>
-                    <AnimatePresence>
-                      {isOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="px-5 pb-5 pt-0 text-xs sm:text-sm text-slate-600 leading-relaxed font-medium"
-                        >
-                          {faq.a}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    <div id={`contact-faq-panel-${i}`} aria-hidden={!isOpen}>
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                            className="px-5 pb-5 pt-0 text-xs sm:text-sm text-slate-600 leading-relaxed font-medium"
+                          >
+                            {faq.a}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
                 );
               })}
