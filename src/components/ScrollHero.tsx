@@ -26,11 +26,6 @@ export function ScrollHero() {
   return (
     <section ref={sectionRef} id="home" className="pio-hero" data-local-motion="true" data-hero-mode="scroll" data-variant={variant} aria-labelledby="pio-hero-title">
       <div className="pio-hero__viewport">
-          <div className="pio-hero__media" aria-hidden="true">
-            <img {...{ fetchpriority: 'high' }} className="pio-hero__poster" src={heroPoster(variant)} width={width} height={height} alt="" loading="eager" decoding="async" />
-            <canvas ref={canvasRef} className="pio-hero__canvas" width={width} height={height} />
-          </div>
-
         <div className="pio-hero__shell">
           <div className="pio-hero__copy">
             <header className="pio-hero__heading">
@@ -38,6 +33,11 @@ export function ScrollHero() {
               <h1 id="pio-hero-title"><span>Har Sip.</span><em>PIO.</em></h1>
               <p className="pio-hero__intro">Real fruit refreshment in every sip. Mango sunshine. Lychee freshness.</p>
             </header>
+
+          <div className="pio-hero__media" aria-hidden="true">
+            <img {...{ fetchpriority: 'high' }} className="pio-hero__poster" src={heroPoster(variant)} width={width} height={height} alt="" loading="eager" decoding="async" />
+            <canvas ref={canvasRef} className="pio-hero__canvas" width={width} height={height} />
+          </div>
 
             <div className="pio-hero__actions">
               <div className="pio-hero__facts"><span><Leaf size={13} /> Real fruit</span><span><Droplets size={13} /> Chilled sip</span><span>160 ml &middot; &#8377;10</span></div>

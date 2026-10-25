@@ -59,13 +59,6 @@
 .pio-hero[data-hero-mode="static"] .pio-hero__viewport { position: relative; }
 @keyframes pio-scroll-nudge { 50% { transform: translateY(4px); } }
 @media (max-width: 1023px) { .pio-hero__signature { display: none; } }
-@media (max-width: 767px), (max-aspect-ratio: 6/5) {
-  /* Keep both packs on portrait screens, with no side letterboxing. */
-  .pio-hero__media {
-    inset: auto 0; top: 50%; width: 100%; height: auto;
-    aspect-ratio: 1100 / 470; transform: translateY(-50%);
-  }
-}
 @media (max-width: 767px) {
   .pio-hero__heading h1 { font-size: clamp(44px, 12vw, 68px); }
   .pio-hero__intro { font-size: 12px; max-width: 34ch; }
@@ -89,4 +82,65 @@
 @media (prefers-reduced-motion: reduce) {
   .pio-hero__scroll-cue svg { animation: none; }
   .pio-hero__links a { transition: none; }
+}
+
+/* Heading, footage and actions share one measured layout instead of floating apart. */
+.pio-hero { background: #101c1d; }
+.pio-hero__shell { padding-top: calc(var(--hero-nav-space) + 8px); }
+.pio-hero__copy {
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  align-items: stretch; gap: 12px; padding-bottom: 18px;
+}
+.pio-hero__heading { position: relative; z-index: 1; }
+.pio-hero__heading h1 { font-size: clamp(60px, 6.5vw, 104px); margin: 10px 0 12px; }
+.pio-hero__eyebrow { font-size: 10px; letter-spacing: .16em; }
+.pio-hero__intro { max-width: 46ch; font-size: clamp(14px, 1.2vw, 18px); line-height: 1.45; text-wrap: balance; }
+.pio-hero__media {
+  position: relative; inset: auto; width: calc(100% + 2 * clamp(18px, 3vw, 64px));
+  margin-inline: calc(-1 * clamp(18px, 3vw, 64px)); min-height: 0;
+  overflow: hidden; transform: none; aspect-ratio: auto;
+}
+.pio-hero__actions { margin-top: 0; padding-top: 0; }
+.pio-hero__facts { font-size: 12px; gap: 16px; }
+.pio-hero__facts svg { width: 17px; height: 17px; }
+.pio-hero__links { margin-top: 18px; gap: 14px; }
+.pio-hero__links a { min-height: 52px; min-width: 200px; font-size: 14px; }
+.pio-hero__promise { font-size: 10px; }
+@media (max-width: 767px) {
+  .pio-hero__shell { padding: calc(var(--hero-nav-space) + 14px) 22px max(18px, env(safe-area-inset-bottom)); }
+  .pio-hero__copy { gap: 20px; padding-bottom: 18px; grid-template-rows: auto minmax(180px, 1fr) auto; }
+  .pio-hero__heading h1 { font-size: clamp(44px, 13.5vw, 76px); white-space: nowrap; margin: 14px 0 14px; }
+  .pio-hero__eyebrow { font-size: 8px; gap: 8px; }
+  .pio-hero__intro { font-size: 14px; max-width: 34ch; }
+  .pio-hero__media { width: calc(100% + 44px); margin-inline: -22px; }
+  .pio-hero__facts { font-size: 11px; gap: 10px; }
+  .pio-hero__facts span + span { padding-left: 10px; }
+  .pio-hero__links { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 18px; }
+  .pio-hero__links a { width: 100%; min-width: 0; min-height: 52px; font-size: 14px; }
+  .pio-hero__promise { display: none; }
+  .pio-hero__footer { font-size: 7px; gap: 9px; }
+}
+@media (max-height: 620px) and (min-width: 768px) {
+  .pio-hero__heading h1 { font-size: 42px; margin: 4px 0; }
+  .pio-hero__copy { gap: 8px; padding-bottom: 8px; }
+  .pio-hero__links { margin-top: 0; }
+  .pio-hero__links a { min-height: 44px; }
+}
+
+.pio-hero__media { container-type: size; }
+@container (min-aspect-ratio: 1100/470) {
+  .pio-hero__poster, .pio-hero__canvas { object-fit: contain; }
+}
+
+/* Desktop footage fills the complete hero; mobile keeps its approved grid. */
+@media (min-width: 768px) {
+  .pio-hero__media {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    margin: 0; z-index: 0;
+  }
+  .pio-hero__media .pio-hero__poster,
+  .pio-hero__media .pio-hero__canvas { object-fit: cover; }
+  .pio-hero__heading { grid-row: 1; }
+  .pio-hero__actions { grid-row: 3; position: relative; z-index: 1; }
+  .pio-hero__footer { position: relative; z-index: 1; }
 }

@@ -36,8 +36,10 @@ export function useHeroSequence(sectionRef: RefObject<HTMLElement>, canvasRef: R
         canvas.width = nextWidth; canvas.height = nextHeight;
         sizeDirty = false;
       }
-      // Desktop fills the viewport; mobile uses a full-width source-aspect stage.
-      const ratio = Math.max(canvas.width / config.width, canvas.height / config.height);
+      // Desktop covers the full viewport. Preserve the existing mobile fit.
+      const fit = innerWidth >= 768 ? Math.max
+        : canvas.width / canvas.height > config.width / config.height ? Math.min : Math.max;
+      const ratio = fit(canvas.width / config.width, canvas.height / config.height);
       const width = config.width * ratio, height = config.height * ratio;
       // Center the packs horizontally and vertically
       const offsetX = (canvas.width - width) / 2;
@@ -79,11 +81,14 @@ export function useHeroSequence(sectionRef: RefObject<HTMLElement>, canvasRef: R
     const measure = () => {
       resizeRaf = 0;
       if (disposed) return;
-      const height = Math.floor(stableViewport.height());
+      const screenHeight = Math.floor(stableViewport.height());
       const navSpace = Math.ceil((navigation?.getBoundingClientRect().bottom || 76) + 16);
       const staticMode = motion.matches || Boolean(connection?.saveData);
       const isMobile = innerWidth < 768;
       const footerHeight = root.querySelector<HTMLElement>('.pio-hero__footer')?.offsetHeight || 24;
+      // Short phones get enough layout height for readable text and two touch targets.
+      const minimumHeight = navSpace + heading.offsetHeight + actions.offsetHeight + footerHeight + 180 + 100;
+      const height = isMobile ? Math.max(screenHeight, minimumHeight) : screenHeight;
 
       const next = [innerWidth, height, navSpace, heading.offsetHeight, actions.offsetHeight, footerHeight, staticMode].join(':');
       if (next === signature) { sizeCanvas(); return; }
@@ -107,7 +112,7 @@ export function useHeroSequence(sectionRef: RefObject<HTMLElement>, canvasRef: R
           id: 'pio-hero-sequence',
           trigger: root,
           start: 'top top',
-          end: 'bottom bottom',
+          end: () => `+=${root.offsetHeight - viewport.offsetHeight}`,
           onUpdate: self => setProgress(self.progress),
           onRefresh: self => setProgress(self.progress),
           invalidateOnRefresh: true,
