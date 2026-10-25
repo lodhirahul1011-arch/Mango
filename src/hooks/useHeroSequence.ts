@@ -14,9 +14,11 @@ export function useHeroSequence(sectionRef: RefObject<HTMLElement>, canvasRef: R
     const context = canvas?.getContext('2d', { alpha: true });
     const viewport = root?.querySelector<HTMLElement>('.pio-hero__viewport');
     const shell = root?.querySelector<HTMLElement>('.pio-hero__shell');
+    const copy = root?.querySelector<HTMLElement>('.pio-hero__copy');
     const heading = root?.querySelector<HTMLElement>('.pio-hero__heading');
     const actions = root?.querySelector<HTMLElement>('.pio-hero__actions');
-    if (!root || !canvas || !context || !viewport || !shell || !heading || !actions) return;
+    const media = root?.querySelector<HTMLElement>('.pio-hero__media');
+    if (!root || !canvas || !context || !viewport || !shell || !copy || !heading || !actions || !media) return;
     const navigation = document.querySelector<HTMLElement>('[data-pio-nav]');
     const stableViewport = measureScrollViewport(root);
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -25,7 +27,7 @@ export function useHeroSequence(sectionRef: RefObject<HTMLElement>, canvasRef: R
     let loader: HeroFrameLoader | undefined;
     let trigger: ScrollTrigger | undefined;
     let disposed = false, raf = 0, resizeRaf = 0;
-    let target = 0, drawn = -1, progress = 0, signature = '';
+    let target: number = config.start, drawn = -1, progress = 0, signature = '';
     let nextWidth = canvas.width, nextHeight = canvas.height, sizeDirty = false;
 
     const draw = (index: number, image: CanvasImageSource) => {
@@ -34,69 +36,65 @@ export function useHeroSequence(sectionRef: RefObject<HTMLElement>, canvasRef: R
         canvas.width = nextWidth; canvas.height = nextHeight;
         sizeDirty = false;
       }
-      const ratio = Math.min(canvas.width / config.width, canvas.height / config.height);
+      // Desktop fills the viewport; mobile uses a full-width source-aspect stage.
+      const ratio = Math.max(canvas.width / config.width, canvas.height / config.height);
       const width = config.width * ratio, height = config.height * ratio;
+      // Center the packs horizontally and vertically
+      const offsetX = (canvas.width - width) / 2;
+      const offsetY = (canvas.height - height) / 2;
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = 'high';
       context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+      context.drawImage(image, offsetX, offsetY, width, height);
       drawn = index;
       root.dataset.frameReady = 'true';
       if (import.meta.env.DEV) canvas.dataset.frame = String(index);
     };
     const sizeCanvas = () => {
       const bounds = canvas.getBoundingClientRect();
-      const dpr = Math.min(devicePixelRatio || 1, variant === 'mobile' ? 1 : 1.5);
-      // Contain at source resolution: never allocate a fullscreen high-DPR texture.
-      const scale = Math.min(dpr, config.width / bounds.width, config.height / bounds.height);
-      const width = Math.max(1, Math.round(bounds.width * scale));
-      const height = Math.max(1, Math.round(bounds.height * scale));
-      // Recalculate even when a pending resize returns to the original size.
+      // Preserve detail on high-DPI screens without oversized backing stores.
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const width = Math.max(1, Math.round(bounds.width * dpr));
+      const height = Math.max(1, Math.round(bounds.height * dpr));
       nextWidth = width; nextHeight = height;
       sizeDirty = canvas.width !== width || canvas.height !== height;
-      // Keep the last drawing visible until its replacement has decoded.
       if (sizeDirty) loader?.redraw();
     };
     const requestFrame = () => {
       if (disposed || raf) return;
       raf = requestAnimationFrame(() => {
         raf = 0;
-        target = Math.min(config.count - 1, Math.max(0, Math.round(progress * (config.count - 1))));
+        target = Math.min(config.count - 1, Math.max(config.start, config.start + Math.round(progress * (config.count - 1 - config.start))));
         root.style.setProperty('--hero-progress', String(progress));
         loader?.request(target);
       });
     };
-    const setProgress = (next: number) => { progress = next; requestFrame(); };
+    const setProgress = (next: number) => {
+      progress = next;
+      // Keep the headline visible throughout the scroll sequence.
+      root.style.setProperty('--hero-copy-offset', `${-8 * progress}px`);
+      requestFrame();
+    };
 
     const measure = () => {
       resizeRaf = 0;
       if (disposed) return;
       const height = Math.floor(stableViewport.height());
-      const navSpace = Math.ceil((navigation?.getBoundingClientRect().bottom || 76) + 20);
+      const navSpace = Math.ceil((navigation?.getBoundingClientRect().bottom || 76) + 16);
       const staticMode = motion.matches || Boolean(connection?.saveData);
-      const next = [innerWidth, height, navSpace, heading.offsetHeight, actions.offsetHeight, staticMode, visualViewport?.scale].join(':');
+      const isMobile = innerWidth < 768;
+      const footerHeight = root.querySelector<HTMLElement>('.pio-hero__footer')?.offsetHeight || 24;
+
+      const next = [innerWidth, height, navSpace, heading.offsetHeight, actions.offsetHeight, footerHeight, staticMode].join(':');
       if (next === signature) { sizeCanvas(); return; }
       trigger?.kill(); trigger = undefined;
       root.style.setProperty('--hero-nav-space', navSpace + 'px');
       root.style.setProperty('--hero-view-height', height + 'px');
-      root.style.setProperty('--hero-section-height', Math.round(height * (innerWidth < 768 ? 1.9 : 2.4)) + 'px');
+      root.style.setProperty('--hero-section-height', Math.round(staticMode ? height : isMobile ? height * 3 : height * 4) + 'px');
       root.dataset.heroMode = staticMode ? 'static' : 'scroll';
-      const viewportTop = viewport.getBoundingClientRect().top;
-      const safeBottom = viewportTop + height - parseFloat(getComputedStyle(shell).paddingBottom);
-      const contentRects = ['.pio-hero__copy', '.pio-hero__media', '.pio-hero__footer']
-        .map(selector => root.querySelector<HTMLElement>(selector)?.getBoundingClientRect())
-        .filter((rect): rect is DOMRect => Boolean(rect?.width && rect.height));
-      const contentOverlaps = contentRects.some((rect, index) => contentRects.slice(index + 1).some(other =>
-        rect.left < other.right - 1 && rect.right > other.left + 1 &&
-        rect.top < other.bottom - 1 && rect.bottom > other.top + 1
-      ));
-      const contentClipped = contentRects.some(rect =>
-        rect.top < viewportTop + navSpace - 2 || rect.bottom > safeBottom + 2
-      );
-      if (!staticMode && (shell.scrollHeight > shell.clientHeight + 2 || contentOverlaps || contentClipped || (visualViewport?.scale || 1) > 1.05)) {
-        // Oversized content stays in normal flow; its frames still follow native scroll.
-        root.dataset.heroMode = 'flow';
-      }
       sizeCanvas();
       if (staticMode) {
+        setProgress(0);
         loader?.destroy(); loader = undefined;
         drawn = -1; delete root.dataset.frameReady;
       } else {
@@ -106,17 +104,17 @@ export function useHeroSequence(sectionRef: RefObject<HTMLElement>, canvasRef: R
           onStats: import.meta.env.DEV ? stats => { root.dataset.loaderStats = JSON.stringify(stats); } : undefined,
         });
         trigger = ScrollTrigger.create({
-          id: 'pio-hero-sequence', trigger: root, start: 'top top',
-          end: () => '+=' + (root.dataset.heroMode === 'scroll'
-            ? Math.max(1, root.offsetHeight - height)
-            : Math.max(height * .35, root.offsetHeight - height)),
+          id: 'pio-hero-sequence',
+          trigger: root,
+          start: 'top top',
+          end: 'bottom bottom',
           onUpdate: self => setProgress(self.progress),
           onRefresh: self => setProgress(self.progress),
           invalidateOnRefresh: true,
         });
         setProgress(trigger.progress);
       }
-      signature = [innerWidth, height, navSpace, heading.offsetHeight, actions.offsetHeight, staticMode, visualViewport?.scale].join(':');
+      signature = next;
       ScrollTrigger.refresh();
     };
     const scheduleMeasure = () => {
@@ -125,6 +123,7 @@ export function useHeroSequence(sectionRef: RefObject<HTMLElement>, canvasRef: R
     const invalidate = () => { signature = ''; scheduleMeasure(); };
     const observer = new ResizeObserver(scheduleMeasure);
     observer.observe(heading); observer.observe(actions); observer.observe(viewport);
+    observer.observe(copy); observer.observe(media);
     if (navigation) observer.observe(navigation);
     const poster = root.querySelector('img');
     poster?.addEventListener('load', scheduleMeasure);
@@ -147,6 +146,12 @@ export function useHeroSequence(sectionRef: RefObject<HTMLElement>, canvasRef: R
       window.removeEventListener('orientationchange', invalidate);
       window.visualViewport?.removeEventListener('resize', scheduleMeasure);
       poster?.removeEventListener('load', scheduleMeasure);
+      copy.inert = false;
+      copy.removeAttribute('aria-hidden');
+      root.style.removeProperty('--hero-copy-fade');
+      root.style.removeProperty('--hero-copy-offset');
+      root.style.removeProperty('--hero-stage-shift');
+      root.style.removeProperty('--hero-stage-scale');
       delete root.dataset.frameReady;
     };
   }, [sectionRef, canvasRef, variant]);

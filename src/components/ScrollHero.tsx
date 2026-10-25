@@ -1,24 +1,41 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, ArrowRight, Droplets, Leaf } from 'lucide-react';
 import { useHeroSequence } from '@/hooks/useHeroSequence';
-import { HERO_VARIANTS, heroPoster, selectHeroVariant } from '@/utils/heroSequence';
+import { dataConnection, HERO_VARIANTS, heroPoster, selectHeroVariant } from '@/utils/heroSequence';
 import './ScrollHero.css';
 
 export function ScrollHero() {
-  const [variant] = useState(selectHeroVariant);
+  const [variant, setVariant] = useState(selectHeroVariant);
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { width, height } = HERO_VARIANTS[variant];
   useHeroSequence(sectionRef, canvasRef, variant);
 
+  useEffect(() => {
+    const breakpoint = window.matchMedia('(max-width: 767px)');
+    const connection = dataConnection();
+    const updateVariant = () => setVariant(selectHeroVariant());
+    breakpoint.addEventListener('change', updateVariant);
+    connection?.addEventListener('change', updateVariant);
+    return () => {
+      breakpoint.removeEventListener('change', updateVariant);
+      connection?.removeEventListener('change', updateVariant);
+    };
+  }, []);
+
   return (
-    <section ref={sectionRef} id="home" className="pio-hero" data-local-motion="true" data-hero-mode="static" data-variant={variant} aria-labelledby="pio-hero-title">
+    <section ref={sectionRef} id="home" className="pio-hero" data-local-motion="true" data-hero-mode="scroll" data-variant={variant} aria-labelledby="pio-hero-title">
       <div className="pio-hero__viewport">
+          <div className="pio-hero__media" aria-hidden="true">
+            <img {...{ fetchpriority: 'high' }} className="pio-hero__poster" src={heroPoster(variant)} width={width} height={height} alt="" loading="eager" decoding="async" />
+            <canvas ref={canvasRef} className="pio-hero__canvas" width={width} height={height} />
+          </div>
+
         <div className="pio-hero__shell">
           <div className="pio-hero__copy">
             <header className="pio-hero__heading">
-              <p className="pio-hero__eyebrow"><span /> REPOSE / PIO <span className="pio-hero__origin">BORN IN ASSAM</span></p>
-              <h1 id="pio-hero-title"><span>Har Sip.</span>{' '}<em>PIO.</em></h1>
+              <p className="pio-hero__eyebrow"><span aria-hidden="true" /> REPOSE / PIO <span className="pio-hero__origin">BORN IN ASSAM</span></p>
+              <h1 id="pio-hero-title"><span>Har Sip.</span><em>PIO.</em></h1>
               <p className="pio-hero__intro">Real fruit refreshment in every sip. Mango sunshine. Lychee freshness.</p>
             </header>
 
@@ -30,11 +47,6 @@ export function ScrollHero() {
               </div>
               <p className="pio-hero__promise">0 Chemical. All refreshment.</p>
             </div>
-          </div>
-
-          <div className="pio-hero__media">
-            <img className="pio-hero__poster" src={heroPoster(variant)} width={width} height={height} alt="PIO Mango and Lychee fruit drink packs surrounded by fruit, ice and colourful splashes" fetchPriority="high" loading="eager" decoding="async" />
-            <canvas ref={canvasRef} className="pio-hero__canvas" width={width} height={height} aria-hidden="true" />
           </div>
 
           <div className="pio-hero__footer">

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Menu, X, ArrowRight, Send } from 'lucide-react';
-import { useScrolled, useActiveSection } from '@/hooks/useScrollReveal';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowRight, Maximize2, Menu, Minimize2, Send, X } from 'lucide-react';
+import { useActiveSection, useScrolled } from '@/hooks/useScrollReveal';
+import './Navbar.css';
 
 const NAV_LINKS = [
   { id: 'home', label: 'Home' },
@@ -13,23 +14,73 @@ const NAV_LINKS = [
 export function Navbar() {
   const scrolled = useScrolled(20);
   const [open, setOpen] = useState(false);
-  const active = useActiveSection(NAV_LINKS.map((l) => l.id));
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const active = useActiveSection(NAV_LINKS.map((link) => link.id));
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    const handleFullscreenChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 1280px)');
+    const closeOnDesktop = () => {
+      if (desktop.matches) setOpen(false);
+    };
+    desktop.addEventListener('change', closeOnDesktop);
+    return () => desktop.removeEventListener('change', closeOnDesktop);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const menuButton = menuButtonRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    menuRef.current?.querySelector<HTMLElement>('[data-menu-focus]')?.focus({ preventScroll: true });
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        return;
+      }
+      if (event.key !== 'Tab' || !menuRef.current) return;
+
+      const focusable = Array.from(
+        menuRef.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+      ).filter((element) => element.tabIndex !== -1);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      menuButton?.focus({ preventScroll: true });
     };
   }, [open]);
 
-  const go = (id: string) => { 
-    setOpen(false); 
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); 
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  };
+
+  const go = (id: string) => {
+    setOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const openSendUsForm = () => {
@@ -43,46 +94,24 @@ export function Navbar() {
 
   return (
     <>
-      <header data-pio-nav 
-        className={`fixed z-50 transition-all duration-300 ${
-          'top-2.5 left-3 right-3 lg:top-3 lg:left-1/2 lg:right-auto lg:w-[min(1280px,calc(100vw-48px))] lg:-translate-x-1/2'
-        }`}
-      >
-        <div 
-          className={`mx-auto w-full transition-all duration-300 rounded-full lg:rounded-[1.15rem] ${
-            scrolled || open
-              ? 'bg-[#f8f6ef]/80 backdrop-blur-xl shadow-[0_12px_35px_rgba(7,61,44,0.12)] border border-[#0a3d2d]/10' 
-              : 'bg-[#f8f6ef]/70 backdrop-blur-md border border-[#0a3d2d]/10'
-          }`}
-        >
-          <nav className="grid grid-cols-[auto_auto] items-center justify-between gap-3 px-4 py-2.5 sm:px-6 lg:grid-cols-[100px_1fr_230px] xl:grid-cols-[150px_1fr_230px] lg:px-5 lg:py-2 min-h-[56px] lg:min-h-[58px]">
-            
-            {/* Brand Logo */}
-            <button 
-              onClick={() => go('home')} 
-              className="group flex items-center gap-2 cursor-pointer focus:outline-none" 
+      <header data-pio-nav className={`pio-navbar${scrolled ? ' is-scrolled' : ''}`}>
+        <div className="pio-navbar__surface">
+          <nav className="pio-navbar__layout" aria-label="Main navigation">
+            <button
+              onClick={() => go('home')}
+              className="pio-navbar__brand"
               aria-label="Go to PIO home"
             >
-              <span className="relative flex h-11 w-[82px] items-center justify-center rounded-full border border-emerald-900/10 bg-white/70 px-3 shadow-[0_10px_26px_rgba(7,61,44,0.08)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-[0_16px_34px_rgba(7,61,44,0.14)] sm:h-11 sm:w-[88px] lg:h-10 lg:w-[86px]">
-                <img
-                  src="/brand/pio-logo-trim.png"
-                  alt="PIO"
-                  className="brand-logo-lift h-8 w-auto object-contain lg:h-7"
-                />
-              </span>
+              <img src="/brand/pio-logo-trim.png" alt="PIO" />
             </button>
 
-            {/* Center Desktop Links */}
-            <ul className="hidden items-center justify-center gap-1 xl:gap-2 lg:flex">
+            <ul className="pio-navbar__links">
               {NAV_LINKS.map((link) => (
                 <li key={link.id}>
-                  <button 
-                    onClick={() => go(link.id)} 
-                    className={`relative px-3 py-1.5 rounded-full text-[10px] xl:text-xs font-semibold uppercase tracking-[0.16em] transition-all duration-200 cursor-pointer ${
-                      active === link.id 
-                        ? 'text-[#0d3c2d] bg-[#eef6ef] font-bold shadow-[0_8px_18px_rgba(7,61,44,0.08)]' 
-                        : 'text-[#1d3c2a]/75 hover:text-[#0d3c2d] hover:bg-[#f3f0e8]'
-                    }`}
+                  <button
+                    onClick={() => go(link.id)}
+                    aria-current={active === link.id ? 'location' : undefined}
+                    className={active === link.id ? 'is-active' : ''}
                   >
                     {link.label}
                   </button>
@@ -90,93 +119,93 @@ export function Navbar() {
               ))}
             </ul>
 
-            {/* Right Action Buttons */}
-            <div className="flex items-center justify-end gap-2 sm:gap-3">
-              {/* Send us form shortcut */}
+            <div className="pio-navbar__actions">
+              <button
+                onClick={toggleFullscreen}
+                title={isFullscreen ? 'Exit Fullscreen (F11)' : 'Enter Fullscreen (F11)'}
+                className="pio-navbar__utility"
+                aria-label={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+              >
+                {isFullscreen ? <Minimize2 size={17} /> : <Maximize2 size={17} />}
+              </button>
               <button
                 onClick={openSendUsForm}
                 title="Open Send Us form"
-                className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-[#eef8f1] text-[#07582f] border border-emerald-900/15 hover:bg-[#07582f] hover:text-white transition-colors duration-200 shadow-2xs cursor-pointer active:scale-95"
+                className="pio-navbar__utility"
                 aria-label="Open Send Us form"
               >
-                <Send className="h-4 w-4" />
+                <Send size={16} />
               </button>
-
-              <button 
-                onClick={() => go('partner')} 
-                className="hidden sm:inline-flex items-center justify-center gap-1.5 rounded-full bg-[#07582f] hover:bg-[#096d3a] active:scale-95 text-white text-xs font-black uppercase tracking-wider px-5 py-2.5 shadow-sm transition-all duration-200 cursor-pointer min-h-[42px]"
-              >
+              <button onClick={() => go('partner')} className="pio-navbar__partner">
                 <span>Partner With Us</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight size={16} />
               </button>
-
-              {/* Mobile Menu Hamburger */}
-              <button 
-                onClick={() => setOpen(!open)} 
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-900/10 bg-white text-emerald-950 shadow-xs lg:hidden cursor-pointer active:scale-95" 
+              <button
+                ref={menuButtonRef}
+                onClick={() => setOpen((value) => !value)}
+                className="pio-navbar__menu-toggle"
                 aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
                 aria-expanded={open}
+                aria-controls="pio-mobile-navigation"
               >
-                {open ? <X className="h-5 w-5 text-[#07582f]"/> : <Menu className="h-5 w-5 text-[#07582f]"/>}
+                {open ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
           </nav>
         </div>
       </header>
 
-      {/* Mobile Drawer (Clean Fullscreen Glass Sheet) */}
-      <div 
-        className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
-          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+      <div
+        className={`pio-navbar__mobile${open ? ' is-open' : ''}`}
         aria-hidden={!open}
       >
-        {/* Backdrop */}
-        <div 
+        <button
+          type="button"
+          className="pio-navbar__backdrop"
+          aria-label="Close navigation menu"
+          tabIndex={-1}
           onClick={() => setOpen(false)}
-          className="absolute inset-0 bg-emerald-950/30 backdrop-blur-sm transition-opacity" 
         />
-
-        {/* Sheet Content */}
-        <div 
-          className={`absolute top-20 inset-x-3 bottom-4 max-h-[82svh] rounded-3xl bg-white/98 border border-emerald-900/10 p-5 shadow-2xl backdrop-blur-xl flex flex-col justify-between overflow-y-auto transition-transform duration-300 ${
-            open ? 'translate-y-0' : '-translate-y-4'
-          }`}
+        <nav
+          ref={menuRef}
+          id="pio-mobile-navigation"
+          className="pio-navbar__mobile-panel"
+          aria-label="Mobile navigation"
+          aria-modal="true"
+          role="dialog"
         >
-          <div className="space-y-1 pt-2">
-            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#07582f] px-3 block mb-3">
-              Navigation
-            </span>
-            {NAV_LINKS.map((link) => (
-              <button 
-                key={link.id} 
-                onClick={() => go(link.id)} 
-                className={`w-full rounded-2xl px-4 py-3.5 text-left text-base font-bold transition-all cursor-pointer flex items-center justify-between min-h-[48px] ${
-                  active === link.id 
-                    ? 'bg-[#eef8f1] text-[#07582f] font-black' 
-                    : 'text-[#082416] hover:bg-emerald-50/70 active:bg-emerald-100'
-                }`}
+          <span className="pio-navbar__mobile-title">Navigation</span>
+          <div className="pio-navbar__mobile-links">
+            {NAV_LINKS.map((link, index) => (
+              <button
+                key={link.id}
+                data-menu-focus={index === 0 ? '' : undefined}
+                onClick={() => go(link.id)}
+                aria-current={active === link.id ? 'location' : undefined}
+                className={active === link.id ? 'is-active' : ''}
               >
                 <span>{link.label}</span>
-                {active === link.id && <span className="h-2 w-2 rounded-full bg-[#10b981]" />}
+                {active === link.id && <span className="pio-navbar__active-mark" />}
               </button>
             ))}
           </div>
 
-          <div className="pt-4 border-t border-emerald-900/10 space-y-3">
-            <button 
-              onClick={() => go('partner')} 
-              className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#07582f] px-5 py-4 text-sm font-black text-white text-center shadow-md active:scale-98 cursor-pointer min-h-[48px]"
-            >
+          <div className="pio-navbar__mobile-actions">
+            <button onClick={() => go('partner')} className="pio-navbar__mobile-partner">
               <span>Partner With Us</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight size={17} />
             </button>
-            
-            <p className="text-center text-[11px] text-slate-500 font-semibold">
-              PIO &bull; ₹10 Refreshment &bull; Made in Assam
-            </p>
+            <button onClick={openSendUsForm} className="pio-navbar__mobile-utility">
+              <Send size={16} />
+              <span>Open Send Us form</span>
+            </button>
+            <button onClick={toggleFullscreen} className="pio-navbar__mobile-utility">
+              {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              <span>{isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}</span>
+            </button>
+            <p>PIO &bull; ₹10 Refreshment &bull; Made in Assam</p>
           </div>
-        </div>
+        </nav>
       </div>
     </>
   );
