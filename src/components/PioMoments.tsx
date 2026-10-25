@@ -3,6 +3,7 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './PioMoments.css';
+import { measureScrollViewport } from '@/utils/scrollViewport';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -55,6 +56,7 @@ export function PioMoments() {
     const nav = document.querySelector<HTMLElement>('[data-pio-nav]');
     const cards = Array.from(rail.querySelectorAll<HTMLElement>('.pio-moments__card'));
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const viewportSize = measureScrollViewport(root);
     let context: gsap.Context | undefined;
     let scrollTrigger: ScrollTrigger | undefined;
     let frame = 0, disposed = false, signature = '', distance = 0;
@@ -81,20 +83,20 @@ export function PioMoments() {
       frame = 0;
       if (disposed) return;
       const top = Math.ceil((nav?.getBoundingClientRect().bottom || 74) + 24);
-      const height = window.visualViewport?.height || window.innerHeight;
+      const height = viewportSize.height();
       const nextSignature = [root.clientWidth, height, top, reduced.matches, ...cards.map(card => card.scrollHeight)].join(':');
       if (signature === nextSignature) return;
       context?.revert(); context = undefined; scrollTrigger = undefined;
       root.style.setProperty('--moments-top', `${top}px`);
       scene.style.removeProperty('height');
       root.dataset.layout = 'vertical';
-      const candidate = window.innerWidth >= 900 && !reduced.matches;
+      const candidate = !reduced.matches && (window.visualViewport?.scale || 1) <= 1.05;
       if (candidate) {
         root.dataset.layout = 'horizontal';
         // Measure real content before choosing a sticky scene, including wrapped/zoomed copy.
         const sceneHeight = viewport.offsetHeight;
         distance = Math.max(0, rail.scrollWidth - rail.clientWidth);
-        if (sceneHeight > height - top - 16 || !distance) root.dataset.layout = 'vertical';
+        if (sceneHeight > height - top - 16 || cards.some(card => card.scrollHeight > card.clientHeight + 1) || !distance) root.dataset.layout = 'vertical';
         else {
           scene.style.height = `${Math.ceil(sceneHeight + distance)}px`;
           context = gsap.context(() => {
@@ -125,7 +127,11 @@ export function PioMoments() {
     images.forEach(image => { image.addEventListener('load', layoutChanged); image.addEventListener('error', layoutChanged); });
     const onFocus = (event: FocusEvent) => {
       if (root.dataset.layout !== 'horizontal') return;
-      const card = (event.target as Element).closest<HTMLElement>('.pio-moments__card');
+      const target = event.target as Element;
+      const bounds = target.getBoundingClientRect();
+      const visible = viewport.getBoundingClientRect();
+      if (!target.matches(':focus-visible') && bounds.left >= visible.left && bounds.right <= visible.right && bounds.top >= visible.top && bounds.bottom <= visible.bottom) return;
+      const card = target.closest<HTMLElement>('.pio-moments__card');
       if (card) scrollToCard(cards.indexOf(card));
     };
     rail.addEventListener('focusin', onFocus);
@@ -137,7 +143,7 @@ export function PioMoments() {
     measure();
     return () => {
       disposed = true;
-      cancelAnimationFrame(frame); observer.disconnect(); context?.revert();
+      cancelAnimationFrame(frame); observer.disconnect(); context?.revert(); viewportSize.destroy();
       rail.removeEventListener('focusin', onFocus);
       window.removeEventListener('resize', schedule);
       window.visualViewport?.removeEventListener('resize', schedule);

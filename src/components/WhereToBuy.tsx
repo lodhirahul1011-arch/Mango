@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, ContactShadows, Environment } from '@react-three/drei';
+import { ContactShadows, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -131,7 +131,7 @@ function FloatingIsland({
   const [pinScale, setPinScale] = useState(0);
   const [cartonsVisible, setCartonsVisible] = useState(false);
 
-  useFrame((_, delta) => {
+  useFrame(() => {
     if (!islandRef.current) return;
     const p = scrollProgress.current; // 0 to 1
 
@@ -220,10 +220,8 @@ export function WhereToBuy() {
   const sectionRef = useRef<HTMLElement>(null!);
   const scrollProgress = useRef(0);
   const pointer = useRef({ x: 0, y: 0 });
-
   const prefersReduced =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     if (prefersReduced) return;
@@ -244,7 +242,7 @@ export function WhereToBuy() {
     window.addEventListener('mousemove', handlePointer);
 
     return () => window.removeEventListener('mousemove', handlePointer);
-  }, []);
+  }, [prefersReduced]);
 
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 

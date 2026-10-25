@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, MapPin, Phone, Send, Mail, CheckCircle2, HelpCircle } from 'lucide-react';
+import { ChevronDown, MapPin, Phone, Send, CheckCircle2, HelpCircle } from 'lucide-react';
 
 const FAQS = [
   {

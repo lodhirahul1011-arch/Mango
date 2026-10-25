@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef, type ReactNode } from 'react';
+import { createContext, useRef, type ReactNode } from 'react';
 import { useMotionValue, useSpring, type MotionValue } from 'framer-motion';
 
 type MouseContextType = {
@@ -39,10 +39,3 @@ export function MouseProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useMouseParallax() {
-  const ctx = useContext(MouseContext);
-  if (!ctx) {
-    throw new Error('useMouseParallax must be used within MouseProvider');
-  }
-  return ctx;
-}

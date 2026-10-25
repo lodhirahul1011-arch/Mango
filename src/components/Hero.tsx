@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Sparkles, CheckCircle2, Droplets, Award } from 'lucide-react';
+import { ArrowRight, Sparkles, CheckCircle2, Droplets } from 'lucide-react';
 
 export function Hero() {
   const [activePack, setActivePack] = useState<'both' | 'mango' | 'lychee'>('both');

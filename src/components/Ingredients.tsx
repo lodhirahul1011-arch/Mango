@@ -1,22 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useSpring } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { 
-  Sparkles, 
-  Droplets, 
-  Leaf, 
-  ShieldCheck, 
-  Waves, 
-  CheckCircle2, 
-  Zap, 
-  Scan, 
-  Volume2, 
-  Flame, 
-  RotateCw,
-  Heart,
-  Smile,
-  ArrowRight
+import {
+  Sparkles,
+  Droplets,
+  Leaf,
+  ShieldCheck,
+  Waves,
+  CheckCircle2,
+  Flame,
 } from 'lucide-react';
 import { fizzAudio } from '@/utils/audio';
 import { ScannerFrameSequence } from '@/components/ScannerFrameSequence';
@@ -462,7 +455,7 @@ export function Ingredients() {
             THE 4 PURITY PILLARS GRID (INTERACTIVE MODERN CARDS)
         ---------------------------------------------------- */}
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {PURITY_PILLARS.map((pillar, idx) => (
+          {PURITY_PILLARS.map((pillar) => (
             <motion.div
               key={pillar.title}
               whileHover={{ y: -6, scale: 1.02 }}

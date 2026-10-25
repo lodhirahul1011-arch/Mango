@@ -1,374 +1,49 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, Droplets, Leaf, Play, ShieldCheck } from 'lucide-react';
-
+import { useRef, useState } from 'react';
+import { ArrowDown, ArrowRight, Droplets, Leaf } from 'lucide-react';
+import { useHeroSequence } from '@/hooks/useHeroSequence';
+import { HERO_VARIANTS, heroPoster, selectHeroVariant } from '@/utils/heroSequence';
 import './ScrollHero.css';
 
-gsap.registerPlugin(ScrollTrigger);
-
-const FRAME_COUNT = 240;
-const frameSrc = (index: number) => `/sequence-new/frame_${String(index).padStart(4, '0')}.jpg?v=4`;
-
-
 export function ScrollHero() {
+  const [variant] = useState(selectHeroVariant);
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const frameRef = useRef(0);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
-  const loadedRef = useRef<Set<number>>(new Set());
-  const rafRef = useRef<number>();
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    if (!section || !canvas || !ctx) return;
-    let disposed = false;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const queue: number[] = [];
-    const requested = new Set<number>();
-    const failed = new Set<number>();
-    let activeLoads = 0;
-    let targetFrame = 0;
-    // Refs survive StrictMode effect replay; clear the previous loader's state.
-    imagesRef.current = [];
-    loadedRef.current.clear();
-    const mobileSequence = window.innerWidth < 768;
-    const frameStep = mobileSequence ? 3 : 1;
-    const sampleFrame = (index: number) => index === FRAME_COUNT - 1 ? index : Math.floor(index / frameStep) * frameStep;
-
-    const draw = (index: number) => {
-      if (disposed) return;
-      // Find nearest loaded frame if current frame is still downloading
-      let targetIndex = index;
-      if (!loadedRef.current.has(targetIndex)) {
-        let nearest = -1;
-        let minDiff = Infinity;
-        for (const loadedIdx of loadedRef.current) {
-          const diff = Math.abs(loadedIdx - index);
-          if (diff < minDiff) {
-            minDiff = diff;
-            nearest = loadedIdx;
-          }
-        }
-        if (nearest !== -1) {
-          targetIndex = nearest;
-        } else {
-          return;
-        }
-      }
-
-      const img = imagesRef.current[targetIndex];
-      if (!img) return;
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        const isMobile = window.innerWidth < 768;
-        const scale = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
-        const w = img.naturalWidth * scale;
-        const h = img.naturalHeight * scale;
-        const x = (canvas.width - w) / 2;
-        const y = (canvas.height - h) / 2;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.imageSmoothingEnabled = true;
-        if (isMobile) {
-          const sourceX = img.naturalWidth * 0.24;
-          const sourceWidth = img.naturalWidth - sourceX;
-          const fit = Math.min(canvas.width / sourceWidth, canvas.height / img.naturalHeight);
-          const fw = sourceWidth * fit;
-          const fh = img.naturalHeight * fit;
-          ctx.drawImage(img, sourceX, 0, sourceWidth, img.naturalHeight,
-            (canvas.width - fw) / 2, (canvas.height - fh) / 2, fw, fh);
-          ctx.save();
-          ctx.globalCompositeOperation = 'destination-in';
-          const fade = ctx.createLinearGradient(0, (canvas.height - fh) / 2, 0, (canvas.height + fh) / 2);
-          fade.addColorStop(0, 'transparent');
-          fade.addColorStop(0.1, '#000');
-          fade.addColorStop(0.9, '#000');
-          fade.addColorStop(1, 'transparent');
-          ctx.fillStyle = fade;
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.restore();
-        } else {
-          ctx.drawImage(img, x, y, w, h);
-        }
-      });
-    };
-
-    const pump = () => {
-      if (disposed) return;
-      queue.sort((a, b) => Math.abs(a - targetFrame) - Math.abs(b - targetFrame));
-      while (activeLoads < 6 && queue.length) {
-        const index = queue.shift()!;
-        activeLoads++;
-        const img = new Image();
-        img.decoding = 'async';
-        if (index === 0) img.fetchPriority = 'high';
-        img.onload = () => {
-          activeLoads--;
-          if (disposed) return;
-          loadedRef.current.add(index);
-          draw(frameRef.current);
-          pump();
-        };
-        img.onerror = () => {
-          activeLoads--;
-          failed.add(index);
-          pump();
-        };
-        img.src = mobileSequence ? `/sequence-mobile/frame_${String(index).padStart(4, '0')}.webp` : frameSrc(index);
-        imagesRef.current[index] = img;
-      }
-    };
-
-    const load = (i: number, high = false) => {
-      i = sampleFrame(i);
-      if (requested.has(i) || failed.has(i)) return;
-      requested.add(i);
-      if (high) queue.unshift(i);
-      else queue.push(i);
-      pump();
-    };
-
-    const preload = (center: number) => {
-      const isMobile = window.innerWidth < 768;
-      const radius = isMobile ? 14 : 28;
-      targetFrame = sampleFrame(center);
-      for (let i = Math.max(0, center - radius); i <= Math.min(FRAME_COUNT - 1, center + radius); i += frameStep) {
-        load(i);
-      }
-      load(targetFrame);
-      pump();
-    };
-
-    const resize = () => {
-      const isMobile = window.innerWidth < 768;
-      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.35 : 1.75);
-      const bounds = canvas.getBoundingClientRect();
-      canvas.width = Math.round(bounds.width * dpr);
-      canvas.height = Math.round(bounds.height * dpr);
-      draw(frameRef.current);
-    };
-
-    // Preload key frames immediately
-    load(0, true);
-    if (!reducedMotion) {
-      [5, 15, 30, 50, 75, 100, 130, 160, 190, 220, 239].forEach((i) => load(i));
-      preload(0);
-    }
-    resize();
-
-    const mm = gsap.matchMedia();
-
-    // 1. Desktop & Tablet Configuration (>= 768px)
-    mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.35,
-        onUpdate: ({ progress }) => {
-          const frame = Math.round(progress * (FRAME_COUNT - 1));
-          frameRef.current = frame;
-          preload(frame);
-          draw(frame);
-        },
-      });
-
-      const entrance = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      entrance
-        .fromTo('.hero-title-line', { yPercent: 112, autoAlpha: 0, clipPath: 'inset(0 0 100% 0)' }, {
-          yPercent: 0, autoAlpha: 1, clipPath: 'inset(0 0 0% 0)', duration: 0.82, stagger: 0.12,
-        })
-        .fromTo('.hero-copy-reveal', { y: 18, autoAlpha: 0 }, {
-          y: 0, autoAlpha: 1, duration: 0.58, stagger: 0.08,
-        }, '-=0.36');
-
-      gsap.fromTo(
-        '.hero-desktop-box',
-        { y: 0, opacity: 1 },
-        {
-          y: -22,
-          opacity: 0.2,
-          ease: 'power1.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top top',
-            end: '24% top',
-            scrub: 0.25,
-          },
-        }
-      );
-    });
-
-    // 2. Mobile Configuration (< 768px)
-    mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
-      const playhead = { frame: 0 };
-      gsap.to(playhead, {
-        frame: FRAME_COUNT - 1,
-        ease: 'none',
-        onUpdate: () => {
-          const frame = sampleFrame(Math.round(playhead.frame));
-          frameRef.current = frame;
-          preload(frame);
-          draw(frame);
-        },
-        scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.3 },
-      });
-
-    });
-
-    const refreshTimeout = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 120);
-
-    window.addEventListener('resize', resize);
-    return () => {
-      disposed = true;
-      clearTimeout(refreshTimeout);
-      window.removeEventListener('resize', resize);
-      mm.revert();
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const { width, height } = HERO_VARIANTS[variant];
+  useHeroSequence(sectionRef, canvasRef, variant);
 
   return (
-    <section 
-      ref={sectionRef} 
-      id="home" 
-      className="relative h-[240svh] md:h-[250vh] lg:h-[260vh] motion-reduce:!h-[100svh] w-full"
-    >
-      <div 
-        className="hero-viewport sticky top-0 h-[100svh] min-h-[100svh] w-full overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: `url(${frameSrc(0)})` }}
-      >
-        {/* Fullscreen 3D Canvas with enhanced saturation & crisp contrast */}
-        <canvas
-          ref={canvasRef}
-          style={{
-            filter: 'contrast(1.08) saturate(1.24) brightness(1.02)',
-          }}
-          className="hero-sequence absolute inset-0 h-full w-full object-cover"
-          aria-label="PIO 3D animated cans and fruit splash"
-        />
+    <section ref={sectionRef} id="home" className="pio-hero" data-local-motion="true" data-hero-mode="static" data-variant={variant} aria-labelledby="pio-hero-title">
+      <div className="pio-hero__viewport">
+        <div className="pio-hero__shell">
+          <div className="pio-hero__copy">
+            <header className="pio-hero__heading">
+              <p className="pio-hero__eyebrow"><span /> REPOSE / PIO <span className="pio-hero__origin">BORN IN ASSAM</span></p>
+              <h1 id="pio-hero-title"><span>Har Sip.</span>{' '}<em>PIO.</em></h1>
+              <p className="pio-hero__intro">Real fruit refreshment in every sip. Mango sunshine. Lychee freshness.</p>
+            </header>
 
-        <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(6,46,25,0.12)_100%)]" />
-
-        <div className="hero-mobile-layout md:hidden">
-          <div className="hero-mobile-heading">
-            <p>REAL FRUIT. REAL GOOD.</p>
-            <h1>Har Sip. <em>PIO.</em></h1>
-            <span>Mango sunshine. Lychee freshness.</span>
+            <div className="pio-hero__actions">
+              <div className="pio-hero__facts"><span><Leaf size={13} /> Real fruit</span><span><Droplets size={13} /> Chilled sip</span><span>160 ml &middot; &#8377;10</span></div>
+              <div className="pio-hero__links">
+                <a className="pio-hero__primary" href="#flavours">Explore flavours <ArrowRight size={18} /></a>
+                <a className="pio-hero__secondary" href="#map">Find near you <ArrowRight size={16} /></a>
+              </div>
+              <p className="pio-hero__promise">0 Chemical. All refreshment.</p>
+            </div>
           </div>
-          <div className="hero-mobile-actions">
-            <div className="hero-mobile-facts"><span>Real fruit</span><span>160 ml</span><span>&#8377;10 a pack</span></div>
-            <button onClick={() => go('flavours')} className="hero-mobile-primary">Explore flavours <ArrowRight size={18} /></button>
-            <button onClick={() => go('map')} className="hero-mobile-secondary">Find near you <ArrowRight size={15} /></button>
-            <span className="hero-mobile-hint motion-reduce:hidden">SCROLL TO SEE THE SPLASH</span>
+
+          <div className="pio-hero__media">
+            <img className="pio-hero__poster" src={heroPoster(variant)} width={width} height={height} alt="PIO Mango and Lychee fruit drink packs surrounded by fruit, ice and colourful splashes" fetchPriority="high" loading="eager" decoding="async" />
+            <canvas ref={canvasRef} className="pio-hero__canvas" width={width} height={height} aria-hidden="true" />
+          </div>
+
+          <div className="pio-hero__footer">
+            <div className="pio-hero__flavours"><span><i /> MANGO</span><span><i /> LYCHEE</span></div>
+            <div className="pio-hero__scroll-cue"><ArrowDown size={14} /><span>SCROLL TO MAKE A SPLASH</span></div>
+            <div className="pio-hero__progress" aria-hidden="true"><span /></div>
+            <span className="pio-hero__signature">TWO FLAVOURS. ONE GOOD FEELING.</span>
           </div>
         </div>
-
-        {/* ====================================================
-            DESKTOP & TABLET LAYOUT (>= 768px): PRESERVED EXACTLY
-        ==================================================== */}
-        <div className="hidden md:flex relative z-10 w-full h-full items-center px-6 sm:px-10 lg:px-14 xl:px-20 pointer-events-none">
-          <div className="hero-desktop-box pointer-events-auto mt-14 sm:mt-8 max-w-sm sm:max-w-md lg:max-w-[440px] xl:max-w-[480px] space-y-5 rounded-[32px] border border-white/70 bg-white/78 p-6 sm:p-7 shadow-[0_24px_70px_rgba(7,88,47,0.15)] backdrop-blur-md">
-
-            {/* 2. Main Title: Har Sip PIO! */}
-            <h1 className="space-y-0 select-none display-heading text-[#073D2C] leading-[0.82]">
-              <span className="hero-title-mask block">
-                <span className="hero-title-line block">Har Sip.</span>
-              </span>
-              <span className="hero-title-mask flex items-center gap-2">
-                <span className="hero-title-line block">PIO.</span>
-                <Leaf className="w-8 h-8 sm:w-10 sm:h-10 text-[#167A4A] fill-[#167A4A] -rotate-12 inline-block shrink-0" />
-              </span>
-            </h1>
-
-            {/* 3. Subtitle */}
-            <div className="hero-copy-reveal space-y-2">
-              <p className="eyebrow text-[#167A4A]">REPOSE / PIO</p>
-              <p className="text-base sm:text-lg text-[#264b34] font-medium leading-relaxed max-w-md">
-                Real fruit refreshment in every sip.
-              </p>
-            </div>
-
-            {/* 4. Four Badges */}
-            <div className="hero-copy-reveal grid grid-cols-4 gap-2 pt-1">
-              <div className="flex flex-col items-center text-center">
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-emerald-900/15 bg-white flex items-center justify-center text-[#07582f] shadow-2xs">
-                  <Leaf className="w-4 h-4 text-[#07582f]" />
-                </div>
-                <span className="mt-1 text-[9px] sm:text-[10px] font-extrabold text-[#0a2e1c] leading-tight">
-                  Real Fruit
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center text-center">
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-emerald-900/15 bg-white flex items-center justify-center text-[#07582f] shadow-2xs">
-                  <Droplets className="w-4 h-4 text-[#07582f]" />
-                </div>
-                <span className="mt-1 text-[9px] sm:text-[10px] font-extrabold text-[#0a2e1c] leading-tight">
-                  Chilled Sip
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center text-center">
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-emerald-900/15 bg-white flex items-center justify-center text-[#07582f] shadow-2xs">
-                  <ShieldCheck className="w-4 h-4 text-[#07582f]" />
-                </div>
-                <span className="mt-1 text-[9px] sm:text-[10px] font-extrabold text-[#0a2e1c] leading-tight">
-                  0 Chemical
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center text-center">
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-emerald-900/15 bg-white flex items-center justify-center text-[#07582f] shadow-2xs font-black text-sm">
-                  ₹10
-                </div>
-                <span className="mt-1 text-[9px] sm:text-[10px] font-extrabold text-[#0a2e1c] leading-tight">
-                  Pocket Price
-                </span>
-              </div>
-            </div>
-
-            {/* 5. Action Buttons & Quick Flavor Badges */}
-            <div className="hero-copy-reveal pt-2 space-y-3">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <button
-                  onClick={() => go('flavours')}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#073D2C] hover:bg-[#0d4e3e] active:scale-95 text-white px-6 py-2.5 text-[10px] font-black uppercase tracking-[0.18em] shadow-[0_18px_40px_rgba(7,61,44,0.18)] hover:-translate-y-0.5 transition-all cursor-pointer min-h-[44px]"
-                >
-                  <span>Explore Flavours</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-
-                <button
-                  onClick={() => go('map')}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white/80 hover:bg-white text-[#073D2C] border border-[#0a3d2d]/15 px-5 py-2.5 text-[10px] font-black uppercase tracking-[0.18em] shadow-[0_8px_20px_rgba(7,61,44,0.06)] hover:-translate-y-0.5 transition-all cursor-pointer min-h-[44px]"
-                >
-                  <Play className="w-3 h-3 fill-[#073D2C]" />
-                  <span>Find Near You</span>
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2 text-[11px] font-bold">
-                <span className="bg-amber-100/90 text-amber-900 px-2.5 py-1 rounded-lg border border-amber-300/60 shadow-2xs">
-                  🥭 Mango 160ml &bull; ₹10
-                </span>
-                <span className="bg-rose-100/90 text-rose-900 px-2.5 py-1 rounded-lg border border-rose-300/60 shadow-2xs">
-                  🌺 Lychee 160ml &bull; ₹10
-                </span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-
-
       </div>
     </section>
   );
