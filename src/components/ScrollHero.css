@@ -128,7 +128,7 @@
 }
 
 .pio-hero__media { container-type: size; }
-@container (min-aspect-ratio: 1100/470) {
+@container (min-aspect-ratio: 16/9) {
   .pio-hero__poster, .pio-hero__canvas { object-fit: contain; }
 }
 
