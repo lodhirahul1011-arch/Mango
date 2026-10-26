@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, MapPin, Phone, Send, CheckCircle2, HelpCircle } from 'lucide-react';
 
@@ -34,15 +34,46 @@ const FACTORY_MAP_URL =
 export function Contact() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [website, setWebsite] = useState('');
+  const pending = useRef(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '', type: PARTNER_OPTIONS[0], message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
+    if (pending.current) return;
+    pending.current = true;
+    setSubmitting(true);
+    setError('');
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 90000);
+    try {
+      const base = (import.meta.env.VITE_CONTACT_API_BASE_URL || '').replace(/\/$/, '');
+      const response = await fetch(base + '/api/pio/contact', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({ name: form.name, phone: form.phone, email: form.email,
+          inquiryType: form.type, message: form.message, website }),
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok || result?.emailStatus !== 'accepted') {
+        throw new Error(response.status === 429
+          ? 'Too many enquiries. Please wait 15 minutes before trying again.'
+          : 'Your enquiry could not be sent. Please try again or call our helpline.');
+      }
+      setSubmitted(true);
       setForm({ name: '', email: '', phone: '', type: PARTNER_OPTIONS[0], message: '' });
-    }, 4500);
+      setWebsite('');
+    } catch (failure) {
+      setError(failure instanceof Error && !['AbortError', 'TypeError'].includes(failure.name)
+        ? failure.message
+        : 'Unable to confirm submission. Please check your connection or call our helpline.');
+    } finally {
+      window.clearTimeout(timeout);
+      pending.current = false;
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -159,17 +190,20 @@ export function Contact() {
               </p>
 
               {submitted ? (
-                <div className="py-12 text-center space-y-3">
+                <div role="status" className="py-12 text-center space-y-3">
                   <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                     <CheckCircle2 className="h-8 w-8" />
                   </div>
                   <h4 className="text-lg font-black text-emerald-950">Thank you!</h4>
                   <p className="text-xs text-slate-600 max-w-xs mx-auto">
-                    Your enquiry has been received. Our sales and distribution team will contact you shortly.
+                    Your enquiry has been accepted for email delivery to our team.
                   </p>
+                  <button type="button" onClick={() => setSubmitted(false)} className="text-sm font-bold text-[#07582f] underline">Send another enquiry</button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4" aria-busy={submitting}>
+                  <div hidden aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} /></label></div>
+                  {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
@@ -178,7 +212,7 @@ export function Contact() {
                       <input
                         type="text"
                         required
-                        value={form.name}
+                        maxLength={100} value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
                         placeholder="Rahul Lodhi"
                         className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
@@ -191,7 +225,7 @@ export function Contact() {
                       <input
                         type="tel"
                         required
-                        value={form.phone}
+                        maxLength={30} value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
                         placeholder="+91 99999 99999"
                         className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
@@ -206,7 +240,7 @@ export function Contact() {
                     <input
                       type="email"
                       required
-                      value={form.email}
+                      maxLength={254} value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       placeholder="rahul@example.com"
                       className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
@@ -237,7 +271,7 @@ export function Contact() {
                     </label>
                     <textarea
                       rows={3}
-                      value={form.message}
+                      maxLength={5000} value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       placeholder="Please mention your location and requirement details..."
                       className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f] resize-none"
@@ -245,10 +279,10 @@ export function Contact() {
                   </div>
 
                   <button
-                    type="submit"
+                    type="submit" disabled={submitting}
                     className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#07582f] hover:bg-[#0a6d3b] text-white py-3.5 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                   >
-                    <span>Submit Enquiry</span>
+                    <span>{submitting ? 'Sending enquiry...' : 'Submit Enquiry'}</span>
                     <Send className="w-3.5 h-3.5" />
                   </button>
                 </form>
