@@ -34,7 +34,7 @@ const MOMENTS = [
     title: <>Small pack.<br /><em>Big on happy.</em></>,
     copy: 'For little breaks, long conversations and everything in between. Bring a little PIO to your day.',
     note: 'TWO FRUITY FAVOURITES. ONE PIO.', link: '#partner', cta: 'Bring PIO to your store',
-    image: '/images/moments-card.jpg', alt: 'Everyday moments with PIO fruit drinks', pack: null,
+    image: '/images/pio-everyday-moments.webp', alt: 'PIO Mango and Lychee packs surrounded by fruit splashes', pack: null,
   },
 ];
 
