@@ -14,10 +14,22 @@ const NAV_LINKS = [
 export function Navbar() {
   const scrolled = useScrolled(20);
   const [open, setOpen] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const active = useActiveSection(NAV_LINKS.map((link) => link.id));
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const hero = document.getElementById('home');
+    if (!hero) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      setHeroVisible(entry.isIntersecting);
+      if (!entry.isIntersecting) setOpen(false);
+    }, { rootMargin: '-104px 0px 0px 0px', threshold: 0 });
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const handleFullscreenChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
@@ -94,7 +106,7 @@ export function Navbar() {
 
   return (
     <>
-      <header data-pio-nav className={`pio-navbar${scrolled ? ' is-scrolled' : ''}`}>
+      <header hidden={!heroVisible} data-pio-nav className={`pio-navbar${scrolled ? ' is-scrolled' : ''}`}>
         <div className="pio-navbar__surface">
           <nav className="pio-navbar__layout" aria-label="Main navigation">
             <button

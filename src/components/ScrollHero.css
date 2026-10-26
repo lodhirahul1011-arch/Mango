@@ -1,162 +1,53 @@
-/* Original high-resolution footage: no color filters or image overlays. */
-.pio-hero {
-  --hero-nav-space: 100px;
-  --hero-view-height: 100svh;
-  --hero-section-height: 400svh;
-  --hero-progress: 0;
-  position: relative;
-  isolation: isolate;
-  height: var(--hero-section-height);
-  background: #202a2e;
-  color: #fff8e9;
-}
-.pio-hero__viewport { position: sticky; top: 0; width: 100%; height: var(--hero-view-height); overflow: hidden; }
-.pio-hero__media { position: absolute; inset: 0; }
-.pio-hero__poster, .pio-hero__canvas {
-  position: absolute; inset: 0; display: block; width: 100%; height: 100%;
-  object-fit: cover; object-position: center; pointer-events: none; filter: none;
-}
-.pio-hero__canvas { opacity: 0; }
-.pio-hero[data-frame-ready="true"] .pio-hero__canvas { opacity: 1; }
-.pio-hero__shell {
-  position: relative; z-index: 2; width: 100%; height: 100%;
-  padding: var(--hero-nav-space) clamp(18px, 3vw, 64px) max(20px, env(safe-area-inset-bottom));
-  display: flex; flex-direction: column; align-items: center; pointer-events: none;
-}
-.pio-hero__copy { flex: 1; min-height: 0; width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; padding-bottom: 22px; }
-.pio-hero__heading { transform: translate3d(0, var(--hero-copy-offset, 0px), 0); }
-.pio-hero__eyebrow { display: flex; justify-content: center; align-items: center; gap: 12px; color: #f6eedb; font-size: 9px; font-weight: 700; letter-spacing: .18em; text-shadow: 0 2px 8px #11191c; }
-.pio-hero__eyebrow > span:first-child { width: 6px; height: 6px; border-radius: 50%; background: #f6bc50; }
-.pio-hero__origin { padding-left: 12px; border-left: 1px solid #ffffff50; color: #e2dfd5; }
-.pio-hero__heading h1 { margin: 6px 0 8px; font-family: var(--font-display); font-size: clamp(48px, 5vw, 80px); font-weight: 600; line-height: .95; letter-spacing: -.045em; color: #fff8e9; text-shadow: 0 3px 18px #10191b90; }
-.pio-hero__heading h1 span, .pio-hero__heading h1 em { font-family: inherit; }
-.pio-hero__heading h1 em { margin-left: .2em; font-style: normal; color: #ffc75f; }
-.pio-hero__intro { max-width: 48ch; margin: 0 auto; font-size: 13px; line-height: 1.45; color: #fff7e7; text-shadow: 0 2px 8px #10191b; }
-.pio-hero__actions { pointer-events: auto; margin-top: auto; padding-top: 16px; }
-.pio-hero__facts { display: flex; justify-content: center; gap: 12px; font-size: 10px; color: #fff6e7; text-shadow: 0 1px 6px #10191b; }
-.pio-hero__facts span { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
-.pio-hero__facts span + span { padding-left: 12px; border-left: 1px solid #ffffff50; }
-.pio-hero__links { display: flex; justify-content: center; gap: 10px; margin-top: 12px; }
-.pio-hero__links a { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 46px; padding: 11px 22px; border-radius: 30px; font-size: 12px; font-weight: 700; text-decoration: none; transition: transform .2s, background-color .2s; }
-.pio-hero__primary { background: #ffcb69; color: #202b20; }
-.pio-hero__primary:hover { background: #ffda93; transform: translateY(-2px); }
-.pio-hero__secondary { border: 1px solid #f6edda80; background: #11191ce6; color: #fff8e9; }
-.pio-hero__secondary:hover { background: #263439; transform: translateY(-2px); }
-.pio-hero__links a:active { transform: scale(.98); }
-.pio-hero__links a:focus-visible { outline: 3px solid #ffc75f; outline-offset: 4px; }
-.pio-hero__promise { margin: 8px 0 0; color: #f1e8d9; font-size: 10px; text-shadow: 0 1px 6px #10191b; }
-.pio-hero__footer { display: flex; align-items: center; gap: 24px; width: 100%; color: #fff8e9; font-size: 9px; letter-spacing: .09em; text-shadow: 0 1px 6px #10191b; }
-.pio-hero__flavours { display: flex; gap: 18px; font-weight: 700; }
-.pio-hero__flavours span { display: flex; align-items: center; gap: 6px; }
-.pio-hero__flavours i { width: 7px; height: 7px; border-radius: 50%; background: #ffc75f; }
+/* Match the artwork's 2752:1536 composition instead of cropping it into a short banner. */
+.pio-hero { position: relative; isolation: isolate; background: #071710; color: #fffbed; overflow: hidden; }
+.pio-hero__media { position: absolute; inset: 0; z-index: -1; }
+.pio-hero__image { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.pio-hero__shell { width: 100%; min-height: max(680px, 55.81vw); padding: clamp(130px, 12vw, 240px) 6.2vw 3vw; display: flex; flex-direction: column; }
+.pio-hero__copy { width: 36%; max-width: 700px; margin-bottom: auto; }
+.pio-hero__eyebrow { color: #e1f49c; font-size: clamp(10px, .8vw, 15px); font-weight: 700; letter-spacing: .26em; }
+.pio-hero h1 { color: #fffbed; margin: 20px 0 22px; font-family: var(--font-display); font-size: clamp(80px, 8.5vw, 170px); font-weight: 600; line-height: .88; letter-spacing: -.045em; }
+.pio-hero h1 span, .pio-hero h1 em { display: block; font-family: inherit; white-space: nowrap; }
+.pio-hero h1 em { font-style: normal; color: #ddfa8a; margin-top: 10px; }
+.pio-hero__intro { font-size: clamp(16px, 1.4vw, 26px); line-height: 1.5; color: #f2f4eb; text-shadow: 0 2px 8px #071710; }
+.pio-hero__actions { margin-top: clamp(24px, 1.9vw, 38px); }
+.pio-hero__links { display: flex; flex-wrap: wrap; gap: clamp(12px, 1.1vw, 22px); }
+.pio-hero__links a { display: inline-flex; align-items: center; justify-content: center; gap: 16px; min-height: clamp(48px, 3.8vw, 72px); padding: 12px clamp(20px, 2vw, 40px); border-radius: 999px; font-size: clamp(13px, 1vw, 19px); font-weight: 700; text-decoration: none; transition: background-color .2s; }
+.pio-hero__primary { background: #ddfa8a; color: #142514; }
+.pio-hero__primary:hover { background: #edffbc; }
+.pio-hero__secondary { border: 1.5px solid #f6edda; background: #07171066; color: #fffbed; }
+.pio-hero__secondary:hover { background: #23432c; }
+.pio-hero a:focus-visible { outline: 3px solid #ddfa8a; outline-offset: 5px; }
+.pio-hero__footer { display: flex; align-items: center; gap: 28px; margin-top: 70px; font-size: clamp(9px, .65vw, 12px); letter-spacing: .15em; text-shadow: 0 2px 6px #071710; }
+.pio-hero__flavours, .pio-hero__flavours span, .pio-hero__scroll-cue { display: flex; align-items: center; gap: 10px; }
+.pio-hero__flavours { gap: 24px; font-weight: 700; }
+.pio-hero__flavours i { width: 9px; height: 9px; background: #ffc75f; border-radius: 50%; }
 .pio-hero__flavours span + span i { background: #f27c99; }
-.pio-hero__scroll-cue { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
-.pio-hero__scroll-cue svg { animation: pio-scroll-nudge 2s ease-in-out infinite; }
-.pio-hero__progress { flex: 1; height: 2px; min-width: 30px; background: #ffffff35; overflow: hidden; }
-.pio-hero__progress span { display: block; height: 100%; background: linear-gradient(90deg, #ffc75f, #f27c99); transform: scaleX(var(--hero-progress)); transform-origin: left; }
-.pio-hero__signature { font-size: 8px; }
-.pio-hero[data-hero-mode="static"] { height: var(--hero-view-height); }
-.pio-hero[data-hero-mode="static"] .pio-hero__viewport { position: relative; }
-@keyframes pio-scroll-nudge { 50% { transform: translateY(4px); } }
-@media (max-width: 1023px) { .pio-hero__signature { display: none; } }
+.pio-hero__scroll-cue { color: inherit; text-decoration: none; white-space: nowrap; }
+.pio-hero__rule { height: 2px; flex: 1; background: #ffffff50; }
+.pio-hero__rule::before { content: ''; display: block; width: 12%; height: 100%; background: #ddfa8a; }
+@media (min-width: 768px) and (max-width: 1100px) {
+  .pio-hero__shell { min-height: 680px; padding-top: 160px; padding-inline: 5vw; }
+  .pio-hero__copy { width: 42%; }
+  .pio-hero h1 { font-size: clamp(72px, 8.8vw, 96px); }
+  .pio-hero__links { gap: 10px; }
+  .pio-hero__links a { padding-inline: 16px; font-size: 12px; gap: 8px; }
+}
+/* Portrait artwork is exclusive to phones; desktop composition stays unchanged. */
 @media (max-width: 767px) {
-  .pio-hero__heading h1 { font-size: clamp(44px, 12vw, 68px); }
-  .pio-hero__intro { font-size: 12px; max-width: 34ch; }
-  .pio-hero__eyebrow { font-size: 8px; gap: 8px; }
-  .pio-hero__origin { padding-left: 8px; }
-  .pio-hero__copy { padding-bottom: 18px; }
-  .pio-hero__links a { padding: 10px 14px; font-size: 11px; }
-  .pio-hero__facts { font-size: 9px; gap: 8px; }
-  .pio-hero__facts span + span { padding-left: 8px; }
-  .pio-hero__footer { display: grid; grid-template-columns: 1fr auto; gap: 12px; font-size: 8px; letter-spacing: .02em; }
-  .pio-hero__flavours { gap: 10px; }
-  .pio-hero__scroll-cue { gap: 4px; }
-  .pio-hero__progress { grid-column: 1 / -1; width: 100%; }
+  .pio-hero__shell { min-height: max(740px, 179.17vw); padding: 112px 24px 24px; }
+  .pio-hero__copy { width: 100%; max-width: 480px; margin-bottom: auto; }
+  .pio-hero__eyebrow { font-size: 10px; text-shadow: 0 1px 8px #071710; }
+  .pio-hero h1 { font-size: clamp(50px, 12.5vw, 88px); margin: 16px 0; line-height: 1; text-shadow: 0 2px 12px #07171066; }
+  .pio-hero h1 span, .pio-hero h1 em { display: inline; }
+  .pio-hero h1 em { margin-left: .2em; }
+  .pio-hero__intro { font-size: 14px; line-height: 1.5; }
+  .pio-hero__actions { margin-top: 20px; }
+  .pio-hero__links { gap: 8px; }
+  .pio-hero__links a { font-size: 12px; padding-inline: 14px; gap: 8px; min-height: 46px; }
+  .pio-hero__media { position: absolute; inset: 0; z-index: -1; display: block; width: 100%; }
+  .pio-hero__image { object-fit: cover; object-position: center bottom; }
+  .pio-hero__footer { margin-top: 340px; gap: 16px; font-size: 8px; letter-spacing: .04em; flex-wrap: wrap; }
+  .pio-hero__flavours { gap: 14px; }
+  .pio-hero__rule { display: none; }
 }
-@media (max-height: 620px) {
-  .pio-hero__heading h1 { font-size: clamp(32px, 7vh, 46px); }
-  .pio-hero__intro, .pio-hero__facts, .pio-hero__promise { display: none; }
-  .pio-hero__copy { padding-bottom: 10px; }
-  .pio-hero__links { margin-top: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pio-hero__scroll-cue svg { animation: none; }
-  .pio-hero__links a { transition: none; }
-}
-
-/* Heading, footage and actions share one measured layout instead of floating apart. */
-.pio-hero { background: #101c1d; }
-.pio-hero__shell { padding-top: calc(var(--hero-nav-space) + 8px); }
-.pio-hero__copy {
-  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
-  align-items: stretch; gap: 12px; padding-bottom: 18px;
-}
-.pio-hero__heading { position: relative; z-index: 1; }
-.pio-hero__heading h1 { font-size: clamp(60px, 6.5vw, 104px); margin: 10px 0 12px; }
-.pio-hero__eyebrow { font-size: 10px; letter-spacing: .16em; }
-.pio-hero__intro { max-width: 46ch; font-size: clamp(14px, 1.2vw, 18px); line-height: 1.45; text-wrap: balance; }
-.pio-hero__media {
-  position: relative; inset: auto; width: calc(100% + 2 * clamp(18px, 3vw, 64px));
-  margin-inline: calc(-1 * clamp(18px, 3vw, 64px)); min-height: 0;
-  overflow: hidden; transform: none; aspect-ratio: auto;
-}
-.pio-hero__actions { margin-top: 0; padding-top: 0; }
-.pio-hero__facts { font-size: 12px; gap: 16px; }
-.pio-hero__facts svg { width: 17px; height: 17px; }
-.pio-hero__links { margin-top: 18px; gap: 14px; }
-.pio-hero__links a { min-height: 52px; min-width: 200px; font-size: 14px; }
-.pio-hero__promise { font-size: 10px; }
-@media (max-width: 767px) {
-  .pio-hero__shell { padding: calc(var(--hero-nav-space) + 14px) 22px max(18px, env(safe-area-inset-bottom)); }
-  .pio-hero__copy { gap: 20px; padding-bottom: 18px; grid-template-rows: auto minmax(180px, 1fr) auto; }
-  .pio-hero__heading h1 { font-size: clamp(44px, 13.5vw, 76px); white-space: nowrap; margin: 14px 0 14px; }
-  .pio-hero__eyebrow { font-size: 8px; gap: 8px; }
-  .pio-hero__intro { font-size: 14px; max-width: 34ch; }
-  .pio-hero__media { width: calc(100% + 44px); margin-inline: -22px; }
-  .pio-hero__facts { font-size: 11px; gap: 10px; }
-  .pio-hero__facts span + span { padding-left: 10px; }
-  .pio-hero__links { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 18px; }
-  .pio-hero__links a { width: 100%; min-width: 0; min-height: 52px; font-size: 14px; }
-  .pio-hero__promise { display: none; }
-  .pio-hero__footer { font-size: 7px; gap: 9px; }
-}
-@media (max-height: 620px) and (min-width: 768px) {
-  .pio-hero__heading h1 { font-size: 42px; margin: 4px 0; }
-  .pio-hero__copy { gap: 8px; padding-bottom: 8px; }
-  .pio-hero__links { margin-top: 0; }
-  .pio-hero__links a { min-height: 44px; }
-}
-
-.pio-hero__media { container-type: size; }
-@container (min-aspect-ratio: 16/9) {
-  .pio-hero__poster, .pio-hero__canvas { object-fit: contain; }
-}
-
-/* Desktop footage fills the complete hero; mobile keeps its approved grid. */
-@media (min-width: 768px) {
-  .pio-hero__media {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    margin: 0; z-index: 0;
-  }
-  .pio-hero__media .pio-hero__poster,
-  .pio-hero__media .pio-hero__canvas { object-fit: cover; }
-  .pio-hero__heading { grid-row: 1; }
-  .pio-hero__actions { grid-row: 3; position: relative; z-index: 1; }
-  .pio-hero__footer { position: relative; z-index: 1; }
-}
-
-/* Center the desktop headline over the hero composition. */
-@media (min-width: 768px) {
-  .pio-hero__heading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: min(720px, calc(100% - 48px));
-    transform: translate(-50%, -50%);
-    text-align: center;
-    z-index: 1;
-  }
-  .pio-hero__heading h1 {
-    text-shadow: 0 3px 20px rgba(5, 20, 16, .8);
-  }
-}
+@media (prefers-reduced-motion: reduce) { .pio-hero__links a { transition: none; } }

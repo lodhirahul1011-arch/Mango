@@ -39,7 +39,7 @@ function App() {
         <Navbar />
 
         <main className="relative z-10">
-          {/* 1. Main 3D Hero Section (EXACTLY AS APPROVED — UNCHANGED) */}
+          {/* 1. Lightweight image hero */}
           <ScrollHero />
 
           {/* 2. Signature Flavours Showcase (Alphonso Mango & Floral Lychee) */}

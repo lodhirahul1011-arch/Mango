@@ -142,7 +142,7 @@ export function Hero() {
                       className="relative"
                     >
                       {/* Mango Pack Shadow */}
-                      <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-4/5 h-8 bg-emerald-950/20 rounded-full blur-md" />
+                      <div className="absolute -bottom-4 left-1/3 -translate-x-1/2 w-4/5 bg-emerald-950/20 rounded-full blur-md" />
                       <img 
                         src="/images/pio-mango.png" 
                         alt="PIO Mango 160ml pack" 
