@@ -1,0 +1,878 @@
+[
+  {
+    "mobile": false,
+    "visit": "cold",
+    "metrics": {
+      "lcp": 664,
+      "cls": 0.0008555723841788838,
+      "longTasks": [
+        164,
+        56
+      ],
+      "nav": {
+        "name": "http://127.0.0.1:4173/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 591.2000000001863,
+        "navigationId": 8129,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "gzip",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.6000000005587935,
+        "domainLookupStart": 0.6000000005587935,
+        "domainLookupEnd": 0.6000000005587935,
+        "connectStart": 0.6000000005587935,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.6000000005587935,
+        "requestStart": 1.5,
+        "responseStart": 8.100000000558794,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 8.100000000558794,
+        "responseEnd": 8.5,
+        "transferSize": 948,
+        "encodedBodySize": 648,
+        "decodedBodySize": 1278,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 15.400000000372529,
+        "domContentLoadedEventStart": 258.40000000037253,
+        "domContentLoadedEventEnd": 258.6000000005588,
+        "domComplete": 564.4000000003725,
+        "loadEventStart": 565.2000000001863,
+        "loadEventEnd": 591.2000000001863,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "resources": [
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap",
+          "bytes": 1189,
+          "decoded": 11634,
+          "duration": 224.69999999925494
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/index-ijm53x7n.js",
+          "bytes": 171357,
+          "decoded": 513929,
+          "duration": 19.09999999962747
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/index-CVHhE33Q.css",
+          "bytes": 32584,
+          "decoded": 182447,
+          "duration": 10.200000000186265
+        },
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "bytes": 1317,
+          "decoded": 20632,
+          "duration": 210.70000000018626
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/products-orchard-v2.webp",
+          "bytes": 230586,
+          "decoded": 230286,
+          "duration": 3.2000000001862645
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/story-tea-v1.webp",
+          "bytes": 196794,
+          "decoded": 196494,
+          "duration": 2.400000000372529
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/assam-heritage-v1.webp",
+          "bytes": 365482,
+          "decoded": 365182,
+          "duration": 2.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/brand/pio-logo-trim.png",
+          "bytes": 40591,
+          "decoded": 40291,
+          "duration": 6
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-nature-new-1672.webp",
+          "bytes": 253738,
+          "decoded": 253438,
+          "duration": 7.800000000745058
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/products/pio-mango.png",
+          "bytes": 1519326,
+          "decoded": 1519026,
+          "duration": 20.299999999813735
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/products/pio-lychee.png",
+          "bytes": 1577803,
+          "decoded": 1577503,
+          "duration": 21.200000000186265
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-mango.png",
+          "bytes": 962412,
+          "decoded": 962112,
+          "duration": 16.299999999813735
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/india-network-map.svg",
+          "bytes": 2812,
+          "decoded": 11564,
+          "duration": 8.299999999813735
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-lychee.png",
+          "bytes": 983169,
+          "decoded": 982869,
+          "duration": 18.799999999813735
+        },
+        {
+          "name": "http://127.0.0.1:4173/brand/rb-white-logo-trim.png",
+          "bytes": 28491,
+          "decoded": 28191,
+          "duration": 11.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/mango-story-bg-v1.webp",
+          "bytes": 229206,
+          "decoded": 228906,
+          "duration": 7.8999999994412065
+        },
+        {
+          "name": "http://127.0.0.1:4173/frames/mango/frame_0001.webp",
+          "bytes": 38900,
+          "decoded": 38600,
+          "duration": 7.099999999627471
+        },
+        {
+          "name": "http://127.0.0.1:4173/vite.svg",
+          "bytes": 948,
+          "decoded": 1278,
+          "duration": 2.199999999254942
+        }
+      ],
+      "overflow": false,
+      "sections": [
+        "home",
+        "flavours",
+        "mango-story",
+        "lychee-story",
+        "story",
+        "pio-moments",
+        "map",
+        "partner",
+        "contact"
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": false,
+    "visit": "repeat",
+    "metrics": {
+      "lcp": 120,
+      "cls": 0,
+      "longTasks": [],
+      "nav": {
+        "name": "http://127.0.0.1:4173/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 15.799999999813735,
+        "navigationId": 6396,
+        "initiatorType": "navigation",
+        "deliveryType": "cache",
+        "nextHopProtocol": "",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "gzip",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.20000000018626451,
+        "domainLookupStart": 0.20000000018626451,
+        "domainLookupEnd": 0.20000000018626451,
+        "connectStart": 0.20000000018626451,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.20000000018626451,
+        "requestStart": 0.7000000001862645,
+        "responseStart": 2.400000000372529,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 2.400000000372529,
+        "responseEnd": 2.7000000001862645,
+        "transferSize": 300,
+        "encodedBodySize": 648,
+        "decodedBodySize": 1278,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 4.2000000001862645,
+        "unloadEventEnd": 4.2000000001862645,
+        "domInteractive": 9.200000000186265,
+        "domContentLoadedEventStart": 15.400000000372529,
+        "domContentLoadedEventEnd": 15.700000000186265,
+        "domComplete": 15.700000000186265,
+        "loadEventStart": 15.700000000186265,
+        "loadEventEnd": 15.799999999813735,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "resources": [
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap",
+          "bytes": 0,
+          "decoded": 11634,
+          "duration": 0
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/index-ijm53x7n.js",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/index-CVHhE33Q.css",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.7000000001862645
+        },
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "bytes": 0,
+          "decoded": 20632,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+          "bytes": 0,
+          "decoded": 27348,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/cormorantgaramond/v21/co3bmX5slCNuHLi8bLeY9MK7whWMhyjYqXtK.woff2",
+          "bytes": 0,
+          "decoded": 37640,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/manrope/v20/xn7gYHE41ni1AdIRggmxSuXd.woff2",
+          "bytes": 0,
+          "decoded": 15120,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/manrope/v20/xn7gYHE41ni1AdIRggexSg.woff2",
+          "bytes": 0,
+          "decoded": 24836,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2",
+          "bytes": 0,
+          "decoded": 22288,
+          "duration": 0
+        },
+        {
+          "name": "http://127.0.0.1:4173/brand/pio-logo-trim.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.2000000001862645
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-nature-new-1672.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 0.6999999992549419
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/products-orchard-v2.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 0.7999999998137355
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/products/pio-mango.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.2000000001862645
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/products/pio-lychee.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/mango-story-bg-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.099999999627471
+        },
+        {
+          "name": "http://127.0.0.1:4173/frames/mango/frame_0001.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.2000000001862645
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/lychee-story-bg-v1.webp",
+          "bytes": 168862,
+          "decoded": 168562,
+          "duration": 2.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/frames/lychee/frame_0001.webp",
+          "bytes": 43496,
+          "decoded": 43196,
+          "duration": 2.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/assam-heritage-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/moments-card.jpg",
+          "bytes": 31344,
+          "decoded": 31044,
+          "duration": 1.900000000372529
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/india-network-map.svg",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 0.7000000001862645
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-mango.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-lychee.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.199999999254942
+        },
+        {
+          "name": "http://127.0.0.1:4173/brand/rb-white-logo-trim.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 0.7000000001862645
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/story-tea-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 0.8000000007450581
+        },
+        {
+          "name": "http://127.0.0.1:4173/vite.svg",
+          "bytes": 300,
+          "decoded": 1278,
+          "duration": 2.199999999254942
+        }
+      ],
+      "overflow": false,
+      "sections": [
+        "home",
+        "flavours",
+        "mango-story",
+        "lychee-story",
+        "story",
+        "pio-moments",
+        "map",
+        "partner",
+        "contact"
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": false,
+    "scrollCheck": {
+      "overflow": false,
+      "frames": [
+        "1",
+        "1"
+      ],
+      "brokenImages": [],
+      "navHidden": true,
+      "longTasks": [
+        74,
+        97,
+        98
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "visit": "cold",
+    "metrics": {
+      "lcp": 536,
+      "cls": 0,
+      "longTasks": [
+        157,
+        66
+      ],
+      "nav": {
+        "name": "http://127.0.0.1:4173/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 570.0999999996275,
+        "navigationId": 8517,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "http/1.1",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "gzip",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.5,
+        "domainLookupStart": 0.5,
+        "domainLookupEnd": 0.5,
+        "connectStart": 0.5,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.5,
+        "requestStart": 1,
+        "responseStart": 3.2999999998137355,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 3.2999999998137355,
+        "responseEnd": 3.7999999998137355,
+        "transferSize": 948,
+        "encodedBodySize": 648,
+        "decodedBodySize": 1278,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 11.5,
+        "domContentLoadedEventStart": 245.29999999981374,
+        "domContentLoadedEventEnd": 245.5,
+        "domComplete": 545.7999999998137,
+        "loadEventStart": 546.5,
+        "loadEventEnd": 570.0999999996275,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "high"
+        }
+      },
+      "resources": [
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap",
+          "bytes": 1189,
+          "decoded": 11634,
+          "duration": 213.1000000005588
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/index-ijm53x7n.js",
+          "bytes": 171357,
+          "decoded": 513929,
+          "duration": 17.90000000037253
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/index-CVHhE33Q.css",
+          "bytes": 32584,
+          "decoded": 182447,
+          "duration": 9.099999999627471
+        },
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "bytes": 1317,
+          "decoded": 20632,
+          "duration": 203.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/products-orchard-v2.webp",
+          "bytes": 230586,
+          "decoded": 230286,
+          "duration": 4
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/story-tea-v1.webp",
+          "bytes": 196794,
+          "decoded": 196494,
+          "duration": 2.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/assam-heritage-v1.webp",
+          "bytes": 365482,
+          "decoded": 365182,
+          "duration": 2.3999999994412065
+        },
+        {
+          "name": "http://127.0.0.1:4173/brand/pio-logo-trim.png",
+          "bytes": 40591,
+          "decoded": 40291,
+          "duration": 4.2000000001862645
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-mobile-portrait-640.webp",
+          "bytes": 135700,
+          "decoded": 135400,
+          "duration": 5
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/products/pio-lychee.png",
+          "bytes": 1577803,
+          "decoded": 1577503,
+          "duration": 18.399999999441206
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/products/pio-mango.png",
+          "bytes": 1519326,
+          "decoded": 1519026,
+          "duration": 17.399999999441206
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/india-network-map.svg",
+          "bytes": 2812,
+          "decoded": 11564,
+          "duration": 6.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-mango.png",
+          "bytes": 962412,
+          "decoded": 962112,
+          "duration": 14.599999999627471
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-lychee.png",
+          "bytes": 983169,
+          "decoded": 982869,
+          "duration": 16.300000000745058
+        },
+        {
+          "name": "http://127.0.0.1:4173/brand/rb-white-logo-trim.png",
+          "bytes": 28491,
+          "decoded": 28191,
+          "duration": 9.300000000745058
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/mango-story-bg-v1.webp",
+          "bytes": 229206,
+          "decoded": 228906,
+          "duration": 18.100000000558794
+        },
+        {
+          "name": "http://127.0.0.1:4173/vite.svg",
+          "bytes": 948,
+          "decoded": 1278,
+          "duration": 2.599999999627471
+        }
+      ],
+      "overflow": false,
+      "sections": [
+        "home",
+        "flavours",
+        "mango-story",
+        "lychee-story",
+        "story",
+        "pio-moments",
+        "map",
+        "partner",
+        "contact"
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "visit": "repeat",
+    "metrics": {
+      "lcp": 148,
+      "cls": 0,
+      "longTasks": [
+        53,
+        54
+      ],
+      "nav": {
+        "name": "http://127.0.0.1:4173/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 49.5,
+        "navigationId": 7355,
+        "initiatorType": "navigation",
+        "deliveryType": "cache",
+        "nextHopProtocol": "",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "gzip",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.5,
+        "domainLookupStart": 0.5,
+        "domainLookupEnd": 0.5,
+        "connectStart": 0.5,
+        "secureConnectionStart": 0,
+        "connectEnd": 0.5,
+        "requestStart": 1.099999999627471,
+        "responseStart": 2.7000000001862645,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 2.7000000001862645,
+        "responseEnd": 2.900000000372529,
+        "transferSize": 300,
+        "encodedBodySize": 648,
+        "decodedBodySize": 1278,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 32.200000000186265,
+        "unloadEventEnd": 32.200000000186265,
+        "domInteractive": 39.299999999813735,
+        "domContentLoadedEventStart": 48.90000000037253,
+        "domContentLoadedEventEnd": 49.299999999813735,
+        "domComplete": 49.40000000037253,
+        "loadEventStart": 49.40000000037253,
+        "loadEventEnd": 49.5,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "resources": [
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap",
+          "bytes": 0,
+          "decoded": 11634,
+          "duration": 0
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/index-ijm53x7n.js",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 2.6000000005587935
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/index-CVHhE33Q.css",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 3.2000000001862645
+        },
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "bytes": 0,
+          "decoded": 20632,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+          "bytes": 0,
+          "decoded": 27348,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/cormorantgaramond/v21/co3bmX5slCNuHLi8bLeY9MK7whWMhyjYqXtK.woff2",
+          "bytes": 0,
+          "decoded": 37640,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/manrope/v20/xn7gYHE41ni1AdIRggmxSuXd.woff2",
+          "bytes": 0,
+          "decoded": 15120,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/manrope/v20/xn7gYHE41ni1AdIRggexSg.woff2",
+          "bytes": 0,
+          "decoded": 24836,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2",
+          "bytes": 0,
+          "decoded": 22288,
+          "duration": 0
+        },
+        {
+          "name": "http://127.0.0.1:4173/brand/pio-logo-trim.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.5
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-mobile-portrait-640.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 0.7999999998137355
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/products-orchard-v2.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.099999999627471
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/products/pio-mango.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.400000000372529
+        },
+        {
+          "name": "http://127.0.0.1:4173/assets/products/pio-lychee.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.7000000001862645
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/mango-story-bg-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1
+        },
+        {
+          "name": "http://127.0.0.1:4173/frames/mango/frame_0001.webp",
+          "bytes": 38900,
+          "decoded": 38600,
+          "duration": 3.900000000372529
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/lychee-story-bg-v1.webp",
+          "bytes": 168862,
+          "decoded": 168562,
+          "duration": 4.099999999627471
+        },
+        {
+          "name": "http://127.0.0.1:4173/frames/lychee/frame_0001.webp",
+          "bytes": 43496,
+          "decoded": 43196,
+          "duration": 3.900000000372529
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/assam-heritage-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/moments-card.jpg",
+          "bytes": 31344,
+          "decoded": 31044,
+          "duration": 2.699999999254942
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/india-network-map.svg",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-mango.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 0.8999999994412065
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/pio-lychee.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.099999999627471
+        },
+        {
+          "name": "http://127.0.0.1:4173/brand/rb-white-logo-trim.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1.2999999998137355
+        },
+        {
+          "name": "http://127.0.0.1:4173/images/story-tea-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 1
+        },
+        {
+          "name": "http://127.0.0.1:4173/vite.svg",
+          "bytes": 300,
+          "decoded": 1278,
+          "duration": 3.900000000372529
+        }
+      ],
+      "overflow": false,
+      "sections": [
+        "home",
+        "flavours",
+        "mango-story",
+        "lychee-story",
+        "story",
+        "pio-moments",
+        "map",
+        "partner",
+        "contact"
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "scrollCheck": {
+      "overflow": false,
+      "frames": [
+        "1",
+        "1"
+      ],
+      "brokenImages": [],
+      "navHidden": true,
+      "longTasks": [
+        53,
+        54,
+        89,
+        104
+      ]
+    },
+    "errors": []
+  }
+]

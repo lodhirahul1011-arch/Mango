@@ -27,3 +27,6 @@ __pycache__/
 .env.*
 !.env.example
 integrations/car-booking/
+
+.perf-tools/
+performance/artifacts/

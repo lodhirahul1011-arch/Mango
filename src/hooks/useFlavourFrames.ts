@@ -46,7 +46,7 @@ export function useFlavourFrames({ flavour, count, sectionRef, canvasRef, progre
     };
     const scheduleDraw = () => { if (!raf && !disposed) raf = requestAnimationFrame(draw); };
     const pump = () => {
-      if (disposed || !started) return;
+      if (disposed || !started || activeLoads >= 4 || images.size + failed.size >= (reducedMotion.matches ? 1 : count)) return;
       const candidates = Array.from({ length: reducedMotion.matches ? 1 : count }, (_, i) => i)
         .filter(i => !images.has(i) && !pending.has(i) && !failed.has(i))
         .sort((a, b) => Math.abs(a - target) - Math.abs(b - target));

@@ -203,7 +203,7 @@ export function CinematicJourney() {
           <div className="journey-reveal relative flex min-h-[460px] items-center justify-center lg:col-span-5">
             <div className="absolute h-72 w-72 rounded-full bg-[conic-gradient(from_120deg,#f8c33b,#fb7185,#07582f,#f8c33b)] opacity-80 blur-[1px] animate-[floatSubtle_5s_ease-in-out_infinite]" />
             <div className="absolute h-96 w-96 rounded-full border border-emerald-900/10" />
-            <img src="/images/pio-mango.png" alt="PIO Mango carton" className="relative z-10 max-h-[430px] w-auto drop-shadow-[0_42px_70px_rgba(7,88,47,0.24)] [transform:perspective(900px)_rotateY(-9deg)]" />
+            <img src="/images/pio-mango-lossless.webp" alt="PIO Mango carton" className="relative z-10 max-h-[430px] w-auto drop-shadow-[0_42px_70px_rgba(7,88,47,0.24)] [transform:perspective(900px)_rotateY(-9deg)]" />
           </div>
         </div>
       </div>
@@ -221,7 +221,7 @@ export function CinematicJourney() {
             {mangoData.map((piece, index) => (
               <FruitMark key={`${piece.label}-${index}`} type={piece.label} className={`orchard-piece orchard-piece-${index} absolute left-1/2 top-1/2`} />
             ))}
-            <img src="/images/pio-mango.png" alt="PIO Mango pack" className="orchard-pack relative z-10 max-h-[500px] w-auto drop-shadow-[0_44px_80px_rgba(120,53,15,0.25)] [transform-style:preserve-3d]" />
+            <img src="/images/pio-mango-lossless.webp" alt="PIO Mango pack" className="orchard-pack relative z-10 max-h-[500px] w-auto drop-shadow-[0_44px_80px_rgba(120,53,15,0.25)] [transform-style:preserve-3d]" />
           </div>
         </div>
       </div>
@@ -236,8 +236,8 @@ export function CinematicJourney() {
           </div>
           <div className="relative flex min-h-[500px] items-center justify-center lg:col-span-7">
             <span className="absolute h-[440px] w-[440px] rounded-full bg-white/50 blur-3xl" />
-            <img src="/images/pio-mango.png" alt="PIO Mango pack" className="morph-mango absolute max-h-[460px] w-auto drop-shadow-[0_40px_70px_rgba(120,53,15,0.18)]" />
-            <img src="/images/pio-lychee.png" alt="PIO Lychee pack" className="morph-lychee absolute max-h-[460px] w-auto drop-shadow-[0_40px_70px_rgba(157,23,77,0.2)]" />
+            <img src="/images/pio-mango-lossless.webp" alt="PIO Mango pack" className="morph-mango absolute max-h-[460px] w-auto drop-shadow-[0_40px_70px_rgba(120,53,15,0.18)]" />
+            <img src="/images/pio-lychee-lossless.webp" alt="PIO Lychee pack" className="morph-lychee absolute max-h-[460px] w-auto drop-shadow-[0_40px_70px_rgba(157,23,77,0.2)]" />
           </div>
         </div>
       </div>
@@ -256,7 +256,7 @@ export function CinematicJourney() {
             {lycheeData.map((piece, index) => (
               <FruitMark key={`${piece.label}-${index}`} type={piece.label} className={`crown-piece-${index} absolute left-1/2 top-1/2`} />
             ))}
-            <img src="/images/pio-lychee.png" alt="PIO Lychee pack" className="crown-pack relative z-10 max-h-[500px] w-auto drop-shadow-[0_44px_80px_rgba(131,24,67,0.26)]" />
+            <img src="/images/pio-lychee-lossless.webp" alt="PIO Lychee pack" className="crown-pack relative z-10 max-h-[500px] w-auto drop-shadow-[0_44px_80px_rgba(131,24,67,0.26)]" />
           </div>
         </div>
       </div>

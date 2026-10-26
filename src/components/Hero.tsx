@@ -144,7 +144,7 @@ export function Hero() {
                       {/* Mango Pack Shadow */}
                       <div className="absolute -bottom-4 left-1/3 -translate-x-1/2 w-4/5 bg-emerald-950/20 rounded-full blur-md" />
                       <img 
-                        src="/images/pio-mango.png" 
+                        src="/images/pio-mango-lossless.webp" 
                         alt="PIO Mango 160ml pack" 
                         className="h-64 sm:h-80 md:h-96 w-auto object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-2"
                       />
@@ -166,7 +166,7 @@ export function Hero() {
                       {/* Lychee Pack Shadow */}
                       <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-4/5 h-8 bg-emerald-950/20 rounded-full blur-md" />
                       <img 
-                        src="/images/pio-lychee.png" 
+                        src="/images/pio-lychee-lossless.webp" 
                         alt="PIO Lychee 160ml pack" 
                         className="h-64 sm:h-80 md:h-96 w-auto object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-105 group-hover:rotate-2"
                       />
@@ -196,7 +196,7 @@ export function Hero() {
                   >
                     <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-amber-950/20 rounded-full blur-md" />
                     <img 
-                      src="/images/pio-mango.png" 
+                      src="/images/pio-mango-lossless.webp" 
                       alt="PIO Mango 3D pack" 
                       className="h-72 sm:h-96 w-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform"
                     />
@@ -224,7 +224,7 @@ export function Hero() {
                   >
                     <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-rose-950/20 rounded-full blur-md" />
                     <img 
-                      src="/images/pio-lychee.png" 
+                      src="/images/pio-lychee-lossless.webp" 
                       alt="PIO Lychee 3D pack" 
                       className="h-72 sm:h-96 w-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform"
                     />

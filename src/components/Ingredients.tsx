@@ -31,7 +31,7 @@ const INGREDIENTS_DATA = {
     viscosity: 82,
     purity: 99.4,
     calories: '68 kcal / 100ml',
-    packImage: '/images/pio-mango.png',
+    packImage: '/images/pio-mango-lossless.webp',
     traits: [
       { label: 'Real Pulp Content', value: '100% Genuine' },
       { label: 'Artificial Colors', value: '0.00% Zero' },
@@ -52,7 +52,7 @@ const INGREDIENTS_DATA = {
     viscosity: 74,
     purity: 99.8,
     calories: '62 kcal / 100ml',
-    packImage: '/images/pio-lychee.png',
+    packImage: '/images/pio-lychee-lossless.webp',
     traits: [
       { label: 'Natural Lychee Extract', value: '100% Genuine' },
       { label: 'Artificial Flavors', value: '0.00% Zero' },

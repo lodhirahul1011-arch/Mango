@@ -54,8 +54,8 @@ function ChapterArt({ index }: { index: number }) {
   return <div className="heritage-art heritage-art--pio" aria-hidden="true">
     <StoryBackdrop />
     <span className="heritage-art__pio-word">Pio.</span>
-    <img className="heritage-pack heritage-pack--mango" src="/assets/products/pio-mango.png" alt="" loading="lazy" width="300" height="600" />
-    <img className="heritage-pack heritage-pack--lychee" src="/assets/products/pio-lychee.png" alt="" loading="lazy" width="300" height="600" />
+    <img className="heritage-pack heritage-pack--mango" src="/assets/products/pio-mango-lossless.webp" alt="" loading="lazy" width="300" height="600" />
+    <img className="heritage-pack heritage-pack--lychee" src="/assets/products/pio-lychee-lossless.webp" alt="" loading="lazy" width="300" height="600" />
     <span className="heritage-art__caption">HAR SIP JIO.</span>
   </div>;
 }

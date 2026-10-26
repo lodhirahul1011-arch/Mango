@@ -1,0 +1,880 @@
+[
+  {
+    "mobile": false,
+    "visit": "cold",
+    "metrics": {
+      "lcp": 1508,
+      "cls": 0.001615053379388503,
+      "longTasks": [
+        180,
+        63,
+        58
+      ],
+      "nav": {
+        "name": "https://mango-i4lg.onrender.com/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 2106.7000000001863,
+        "navigationId": 6105,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "br",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.6000000005587935,
+        "domainLookupStart": 1.2000000001862645,
+        "domainLookupEnd": 26.600000000558794,
+        "connectStart": 26.600000000558794,
+        "secureConnectionStart": 45.60000000055879,
+        "connectEnd": 73.5,
+        "requestStart": 73.5,
+        "responseStart": 375.1000000005588,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 375.1000000005588,
+        "responseEnd": 375.6000000005588,
+        "transferSize": 869,
+        "encodedBodySize": 569,
+        "decodedBodySize": 1278,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 382.90000000037253,
+        "domContentLoadedEventStart": 953,
+        "domContentLoadedEventEnd": 953.3000000007451,
+        "domComplete": 2101.9000000003725,
+        "loadEventStart": 2102.5,
+        "loadEventEnd": 2106.7000000001863,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "resources": [
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap",
+          "bytes": 1189,
+          "decoded": 11634,
+          "duration": 236.79999999981374
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/index-CjmKAXoa.js",
+          "bytes": 174959,
+          "decoded": 513884,
+          "duration": 429
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/index-CVHhE33Q.css",
+          "bytes": 32745,
+          "decoded": 182447,
+          "duration": 416.30000000074506
+        },
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "bytes": 1317,
+          "decoded": 20632,
+          "duration": 130.79999999981374
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/products-orchard-v2.webp",
+          "bytes": 230586,
+          "decoded": 230286,
+          "duration": 420.79999999981374
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/story-tea-v1.webp",
+          "bytes": 196794,
+          "decoded": 196494,
+          "duration": 412.6000000005588
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/assam-heritage-v1.webp",
+          "bytes": 365482,
+          "decoded": 365182,
+          "duration": 420.40000000037253
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/brand/pio-logo-trim.png",
+          "bytes": 40591,
+          "decoded": 40291,
+          "duration": 317.90000000037253
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-nature-new-1672.webp",
+          "bytes": 253738,
+          "decoded": 253438,
+          "duration": 334.20000000018626
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/products/pio-mango.png",
+          "bytes": 1519326,
+          "decoded": 1519026,
+          "duration": 942.7000000001863
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/products/pio-lychee.png",
+          "bytes": 1577803,
+          "decoded": 1577503,
+          "duration": 965.5
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/india-network-map.svg",
+          "bytes": 2793,
+          "decoded": 11522,
+          "duration": 321.1000000005588
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-mango.png",
+          "bytes": 962412,
+          "decoded": 962112,
+          "duration": 719
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-lychee.png",
+          "bytes": 983169,
+          "decoded": 982869,
+          "duration": 522.0999999996275
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/brand/rb-white-logo-trim.png",
+          "bytes": 28491,
+          "decoded": 28191,
+          "duration": 287.59999999962747
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/mango-story-bg-v1.webp",
+          "bytes": 229206,
+          "decoded": 228906,
+          "duration": 405.90000000037253
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/frames/mango/frame_0001.webp",
+          "bytes": 38900,
+          "decoded": 38600,
+          "duration": 390.59999999962747
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/vite.svg",
+          "bytes": 314,
+          "decoded": 10,
+          "duration": 296.09999999962747
+        }
+      ],
+      "overflow": false,
+      "sections": [
+        "home",
+        "flavours",
+        "mango-story",
+        "lychee-story",
+        "story",
+        "pio-moments",
+        "map",
+        "partner",
+        "contact"
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": false,
+    "visit": "repeat",
+    "metrics": {
+      "lcp": 624,
+      "cls": 0,
+      "longTasks": [
+        54,
+        68
+      ],
+      "nav": {
+        "name": "https://mango-i4lg.onrender.com/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 490.09999999962747,
+        "navigationId": 345,
+        "initiatorType": "navigation",
+        "deliveryType": "cache",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "br",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.5,
+        "domainLookupStart": 0.5,
+        "domainLookupEnd": 0.5,
+        "connectStart": 0.5,
+        "secureConnectionStart": 0.5,
+        "connectEnd": 0.5,
+        "requestStart": 1,
+        "responseStart": 236,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 236,
+        "responseEnd": 236.3999999994412,
+        "transferSize": 300,
+        "encodedBodySize": 569,
+        "decodedBodySize": 1278,
+        "responseStatus": 200,
+        "serverTiming": [
+          {
+            "name": "cfExtPri",
+            "duration": 0,
+            "description": ""
+          }
+        ],
+        "unloadEventStart": 238.3999999994412,
+        "unloadEventEnd": 238.3999999994412,
+        "domInteractive": 244.5,
+        "domContentLoadedEventStart": 489.70000000018626,
+        "domContentLoadedEventEnd": 489.79999999981374,
+        "domComplete": 490,
+        "loadEventStart": 490,
+        "loadEventEnd": 490.09999999962747,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "resources": [
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap",
+          "bytes": 0,
+          "decoded": 11634,
+          "duration": 0
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/index-CjmKAXoa.js",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 234.30000000074506
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/index-CVHhE33Q.css",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 239.79999999981374
+        },
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "bytes": 0,
+          "decoded": 20632,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+          "bytes": 0,
+          "decoded": 27348,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/cormorantgaramond/v21/co3bmX5slCNuHLi8bLeY9MK7whWMhyjYqXtK.woff2",
+          "bytes": 0,
+          "decoded": 37640,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/manrope/v20/xn7gYHE41ni1AdIRggmxSuXd.woff2",
+          "bytes": 0,
+          "decoded": 15120,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/manrope/v20/xn7gYHE41ni1AdIRggexSg.woff2",
+          "bytes": 0,
+          "decoded": 24836,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2",
+          "bytes": 0,
+          "decoded": 22288,
+          "duration": 0
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/brand/pio-logo-trim.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 30.299999999813735
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-nature-new-1672.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 33.299999999813735
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/products-orchard-v2.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 30.09999999962747
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/products/pio-mango.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 37.59999999962747
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/products/pio-lychee.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 37.299999999813735
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/mango-story-bg-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 32.200000000186265
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/frames/mango/frame_0001.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 29.799999999813735
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/lychee-story-bg-v1.webp",
+          "bytes": 168862,
+          "decoded": 168562,
+          "duration": 349.3999999994412
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/frames/lychee/frame_0001.webp",
+          "bytes": 43496,
+          "decoded": 43196,
+          "duration": 294.40000000037253
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/assam-heritage-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 31.299999999813735
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/moments-card.jpg",
+          "bytes": 31344,
+          "decoded": 31044,
+          "duration": 462.69999999925494
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/india-network-map.svg",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 29.299999999813735
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-mango.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 34.40000000037253
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-lychee.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 30.5
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/brand/rb-white-logo-trim.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 30.100000000558794
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/story-tea-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 30.600000000558794
+        }
+      ],
+      "overflow": false,
+      "sections": [
+        "home",
+        "flavours",
+        "mango-story",
+        "lychee-story",
+        "story",
+        "pio-moments",
+        "map",
+        "partner",
+        "contact"
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": false,
+    "scrollCheck": {
+      "overflow": false,
+      "frames": [
+        "1",
+        "1"
+      ],
+      "brokenImages": [],
+      "navHidden": true,
+      "longTasks": [
+        54,
+        68,
+        73,
+        144,
+        145
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "visit": "cold",
+    "metrics": {
+      "lcp": 1236,
+      "cls": 0,
+      "longTasks": [
+        168,
+        105,
+        81
+      ],
+      "nav": {
+        "name": "https://mango-i4lg.onrender.com/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 1206.5,
+        "navigationId": 433,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "br",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.5,
+        "domainLookupStart": 0.900000000372529,
+        "domainLookupEnd": 5.800000000745058,
+        "connectStart": 5.800000000745058,
+        "secureConnectionStart": 29.90000000037253,
+        "connectEnd": 59.200000000186265,
+        "requestStart": 59.30000000074506,
+        "responseStart": 296.20000000018626,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 296.20000000018626,
+        "responseEnd": 296.70000000018626,
+        "transferSize": 869,
+        "encodedBodySize": 569,
+        "decodedBodySize": 1278,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 304.30000000074506,
+        "domContentLoadedEventStart": 696,
+        "domContentLoadedEventEnd": 696.4000000003725,
+        "domComplete": 1199.9000000003725,
+        "loadEventStart": 1200.800000000745,
+        "loadEventEnd": 1206.5,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "resources": [
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap",
+          "bytes": 1189,
+          "decoded": 11634,
+          "duration": 240.09999999962747
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/index-CjmKAXoa.js",
+          "bytes": 174959,
+          "decoded": 513884,
+          "duration": 293.59999999962747
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/index-CVHhE33Q.css",
+          "bytes": 32745,
+          "decoded": 182447,
+          "duration": 240.70000000018626
+        },
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "bytes": 1317,
+          "decoded": 20632,
+          "duration": 127.3999999994412
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/products-orchard-v2.webp",
+          "bytes": 230586,
+          "decoded": 230286,
+          "duration": 153.20000000018626
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/story-tea-v1.webp",
+          "bytes": 196794,
+          "decoded": 196494,
+          "duration": 144.29999999981374
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/assam-heritage-v1.webp",
+          "bytes": 365482,
+          "decoded": 365182,
+          "duration": 164
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/brand/pio-logo-trim.png",
+          "bytes": 20490,
+          "decoded": 20190,
+          "duration": 44
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/products/pio-mango.png",
+          "bytes": 174488,
+          "decoded": 174188,
+          "duration": 103.8999999994412
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-mobile-portrait-640.webp",
+          "bytes": 135700,
+          "decoded": 135400,
+          "duration": 333
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/products/pio-lychee.png",
+          "bytes": 187360,
+          "decoded": 187060,
+          "duration": 60.59999999962747
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/india-network-map.svg",
+          "bytes": 2793,
+          "decoded": 11522,
+          "duration": 33.30000000074506
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-mango.png",
+          "bytes": 105596,
+          "decoded": 105296,
+          "duration": 41.700000000186265
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-lychee.png",
+          "bytes": 108916,
+          "decoded": 108616,
+          "duration": 49.89999999944121
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/brand/rb-white-logo-trim.png",
+          "bytes": 11278,
+          "decoded": 10978,
+          "duration": 96.09999999962747
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/mango-story-bg-v1.webp",
+          "bytes": 229206,
+          "decoded": 228906,
+          "duration": 88
+        }
+      ],
+      "overflow": false,
+      "sections": [
+        "home",
+        "flavours",
+        "mango-story",
+        "lychee-story",
+        "story",
+        "pio-moments",
+        "map",
+        "partner",
+        "contact"
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "visit": "repeat",
+    "metrics": {
+      "lcp": 216,
+      "cls": 0,
+      "longTasks": [
+        54,
+        59
+      ],
+      "nav": {
+        "name": "https://mango-i4lg.onrender.com/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 108.69999999925494,
+        "navigationId": 4973,
+        "initiatorType": "navigation",
+        "deliveryType": "cache",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "br",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 0.6999999992549419,
+        "domainLookupStart": 0.6999999992549419,
+        "domainLookupEnd": 0.6999999992549419,
+        "connectStart": 0.6999999992549419,
+        "secureConnectionStart": 0.6999999992549419,
+        "connectEnd": 0.6999999992549419,
+        "requestStart": 1.2999999998137355,
+        "responseStart": 34.299999999813735,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 34.299999999813735,
+        "responseEnd": 34.89999999944121,
+        "transferSize": 300,
+        "encodedBodySize": 569,
+        "decodedBodySize": 1278,
+        "responseStatus": 200,
+        "serverTiming": [
+          {
+            "name": "cfExtPri",
+            "duration": 0,
+            "description": ""
+          }
+        ],
+        "unloadEventStart": 63.89999999944121,
+        "unloadEventEnd": 63.89999999944121,
+        "domInteractive": 70,
+        "domContentLoadedEventStart": 108.29999999981374,
+        "domContentLoadedEventEnd": 108.3999999994412,
+        "domComplete": 108.5,
+        "loadEventStart": 108.5,
+        "loadEventEnd": 108.69999999925494,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {
+          "randomizedTriggerRate": 0.4994798,
+          "value": "low"
+        }
+      },
+      "resources": [
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Permanent+Marker&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap",
+          "bytes": 0,
+          "decoded": 11634,
+          "duration": 0
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/index-CjmKAXoa.js",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 34.40000000037253
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/index-CVHhE33Q.css",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 30.09999999962747
+        },
+        {
+          "name": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "bytes": 0,
+          "decoded": 20632,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2",
+          "bytes": 0,
+          "decoded": 27348,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/cormorantgaramond/v21/co3bmX5slCNuHLi8bLeY9MK7whWMhyjYqXtK.woff2",
+          "bytes": 0,
+          "decoded": 37640,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/manrope/v20/xn7gYHE41ni1AdIRggmxSuXd.woff2",
+          "bytes": 0,
+          "decoded": 15120,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/manrope/v20/xn7gYHE41ni1AdIRggexSg.woff2",
+          "bytes": 0,
+          "decoded": 24836,
+          "duration": 0
+        },
+        {
+          "name": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2",
+          "bytes": 0,
+          "decoded": 22288,
+          "duration": 0
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/brand/pio-logo-trim.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 48.60000000055879
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-mobile-portrait-640.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 48.200000000186265
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/products-orchard-v2.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 30.899999999441206
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/products/pio-mango.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 30.299999999813735
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/assets/products/pio-lychee.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 31
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/mango-story-bg-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 45.10000000055879
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/frames/mango/frame_0001.webp",
+          "bytes": 38900,
+          "decoded": 38600,
+          "duration": 44.69999999925494
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/lychee-story-bg-v1.webp",
+          "bytes": 168862,
+          "decoded": 168562,
+          "duration": 40.89999999944121
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/frames/lychee/frame_0001.webp",
+          "bytes": 43496,
+          "decoded": 43196,
+          "duration": 44.799999999813735
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/assam-heritage-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 38.59999999962747
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/moments-card.jpg",
+          "bytes": 18348,
+          "decoded": 18048,
+          "duration": 39.69999999925494
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/india-network-map.svg",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 36
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-mango.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 39.200000000186265
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/pio-lychee.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 35.700000000186265
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/brand/rb-white-logo-trim.png",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 36.60000000055879
+        },
+        {
+          "name": "https://mango-i4lg.onrender.com/images/story-tea-v1.webp",
+          "bytes": 300,
+          "decoded": 0,
+          "duration": 31.700000000186265
+        }
+      ],
+      "overflow": false,
+      "sections": [
+        "home",
+        "flavours",
+        "mango-story",
+        "lychee-story",
+        "story",
+        "pio-moments",
+        "map",
+        "partner",
+        "contact"
+      ]
+    },
+    "errors": []
+  },
+  {
+    "mobile": true,
+    "scrollCheck": {
+      "overflow": false,
+      "frames": [
+        "1",
+        "1"
+      ],
+      "brokenImages": [],
+      "navHidden": true,
+      "longTasks": [
+        54,
+        59,
+        50,
+        99,
+        121
+      ]
+    },
+    "errors": []
+  }
+]

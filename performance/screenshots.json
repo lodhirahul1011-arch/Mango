@@ -1,0 +1,22 @@
+[
+  {
+    "view": "desktop",
+    "changedPixelsPercent": 0,
+    "meanChannelDifference": 0
+  },
+  {
+    "view": "mobile",
+    "changedPixelsPercent": 0,
+    "meanChannelDifference": 0
+  },
+  {
+    "view": "desktop-contact",
+    "changedPixelsPercent": 20.47577160493827,
+    "meanChannelDifference": 3.065650720164609
+  },
+  {
+    "view": "mobile-contact",
+    "changedPixelsPercent": 18.028618301130148,
+    "meanChannelDifference": 1.3702090168914813
+  }
+]

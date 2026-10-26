@@ -436,8 +436,8 @@ export function InteractiveMap() {
           })}
 
           <div className="pio-map-product pointer-events-none absolute right-[8%] top-[8%] z-30 hidden items-end">
-            <img src="/images/pio-mango.png" alt="" draggable={false} className="h-44 w-auto -rotate-[8deg] object-contain drop-shadow-[0_26px_30px_rgba(38,67,31,0.28)] lg:h-56" />
-            <img src="/images/pio-lychee.png" alt="" draggable={false} className="-ml-14 h-40 w-auto rotate-[5deg] object-contain drop-shadow-[0_26px_30px_rgba(38,67,31,0.24)] lg:h-52" />
+            <img src="/images/pio-mango-lossless.webp" loading="lazy" decoding="async" alt="" draggable={false} className="h-44 w-auto -rotate-[8deg] object-contain drop-shadow-[0_26px_30px_rgba(38,67,31,0.28)] lg:h-56" />
+            <img src="/images/pio-lychee-lossless.webp" loading="lazy" decoding="async" alt="" draggable={false} className="-ml-14 h-40 w-auto rotate-[5deg] object-contain drop-shadow-[0_26px_30px_rgba(38,67,31,0.24)] lg:h-52" />
           </div>
 
           <form onSubmit={handleSearch} className="absolute bottom-8 right-5 z-40 hidden w-[23rem] rounded-3xl border border-white/70 bg-white/52 p-4 shadow-[0_18px_42px_rgba(29,76,41,0.14)] backdrop-blur-md lg:block">

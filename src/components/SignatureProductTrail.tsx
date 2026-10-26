@@ -101,14 +101,14 @@ export function SignatureProductTrail() {
       <div className="absolute left-1/2 top-1/2 h-[280px] w-[210px] -translate-x-1/2 -translate-y-1/2 rounded-[44%] bg-[#FFC83D]/18 blur-3xl" />
       <img
         ref={mangoRef}
-        src="/images/pio-mango.png"
+        src="/images/pio-mango-lossless.webp"
         alt=""
         className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_38px_54px_rgba(7,61,44,0.24)]"
         draggable={false}
       />
       <img
         ref={lycheeRef}
-        src="/images/pio-lychee.png"
+        src="/images/pio-lychee-lossless.webp"
         alt=""
         className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_38px_54px_rgba(131,24,67,0.22)]"
         draggable={false}

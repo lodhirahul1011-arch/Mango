@@ -1,0 +1,30 @@
+[
+  {
+    "source": "/images/pio-mango.png",
+    "output": "/images/pio-mango-lossless.webp",
+    "before": 962112,
+    "after": 557662,
+    "visiblePixelsIdentical": true
+  },
+  {
+    "source": "/images/pio-lychee.png",
+    "output": "/images/pio-lychee-lossless.webp",
+    "before": 982869,
+    "after": 577352,
+    "visiblePixelsIdentical": true
+  },
+  {
+    "source": "/assets/products/pio-mango.png",
+    "output": "/assets/products/pio-mango-lossless.webp",
+    "before": 1519026,
+    "after": 1079912,
+    "visiblePixelsIdentical": true
+  },
+  {
+    "source": "/assets/products/pio-lychee.png",
+    "output": "/assets/products/pio-lychee-lossless.webp",
+    "before": 1577503,
+    "after": 1120708,
+    "visiblePixelsIdentical": true
+  }
+]

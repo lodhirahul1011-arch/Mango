@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Real PIO Mango Carton: Front-facing 3D Tetra Pack with real pack texture
 function RealMangoCarton({ position, rotation }: { position: [number, number, number]; rotation?: [number, number, number] }) {
-  const texture = useTexture('/images/pio-mango.png');
+  const texture = useTexture('/images/pio-mango-lossless.webp');
   texture.generateMipmaps = true;
   texture.minFilter = THREE.LinearMipmapLinearFilter;
 
@@ -60,7 +60,7 @@ function RealMangoCarton({ position, rotation }: { position: [number, number, nu
 
 // Real PIO Lychee Carton: Front-facing 3D Tetra Pack with real pack texture
 function RealLycheeCarton({ position, rotation }: { position: [number, number, number]; rotation?: [number, number, number] }) {
-  const texture = useTexture('/images/pio-lychee.png');
+  const texture = useTexture('/images/pio-lychee-lossless.webp');
   texture.generateMipmaps = true;
   texture.minFilter = THREE.LinearMipmapLinearFilter;
 
@@ -549,8 +549,8 @@ export function WhyPIO() {
               <Suspense
                 fallback={
                   <div className="w-full h-full flex items-center justify-center gap-6">
-                    <img src="/images/pio-mango.png" alt="PIO Mango Pack" className="h-44 object-contain drop-shadow-xl" />
-                    <img src="/images/pio-lychee.png" alt="PIO Lychee Pack" className="h-44 object-contain drop-shadow-xl" />
+                    <img src="/images/pio-mango-lossless.webp" alt="PIO Mango Pack" className="h-44 object-contain drop-shadow-xl" />
+                    <img src="/images/pio-lychee-lossless.webp" alt="PIO Lychee Pack" className="h-44 object-contain drop-shadow-xl" />
                   </div>
                 }
               >
@@ -571,8 +571,8 @@ export function WhyPIO() {
               </Suspense>
             ) : (
               <div className="w-full h-full flex items-center justify-center gap-6">
-                <img src="/images/pio-mango.png" alt="PIO Mango" className="h-48 object-contain drop-shadow-2xl" />
-                <img src="/images/pio-lychee.png" alt="PIO Lychee" className="h-48 object-contain drop-shadow-2xl" />
+                <img src="/images/pio-mango-lossless.webp" alt="PIO Mango" className="h-48 object-contain drop-shadow-2xl" />
+                <img src="/images/pio-lychee-lossless.webp" alt="PIO Lychee" className="h-48 object-contain drop-shadow-2xl" />
               </div>
             )}
           </div>

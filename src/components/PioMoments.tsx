@@ -13,14 +13,14 @@ const MOMENTS = [
     title: <>A little sip.<br /><em>A lot of sunshine.</em></>,
     copy: 'Rich mango flavour. Golden moments. A fruity favourite for your everyday escape.',
     note: 'PIO MANGO · 160 ML · ₹10', link: '#mango-story', cta: 'Meet your mango',
-    image: '/images/mango-story-bg-v1.webp', alt: 'Warm mango orchard scenery', pack: '/assets/products/pio-mango.png',
+    image: '/images/mango-story-bg-v1.webp', alt: 'Warm mango orchard scenery', pack: '/assets/products/pio-mango-lossless.webp',
   },
   {
     id: 'escape', tone: 'lychee', chapter: 'A FRESH PERSPECTIVE',
     title: <>Sweet escape.<br /><em>Pink possibilities.</em></>,
     copy: 'Delicate lychee flavour with a refreshing finish. Take a moment. Make it a PIO moment.',
     note: 'PIO LYCHEE · 160 ML · ₹10', link: '#lychee-story', cta: 'Discover lychee',
-    image: '/images/lychee-story-bg-v1.webp', alt: 'Soft pink lychee orchard scenery', pack: '/assets/products/pio-lychee.png',
+    image: '/images/lychee-story-bg-v1.webp', alt: 'Soft pink lychee orchard scenery', pack: '/assets/products/pio-lychee-lossless.webp',
   },
   {
     id: 'roots', tone: 'assam', chapter: 'FROM OUR HOME TO YOURS',

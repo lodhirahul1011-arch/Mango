@@ -1,0 +1,42 @@
+[
+  {
+    "url": "https://mango-i4lg.onrender.com/",
+    "status": 200,
+    "headersMs": 144,
+    "headers": {
+      "cache-control": "public, max-age=0, s-maxage=300",
+      "content-encoding": "br",
+      "content-type": "text/html; charset=utf-8",
+      "server": "cloudflare",
+      "age": "255"
+    }
+  },
+  {
+    "url": "https://mango-i4lg.onrender.com/assets/index-ijm53x7n.js",
+    "status": 404,
+    "headersMs": 299,
+    "headers": {
+      "cache-control": null,
+      "content-encoding": "br",
+      "content-type": "text/plain; charset=utf-8",
+      "server": "cloudflare",
+      "age": null
+    }
+  },
+  {
+    "url": "https://mango-i4lg.onrender.com/images/pio-nature-new-1672.webp",
+    "status": 200,
+    "headersMs": 245,
+    "headers": {
+      "cache-control": "public, max-age=0, s-maxage=300",
+      "content-encoding": null,
+      "content-type": "image/webp",
+      "server": "cloudflare",
+      "age": null
+    }
+  },
+  {
+    "url": "https://car-booking-backend-pux1.onrender.com/api/health",
+    "error": "TimeoutError"
+  }
+]

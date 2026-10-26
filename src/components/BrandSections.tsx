@@ -17,8 +17,8 @@ const reveal = {
 const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 const PRODUCT_ASSETS = {
-  mango: '/assets/products/pio-mango.png',
-  lychee: '/assets/products/pio-lychee.png',
+  mango: '/assets/products/pio-mango-lossless.webp',
+  lychee: '/assets/products/pio-lychee-lossless.webp',
 };
 
 const FEATURE_BADGES = ['160ml Pack', 'Rs 10', 'Made in Assam'];
@@ -238,7 +238,7 @@ function ProductsShowcase() {
 
       <div className="products-mobile relative min-h-[980px] overflow-hidden px-7 pb-10 pt-16 lg:hidden">
         <img
-          src="/images/products-orchard-v2.webp"
+          src="/images/products-orchard-v2.webp" loading="lazy" decoding="async" width="1672" height="941"
           alt=""
           draggable={false}
           className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
@@ -265,13 +265,13 @@ function ProductsShowcase() {
         <div className="relative z-10 mt-12 h-[440px]">
           <div className="pointer-events-none absolute inset-x-[4%] bottom-6 h-16 rounded-full bg-[#062816]/18 blur-2xl" />
           <img
-            src={PRODUCT_ASSETS.mango}
+            src={PRODUCT_ASSETS.mango} loading="lazy" decoding="async"
             alt="PIO Mango pack"
             draggable={false}
             className="mobile-pack mobile-pack-mango absolute bottom-9 left-[5%] z-10 h-[390px] w-auto -rotate-[5deg] object-contain drop-shadow-[0_30px_38px_rgba(91,67,11,0.22)]"
           />
           <img
-            src={PRODUCT_ASSETS.lychee}
+            src={PRODUCT_ASSETS.lychee} loading="lazy" decoding="async"
             alt="PIO Lychee pack"
             draggable={false}
             className="mobile-pack mobile-pack-lychee absolute bottom-5 right-[1%] z-20 h-[360px] w-auto rotate-[5deg] object-contain drop-shadow-[0_30px_38px_rgba(95,20,44,0.20)]"

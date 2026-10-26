@@ -1,0 +1,21 @@
+const {chromium}=require('../.perf-tools/node_modules/playwright');const fs=require('fs');const assert=require('node:assert/strict');
+(async()=>{
+const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});const results=[];
+for(const mobile of [false,true]){
+ const page=await browser.newPage({viewport:mobile?{width:390,height:844}:{width:1440,height:900},isMobile:mobile,hasTouch:mobile});const errors=[],failed=[];page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>failed.push({url:r.url(),error:r.failure().errorText}));
+ await page.goto('http://127.0.0.1:4173',{waitUntil:'networkidle'});
+ await page.evaluate(()=>document.fonts.ready);
+ const sections=await page.locator('main section').evaluateAll(es=>es.map(e=>e.id));
+ const missing=await page.locator('a[href^="#"]').evaluateAll(es=>es.map(e=>e.getAttribute('href')).filter(h=>h.length>1&&!document.getElementById(h.slice(1))));
+ if(mobile){await page.getByRole('button',{name:'Open navigation menu',exact:true}).click();await page.getByRole('dialog').waitFor({state:'visible'});await page.keyboard.press('Escape');await page.getByRole('dialog').waitFor({state:'hidden'});}
+ await page.getByRole('link',{name:'Explore flavours',exact:true}).first().click();await page.waitForTimeout(1200);
+ await page.locator('#contact').scrollIntoViewIfNeeded();await page.waitForTimeout(1200);assert.equal(await page.locator('[data-pio-nav]').isVisible(),false);
+ await page.getByRole('button',{name:'What is the shelf life of PIO drinks?'}).click();assert.equal(await page.getByRole('button',{name:'What is the shelf life of PIO drinks?'}).getAttribute('aria-expanded'),'true');
+ const form=page.locator('#send-us-form form');await form.locator('input[type=text]').fill('Performance Test');await form.locator('input[type=tel]').fill('+919876543210');await form.locator('input[type=email]').fill('test@example.com');await form.locator('textarea').fill('Local mocked regression check.');
+ await page.route('**/api/pio/contact',route=>route.fulfill({status:route.request().method()==='OPTIONS'?204:503,headers:{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'content-type','Access-Control-Allow-Methods':'POST, OPTIONS'},contentType:'application/json',body:route.request().method()==='OPTIONS'?'':'{"emailStatus":"failed"}'}));await form.getByRole('button',{name:'Submit Enquiry'}).click();await page.getByRole('alert').waitFor();assert.equal(await form.locator('input[type=text]').inputValue(),'Performance Test');
+ await page.unroute('**/api/pio/contact');await page.route('**/api/pio/contact',async route=>{await new Promise(r=>setTimeout(r,150));await route.fulfill({status:route.request().method()==='OPTIONS'?204:200,headers:{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'content-type','Access-Control-Allow-Methods':'POST, OPTIONS'},contentType:'application/json',body:route.request().method()==='OPTIONS'?'':'{"emailStatus":"accepted"}'});});await form.getByRole('button',{name:'Submit Enquiry'}).click();await page.getByRole('status').waitFor();await page.getByRole('button',{name:'Send another enquiry'}).click();assert.equal(await form.locator('input[type=text]').inputValue(),'');
+ await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(400);assert.equal(await page.locator('[data-pio-nav]').isVisible(),true);
+ results.push({mobile,sections,missingAnchors:missing,errors,failed,flows:'menu (mobile), hero CTA, navbar boundary, FAQ, mocked email failure/preservation and success/reset passed'});await page.close();
+}
+const context=await browser.newContext({reducedMotion:'reduce',viewport:{width:390,height:844}});const page=await context.newPage();await page.goto('http://127.0.0.1:4173');await page.locator('#mango-story').scrollIntoViewIfNeeded();await page.waitForTimeout(1200);results.push({reducedMotion:true,frames:await page.locator('canvas[data-frame]').evaluateAll(es=>es.map(e=>e.dataset.frame))});await browser.close();fs.writeFileSync('performance/flows.json',JSON.stringify(results,null,2));console.log(JSON.stringify(results,null,2));
+})().catch(e=>{console.error(e);process.exit(1);});

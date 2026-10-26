@@ -11,12 +11,14 @@ const NAV_LINKS = [
   { id: 'contact', label: 'Contact Us' },
 ];
 
+const NAV_IDS = NAV_LINKS.map(link => link.id);
+
 export function Navbar() {
   const scrolled = useScrolled(20);
   const [open, setOpen] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const active = useActiveSection(NAV_LINKS.map((link) => link.id));
+  const active = useActiveSection(NAV_IDS);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLElement>(null);
 
