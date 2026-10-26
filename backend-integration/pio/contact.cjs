@@ -21,10 +21,16 @@ function createMailer(env = process.env, dependencies = {}) {
   const fetcher = dependencies.fetch || globalThis.fetch;
   function config() {
     const mode = env.CONTACT_MAIL_PROVIDER || 'smtp';
-    const from = env.MAIL_FROM;
     const to = env.CONTACT_EMAIL;
-    if (!cleanHeader(from) || !from || !cleanHeader(to) || !emailPattern.test(to) || !emailPattern.test((from.match(/<([^<>]+)>$/) || [null,from])[1])) throw Error('configuration');
-    if (!['smtp','resend'].includes(mode)) throw Error('configuration');
+    if (!cleanHeader(to) || !emailPattern.test(to)) throw Error('configuration');
+    if (!['smtp','resend','emailjs'].includes(mode)) throw Error('configuration');
+    if (mode === 'emailjs') {
+      const {EMAILJS_SERVICE_ID: serviceId, EMAILJS_TEMPLATE_ID: templateId, EMAILJS_PUBLIC_KEY: publicKey, EMAILJS_PRIVATE_KEY: privateKey} = env;
+      if (![serviceId,templateId,publicKey,privateKey].every(value => typeof value === 'string' && value.trim())) throw Error('configuration');
+      return {mode,to,serviceId,templateId,publicKey,privateKey};
+    }
+    const from = env.MAIL_FROM;
+    if (!cleanHeader(from) || !from || !emailPattern.test((from.match(/<([^<>]+)>$/) || [null,from])[1])) throw Error('configuration');
     if (mode === 'resend') {
       if (!env.RESEND_API_KEY) throw Error('configuration');
       return {mode,from,to};
@@ -46,16 +52,38 @@ function createMailer(env = process.env, dependencies = {}) {
     },
     async send(data) {
       const cfg=config();
-      const rows=[['Name',data.name],['Phone',data.phone],['Email',data.email],['Enquiry purpose',data.inquiryType],['Message',data.message || '(Not provided)'],['Submitted at (UTC)',new Date().toISOString()]];
-      const mail={from:cfg.from,to:cfg.to,replyTo:data.email,subject:'PIO Website - New '+({'Become a Distributor':'Distributor Enquiry','Become a Retailer':'Retailer Enquiry','B2B / Institutional':'B2B Enquiry','General Consumer Feedback':'Consumer Feedback'}[data.inquiryType]),text:rows.map(([k,v])=>k+': '+v).join('\n'),html:'<h2>PIO website enquiry</h2>'+rows.map(([k,v])=>'<p><b>'+k+':</b> '+escapeHtml(v).replace(/\n/g,'<br>')+'</p>').join('')};
-      if (cfg.mode === 'resend') {
-        const {replyTo,...payload}=mail;
-        const response=await fetcher('https://api.resend.com/emails',{method:'POST',headers:{Authorization:'Bearer '+env.RESEND_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({...payload,to:[cfg.to],reply_to:replyTo}),signal:AbortSignal.timeout(20000)});
-        const result=await response.json();
-        if (!response.ok || !result.id) throw Error('provider');
+      const subject='PIO Website - New '+({'Become a Distributor':'Distributor Enquiry','Become a Retailer':'Retailer Enquiry','B2B / Institutional':'B2B Enquiry','General Consumer Feedback':'Consumer Feedback'}[data.inquiryType]);
+      if (cfg.mode === 'emailjs') {
+        const response=await fetcher('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          service_id:cfg.serviceId,
+          template_id:cfg.templateId,
+          user_id:cfg.publicKey,
+          accessToken:cfg.privateKey,
+          template_params:{
+            to_email:cfg.to,
+            name:data.name,
+            email:data.email,
+            phone:data.phone,
+            inquiry_type:data.inquiryType,
+            message:data.message || '(Not provided)',
+            reply_to:data.email,
+            subject,
+            submitted_at:new Date().toISOString(),
+          },
+        }),signal:AbortSignal.timeout(20000)});
+        if (!response.ok) throw Error('provider');
       } else {
-        const result=await transport.sendMail(mail);
-        if (!result.accepted?.some(address => String(typeof address==='string'?address:address.address).toLowerCase()===cfg.to.toLowerCase())) throw Error('provider');
+        const rows=[['Name',data.name],['Phone',data.phone],['Email',data.email],['Enquiry purpose',data.inquiryType],['Message',data.message || '(Not provided)'],['Submitted at (UTC)',new Date().toISOString()]];
+        const mail={from:cfg.from,to:cfg.to,replyTo:data.email,subject,text:rows.map(([k,v])=>k+': '+v).join('\n'),html:'<h2>PIO website enquiry</h2>'+rows.map(([k,v])=>'<p><b>'+k+':</b> '+escapeHtml(v).replace(/\n/g,'<br>')+'</p>').join('')};
+        if (cfg.mode === 'resend') {
+          const {replyTo,...payload}=mail;
+          const response=await fetcher('https://api.resend.com/emails',{method:'POST',headers:{Authorization:'Bearer '+env.RESEND_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({...payload,to:[cfg.to],reply_to:replyTo}),signal:AbortSignal.timeout(20000)});
+          const result=await response.json();
+          if (!response.ok || !result.id) throw Error('provider');
+        } else {
+          const result=await transport.sendMail(mail);
+          if (!result.accepted?.some(address => String(typeof address==='string'?address:address.address).toLowerCase()===cfg.to.toLowerCase())) throw Error('provider');
+        }
       }
       return {emailStatus:'accepted'};
     }
@@ -63,11 +91,6 @@ function createMailer(env = process.env, dependencies = {}) {
 }
 function createRouter({mailer=createMailer(), max=5} = {}) {
   const router=express.Router();
-  router.use((req,res,next)=>{
-    const origins=(process.env.CORS_ORIGINS || process.env.CLIENT_URL || '').split(',').map(s=>s.trim()).filter(Boolean);
-    if(req.headers.origin && !origins.includes(req.headers.origin)) return res.status(403).json({message:'Origin not allowed.'});
-    next();
-  });
   router.use(rateLimit({windowMs:15*60*1000,max,standardHeaders:true,legacyHeaders:false,message:{message:'Too many enquiries. Please try again later.'}}));
   router.use(express.json({limit:'12kb'}));
   router.post('/',async(req,res)=>{
