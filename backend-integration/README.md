@@ -1,68 +1,31 @@
-For this project's local and standalone Node setup, see [LOCAL_SETUP.md](./LOCAL_SETUP.md). The instructions below are the optional external car-booking backend deployment.
+﻿# PIO contact email deployment
 
-# PIO contact email on your existing backend
+Frontend repository: https://github.com/lodhirahul1011-arch/Mango
+Backend repository: https://github.com/lodhirahul1011-arch/Mango-backend
 
-No second service is needed. The website now sends POST /api/pio/contact to your existing car-booking Render service. Its original /api/contact saves car enquiries with incompatible enum values and requires a message. The isolated PIO route sends email only; existing booking, admin and saved-contact behavior is untouched.
+## Separate Render services (current deployment)
 
-## Apply and deploy
+Frontend https://mango-i4lg.onrender.com:
+- Set VITE_CONTACT_API_BASE_URL=https://mango-backend-1wwy.onrender.com in Render Environment.
+- Build: npm ci && npm run build. For a Static Site, publish directory: dist.
+- Rebuild after changing VITE_CONTACT_API_BASE_URL.
 
-A modified checkout is ready at integrations/car-booking/backend (ignored by the PIO repository). The portable files in this directory are the deliverable for the car-booking repository.
+Backend https://mango-backend-1wwy.onrender.com:
+- Repository: Mango-backend, branch main, Root Directory empty.
+- Node Web Service build: npm ci. Start: npm start. Docker deployments use the updated Dockerfile.
+- GET /api/health must report service pio-backend.
+- Public POST /api/pio/contact and OPTIONS preflight are handled before authentication; no login is required.
+- Configure mail variables on the backend Render service. Local .env is not pushed to GitHub.
+- CONTACT_EMAIL controls the recipient; visitor email is Reply-To.
+- SMTP: CONTACT_MAIL_PROVIDER=smtp plus MAIL_HOST, MAIL_PORT, MAIL_SECURE, MAIL_USER, MAIL_PASS, MAIL_FROM.
+- Render Free blocks SMTP ports 465/587. Use a supported HTTPS provider or SMTP-capable hosting.
+- EmailJS HTTPS: CONTACT_MAIL_PROVIDER=emailjs, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY, EMAILJS_PRIVATE_KEY, CONTACT_EMAIL. Template recipient {{to_email}}, Reply-To {{reply_to}}. These are backend variables, never VITE_ secrets.
+- Set TRUST_PROXY_HOPS=1 for Render's proxy.
 
-To apply to another checkout, run from backend-integration:
+## Local / combined hosting
 
-    node install.cjs /absolute/path/to/car-booking/backend
+See LOCAL_SETUP.md. npm run dev serves the frontend and contact API together; leave VITE_CONTACT_API_BASE_URL empty for that setup. npm run build followed by npm start serves both from Node.
 
-This copies pio/ and mounts its route before the existing global CORS middleware and body parsing. The PIO contact endpoint allows requests from any website, without credentials; all other backend endpoints retain the configured CORS allowlist. It also sets trust proxy to TRUST_PROXY_HOPS (default 1 for Render). Review that number if using a different proxy topology; never use unrestricted true. Existing dependencies already include Express, Nodemailer, dotenv, cors and express-rate-limit.
+## Verification
 
-From the car-booking backend directory:
-
-    npm ci
-    node --test pio/contact.test.cjs
-    node pio/verify.cjs
-    npm start
-
-Commit server.js and pio/ to the car-booking repository, then redeploy the EXISTING car-booking-backend-pux1 Render service. This workspace has not pushed or deployed those changes. Until deployment, the new endpoint will not work on the live service.
-
-## Backend environment (Render Environment or backend/.env)
-
-Merge pio/.env.example into existing environment; keep MongoDB, JWT and booking configuration. Do not replace the entire existing environment with mail variables.
-
-- CONTACT_MAIL_PROVIDER=emailjs
-- EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_PUBLIC_KEY, EMAILJS_PRIVATE_KEY: EmailJS account/service/template values. Keep EMAILJS_PRIVATE_KEY server-only in Render; never use a VITE_ prefix.
-- Configure the EmailJS template recipient as `{{to_email}}` and Reply-To as `{{reply_to}}`. The template body can use `{{name}}`, `{{email}}`, `{{phone}}`, `{{inquiry_type}}`, `{{message}}`, `{{subject}}` and `{{submitted_at}}`.
-- CONTACT_MAIL_PROVIDER=smtp is an alternative only on a host that permits outbound SMTP.
-- SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASS: provider credentials. Existing MAIL_HOST, MAIL_PORT, MAIL_SECURE, MAIL_USER, MAIL_PASS aliases are also supported. SMTP_ values take precedence if both exist.
-- Port 587 requires SMTP_SECURE=false and STARTTLS; port 465 requires SMTP_SECURE=true. Certificate verification stays enabled.
-- MAIL_FROM: authorized sender, for example PIO <sender@your-domain.com>.
-- CONTACT_EMAIL: recipient mailbox only. Independent of ADMIN_EMAIL. Change this and restart/redeploy to redirect enquiries.
-- CORS_ORIGINS: comma-separated exact origins for the existing car-booking API. The PIO contact endpoint has its own public CORS policy and does not require adding website origins here.
-- TRUST_PROXY_HOPS=1 for the standard Render proxy.
-
-Customer email becomes Reply-To, never From. Browser input cannot override recipients or credentials. Your src/.env is not the backend environment; provider credentials belong in Render's backend environment. Never prefix SMTP passwords/private keys with VITE_. Rotate any EmailJS private key or mail password previously shared or exposed. No credentials were copied into this integration.
-
-## Frontend environment
-
-Root .env (beside package.json), already configured locally:
-
-    VITE_CONTACT_API_BASE_URL=https://car-booking-backend-pux1.onrender.com
-
-Set the same variable in the frontend hosting environment and rebuild. For local backend use http://localhost:5000. Leave it empty only when a same-origin reverse proxy serves /api/pio/contact. Vite does not load src/.env by default. Only this public URL belongs in frontend configuration.
-
-    npm run dev
-    npm run build
-
-## Render Free / HTTPS options
-
-Render Free blocks outbound SMTP ports 25, 465 and 587: https://render.com/docs/free . SMTP requires compatible hosting; changing credentials cannot bypass this restriction. No plan upgrade is selected here.
-
-For an existing EmailJS Gmail service, use CONTACT_MAIL_PROVIDER=emailjs and set the EmailJS values above in the backend environment. The private key stays server-side. Check EmailJS template recipient/reply-to fields and rate limits. The verification CLI checks configuration only for HTTPS; it does not send mail or verify account authorization.
-
-Alternatively, use CONTACT_MAIL_PROVIDER=resend with a server-only RESEND_API_KEY and an authorized sender on a verified domain. Complete domain/DNS verification and account/recipient restrictions first; a key alone is not enough. See https://resend.com/docs/api-reference/emails/send-email . SMTP settings are unused in this mode.
-
-## Reliability and testing
-
-Successful SMTP recipient acceptance, a successful EmailJS HTTP response, or a successful Resend message ID produces emailStatus=accepted. This is not a guarantee of inbox placement. Failure returns a safe 503, preserves the form values and never reports success. No database is added and no customer confirmation email is sent.
-
-Rate limit is five attempts per IP per 15 minutes (in-memory per instance; use shared storage for multiple instances). Requests are limited to 12 KB, enquiry types are allowlisted, HTML is escaped and a honeypot rejects bots. Existing global backend rate limits also apply. Do not automatically retry uncertain timed-out submissions: a provider may have accepted an email before the connection was lost.
-
-Tests use mocked providers and real local HTTP requests. No live delivery is implied. For a real test after deployment, submit the PIO form with your own details, confirm the network response says accepted, then check CONTACT_EMAIL inbox and spam. Verify CLI sends no email.
+npm test covers validation, mail providers, failures and CORS. npm run test:browser covers frontend success/error handling. Provider acceptance does not guarantee inbox placement. No live test email is automatically sent by these tests.
