@@ -1,3 +1,5 @@
+For this project's local and standalone Node setup, see [LOCAL_SETUP.md](./LOCAL_SETUP.md). The instructions below are the optional external car-booking backend deployment.
+
 # PIO contact email on your existing backend
 
 No second service is needed. The website now sends POST /api/pio/contact to your existing car-booking Render service. Its original /api/contact saves car enquiries with incompatible enum values and requires a message. The isolated PIO route sends email only; existing booking, admin and saved-contact behavior is untouched.
