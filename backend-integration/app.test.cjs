@@ -29,3 +29,24 @@ test('website API delivers validated enquiries and does not report failed sends 
   assert.equal((await fetch(base+'/.env')).status,404);
  } finally {await new Promise(resolve=>server.close(resolve));}
 });
+
+test('PIO contact supports cross-origin preflight and validation responses without opening other paths',async()=>{
+ const app=createApp({mailer:{send:async()=>{}}});
+ const server=app.listen(0,'127.0.0.1');
+ await new Promise(resolve=>server.once('listening',resolve));
+ const base='http://127.0.0.1:'+server.address().port;
+ const origin='https://mango-i4lg.onrender.com';
+ try {
+  const preflight=await fetch(base+'/api/pio/contact',{method:'OPTIONS',headers:{Origin:origin,'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'content-type'}});
+  assert.equal(preflight.status,204);
+  assert.equal(preflight.headers.get('access-control-allow-origin'),origin);
+  assert.match(preflight.headers.get('access-control-allow-methods'),/POST/);
+  assert.match(preflight.headers.get('access-control-allow-headers'),/content-type/i);
+  assert.equal(preflight.headers.get('access-control-allow-credentials'),null);
+  const response=await fetch(base+'/api/pio/contact',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'});
+  assert.equal(response.status,400);
+  assert.equal(response.headers.get('access-control-allow-origin'),origin);
+  const other=await fetch(base+'/api/private',{headers:{Origin:origin}});
+  assert.equal(other.headers.get('access-control-allow-origin'),null);
+ } finally {await new Promise(resolve=>server.close(resolve));}
+});
