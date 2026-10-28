@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('node:path');
 const dotenv = require('dotenv');
 const {createRouter} = require('./pio/contact.cjs');
@@ -11,7 +12,8 @@ function createApp(options = {}) {
   const app = express();
   app.disable('x-powered-by');
   if (process.env.TRUST_PROXY_HOPS) app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS));
-  app.use('/api/pio/contact', createRouter(options));
+  // Public enquiry endpoint: no cookies or authenticated session required.
+  app.use('/api/pio/contact', cors({origin:true,methods:['POST','OPTIONS'],allowedHeaders:['Content-Type'],credentials:false}), createRouter(options));
   return app;
 }
 module.exports = {createApp,loadEnvironment};

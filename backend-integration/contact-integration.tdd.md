@@ -10,3 +10,10 @@ Browser: Playwright verifies failed submission preserves details, accepted respo
 `npm run typecheck` and `npm run build` passed. Build warns about bundle size and outdated Browserslist metadata.
 `npm run mail:verify`: real SMTP connection and authentication verified; no email sent. Inbox placement and production deployment remain unverified.
 Root .env changes are local and ignored. Mail configuration copied from src/.env into server-only keys. No secrets are committed. Browser bundle checked for configured server secrets.
+
+## Separate frontend/backend CORS fix
+
+RED: added a real HTTP preflight test for https://mango-i4lg.onrender.com. Before implementation the OPTIONS response was 200 without the required CORS contract (expected 204).
+GREEN: npm test passes 12/12. The contact-only middleware now handles OPTIONS and attaches origin headers to POST responses, including validation errors. Credentials are not enabled and unrelated routes do not gain CORS headers. This follows the existing public contact endpoint policy.
+Coverage: npm run test:coverage reports 100% lines/functions and 83.70% branches for app.cjs and contact.cjs.
+Live check before deployment: mango-backend-1wwy.onrender.com/api/health identifies roomrent-backend; its preflight rejects the PIO frontend with 403 Origin not allowed. This deployment must use the Mango repository and npm start before this fix can take effect.
