@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { validateContact, type ContactErrors, type ContactForm } from './contactValidation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, MapPin, Phone, Send, CheckCircle2, HelpCircle } from 'lucide-react';
 
@@ -38,28 +39,69 @@ export function Contact() {
   const [error, setError] = useState('');
   const [website, setWebsite] = useState('');
   const pending = useRef(false);
+  const warmed = useRef(false);
+  const [fieldErrors, setFieldErrors] = useState<ContactErrors>({});
+  const base = (import.meta.env.VITE_CONTACT_API_BASE_URL || '').replace(/\/$/, '');
+  const warmBackend = () => {
+    if (warmed.current) return;
+    warmed.current = true;
+    void fetch(base + '/api/health', { signal: AbortSignal.timeout(60000) }).catch(() => {
+      warmed.current = false;
+    });
+  };
+  const updateField = (field: keyof ContactForm, value: string) => {
+    setForm(current => ({ ...current, [field]: value }));
+    setFieldErrors(current => ({ ...current, [field]: undefined }));
+    setError('');
+  };
+  const fieldProps = (field: keyof ContactForm) => ({
+    id: field === 'type' ? 'partner-type-select' : 'contact-' + field,
+    name: field,
+    disabled: submitting,
+    'aria-invalid': Boolean(fieldErrors[field]),
+    'aria-describedby': fieldErrors[field] ? 'contact-' + field + '-error' : undefined,
+    onBlur: () => setFieldErrors(current => ({ ...current, [field]: validateContact(form)[field] })),
+  });
+  const fieldError = (field: keyof ContactForm) => fieldErrors[field] && (
+    <p id={'contact-' + field + '-error'} className="mt-1 text-xs text-red-700">{fieldErrors[field]}</p>
+  );
   const [form, setForm] = useState({ name: '', email: '', phone: '', type: PARTNER_OPTIONS[0], message: '' });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (pending.current) return;
+    const errors = validateContact(form);
+    setFieldErrors(errors);
+    if (Object.keys(errors).length) {
+      const field = Object.keys(errors)[0];
+      document.getElementById(field === 'type' ? 'partner-type-select' : 'contact-' + field)?.focus();
+      return;
+    }
     pending.current = true;
     setSubmitting(true);
     setError('');
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 90000);
     try {
-      const base = (import.meta.env.VITE_CONTACT_API_BASE_URL || '').replace(/\/$/, '');
       const response = await fetch(base + '/api/pio/contact', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
-        body: JSON.stringify({ name: form.name, phone: form.phone, email: form.email,
+        body: JSON.stringify({ name: form.name.trim(), phone: form.phone.trim(), email: form.email.trim(),
           inquiryType: form.type, message: form.message, website }),
       });
       const result = await response.json().catch(() => null);
+      if (response.status === 400 && result?.errors) {
+        const errors: ContactErrors = {};
+        for (const field of ['name', 'phone', 'email', 'type', 'message'] as const) {
+          const message = result.errors[field === 'type' ? 'inquiryType' : field];
+          if (typeof message === 'string') errors[field] = message;
+        }
+        setFieldErrors(errors);
+      }
       if (!response.ok || result?.emailStatus !== 'accepted') {
         throw new Error(response.status === 429
           ? 'Too many enquiries. Please wait 15 minutes before trying again.'
+          : response.status === 400 ? 'Please correct the highlighted details.'
           : 'Your enquiry could not be sent. Please try again or call our helpline.');
       }
       setSubmitted(true);
@@ -201,60 +243,66 @@ export function Contact() {
                   <button type="button" onClick={() => setSubmitted(false)} className="text-sm font-bold text-[#07582f] underline">Send another enquiry</button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4" aria-busy={submitting}>
+                <form noValidate onFocusCapture={warmBackend} onSubmit={handleSubmit} className="space-y-4" aria-busy={submitting}>
                   <div hidden aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} /></label></div>
                   {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
+                      <label htmlFor="contact-name" className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
                         Your Name *
                       </label>
                       <input
-                        type="text"
+                        type="text" autoComplete="name"
                         required
+                        {...fieldProps('name')}
                         maxLength={100} value={form.name}
-                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        onChange={(e) => updateField('name', e.target.value)}
                         placeholder="Rahul Lodhi"
                         className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
                       />
+                      {fieldError('name')}
                     </div>
                     <div>
-                      <label className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
+                      <label htmlFor="contact-phone" className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
                         Phone Number *
                       </label>
                       <input
-                        type="tel"
+                        type="tel" autoComplete="tel" inputMode="tel"
                         required
+                        {...fieldProps('phone')}
                         maxLength={30} value={form.phone}
-                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        onChange={(e) => updateField('phone', e.target.value)}
                         placeholder="+91 99999 99999"
                         className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
                       />
+                      {fieldError('phone')}
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
+                    <label htmlFor="contact-email" className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
                       Email Address *
                     </label>
                     <input
-                      type="email"
+                      type="email" autoComplete="email"
                       required
-                      maxLength={254} value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      {...fieldProps('email')}
+                        maxLength={254} value={form.email}
+                      onChange={(e) => updateField('email', e.target.value)}
                       placeholder="rahul@example.com"
                       className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
                     />
+                      {fieldError('email')}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
+                    <label htmlFor="partner-type-select" className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
                       Enquiry Purpose
                     </label>
                     <select
-                      id="partner-type-select"
+                      {...fieldProps('type')}
                       value={form.type}
-                      onChange={(e) => setForm({ ...form, type: e.target.value })}
+                      onChange={(e) => updateField('type', e.target.value)}
                       className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f]"
                     >
                       {PARTNER_OPTIONS.map((opt) => (
@@ -263,24 +311,27 @@ export function Contact() {
                         </option>
                       ))}
                     </select>
+                    {fieldError('type')}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
-                      Message / City & Details
+                    <label htmlFor="contact-message" className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">
+                      Message / City & Details (optional)
                     </label>
                     <textarea
                       rows={3}
-                      maxLength={5000} value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                      {...fieldProps('message')}
+                        maxLength={5000} value={form.message}
+                      onChange={(e) => updateField('message', e.target.value)}
                       placeholder="Please mention your location and requirement details..."
                       className="w-full rounded-2xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f] focus:ring-1 focus:ring-[#07582f] resize-none"
                     />
+                      {fieldError('message')}
                   </div>
 
                   <button
                     type="submit" disabled={submitting}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#07582f] hover:bg-[#0a6d3b] text-white py-3.5 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                    className="disabled:opacity-60 disabled:cursor-wait w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#07582f] hover:bg-[#0a6d3b] text-white py-3.5 text-xs font-black uppercase tracking-wider shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                   >
                     <span>{submitting ? 'Sending enquiry...' : 'Submit Enquiry'}</span>
                     <Send className="w-3.5 h-3.5" />
