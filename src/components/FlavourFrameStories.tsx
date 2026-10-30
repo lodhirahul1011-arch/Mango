@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const flavours = [
   { id: 'mango', count: 89, number: '01', label: 'PIO MANGO', title: 'A little sip.\nA lot of sunshine.', description: 'Rich mango flavour. Golden moments. Take a slow scroll into your fruity favourite.', note: 'SUNSHINE, PACKED.', next: 'lychee-story', nextLabel: 'Meet lychee' },
-  { id: 'lychee', count: 57, number: '02', label: 'PIO LYCHEE', title: 'Sweet escape.\nFresh perspective.', description: 'Delicate lychee flavour with a refreshing finish. A little everyday escape, in every sip.', note: 'REFRESHINGLY YOURS.', next: 'inside', nextLabel: 'Discover the ingredients' },
+  { id: 'lychee', count: 57, number: '02', label: 'PIO LYCHEE', title: 'Sweet escape.\nFresh perspective.', description: 'Delicate lychee flavour with a refreshing finish. A little everyday escape, in every sip.', note: 'REFRESHINGLY YOURS.', next: null, nextLabel: null },
 ] as const;
 
 
@@ -72,7 +72,9 @@ function FlavourScene({ flavour }: { flavour: typeof flavours[number] }) {
           <h2 id={`${flavour.id}-film-title`}>{flavour.title.split('\n').map(line => <span key={line}>{line}</span>)}</h2>
           <p className="flavour-film__description">{flavour.description}</p>
           <div className="flavour-film__facts"><span>160 ml of happy</span><span>&#8377;10 a pack</span></div>
-          <a className="flavour-film__link" href={`#${flavour.next}`}>{flavour.nextLabel}<ArrowUpRight size={18} /></a>
+          {flavour.next && flavour.nextLabel && (
+            <a className="flavour-film__link" href={`#${flavour.next}`}>{flavour.nextLabel}<ArrowUpRight size={18} /></a>
+          )}
           <div className="flavour-film__scroll"><ArrowDown size={16} /><span>Scroll to savour the moment</span></div>
         </div>
         <div className="flavour-film__visual">

@@ -35,7 +35,7 @@
 /* Portrait artwork is exclusive to phones; desktop composition stays unchanged. */
 @media (max-width: 767px) {
   .pio-hero__shell { min-height: max(740px, 179.17vw); padding: 112px 24px 24px; }
-  .pio-hero__copy { width: 100%; max-width: 480px; margin-bottom: auto; }
+  .pio-hero__copy { width: 100%; max-width: 480px; margin-bottom: auto; padding: 18px; border: 1px solid #ddfa8a80; border-radius: 20px; background: #071710e8; box-shadow: 0 12px 32px #07171080; backdrop-filter: blur(10px); }
   .pio-hero__eyebrow { font-size: 10px; text-shadow: 0 1px 8px #071710; }
   .pio-hero h1 { font-size: clamp(50px, 12.5vw, 88px); margin: 16px 0; line-height: 1; text-shadow: 0 2px 12px #07171066; }
   .pio-hero h1 span, .pio-hero h1 em { display: inline; }

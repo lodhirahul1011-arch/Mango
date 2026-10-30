@@ -335,8 +335,6 @@ function ProductsShowcase() {
         </div>
 
         <div ref={visualRef} className="products-stage relative z-10 -mt-2 min-h-[330px] overflow-hidden rounded-[28px] sm:mt-0 sm:min-h-[620px] sm:overflow-visible sm:rounded-none lg:min-h-[760px]">
-          <div className="products-sip-seal" aria-hidden="true"><Sparkles size={22} /><span>GOOD MOOD</span><strong>on the go.</strong></div>
-
           <div className="depth-near pointer-events-none absolute inset-x-[12%] bottom-[18%] h-20 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(7,61,44,0.22),transparent_68%)] blur-2xl sm:bottom-[20%] sm:h-28" />
 
 

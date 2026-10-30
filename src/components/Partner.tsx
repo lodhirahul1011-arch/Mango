@@ -39,7 +39,7 @@ const PARTNER_TYPES: PartnerType[] = [
     title: 'B2B & Canteens',
     icon: Building2,
     description: 'Bulk supply for school canteens, college campuses, corporate dining, and events.',
-    benefits: ['Customized bulk packaging', 'Aseptic shelf-stability (no chillers required for storage)', 'Dedicated account manager'],
+    benefits: ['Aseptic shelf-stability (no chillers required for storage)', 'Dedicated account manager'],
     badge: 'Institutional',
   },
 ];

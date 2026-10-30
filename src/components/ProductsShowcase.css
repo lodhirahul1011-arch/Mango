@@ -50,27 +50,6 @@
 .products-showcase .flavour-info-lychee { border-top: 3px solid #e87993; }
 .products-showcase .flavour-info p { line-height: 1.65; }
 
-.products-sip-seal {
-  position: absolute;
-  top: 4%;
-  right: 5%;
-  width: 112px;
-  height: 112px;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  background: #085735;
-  color: #fff5c9;
-  border: 5px solid #fff5c9;
-  outline: 1px solid #08573533;
-  box-shadow: 0 12px 30px #08573518;
-  transform: rotate(12deg);
-}
-.products-sip-seal span { font-size: 8px; font-weight: 800; letter-spacing: .16em; }
-.products-sip-seal strong { font-size: 15px; }
 .product-float { width: 100%; height: 100%; animation: pio-pack-bob 5s ease-in-out infinite; }
 .product-float-lychee { animation-delay: -2.5s; animation-duration: 5.8s; }
 .product-float img { transition: scale .45s ease, filter .45s ease; }
@@ -104,7 +83,6 @@
   .products-stage .product-mango { top: 55px; left: 3%; width: 46%; height: 450px; }
   .products-stage .product-lychee { top: 95px; right: 3%; width: 46%; height: 435px; }
   .products-stage .product-float img { height: 100%; }
-  .products-showcase .products-sip-seal { width: 94px; height: 94px; top: 0; right: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
