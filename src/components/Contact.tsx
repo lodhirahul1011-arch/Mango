@@ -41,7 +41,7 @@ export function Contact() {
   const pending = useRef(false);
   const warmed = useRef(false);
   const [fieldErrors, setFieldErrors] = useState<ContactErrors>({});
-  const base = (import.meta.env.VITE_CONTACT_API_BASE_URL || '').replace(/\/$/, '');
+  const base = (import.meta.env.VITE_CONTACT_API_BASE_URL || '').trim().replace(/\/+$/, '');
   const warmBackend = () => {
     if (warmed.current) return;
     warmed.current = true;
@@ -73,6 +73,7 @@ export function Contact() {
     const errors = validateContact(form);
     setFieldErrors(errors);
     if (Object.keys(errors).length) {
+      console.warn('[PIO contact] Validation failed', { fields: Object.keys(errors) });
       const field = Object.keys(errors)[0];
       document.getElementById(field === 'type' ? 'partner-type-select' : 'contact-' + field)?.focus();
       return;
@@ -83,6 +84,9 @@ export function Contact() {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 90000);
     try {
+      if (!base) console.warn('[PIO contact] VITE_CONTACT_API_BASE_URL is missing. Using same-origin API; Netlify needs the Render URL and a rebuild.');
+      if (base && !/^https?:\/\//i.test(base)) throw new Error('Contact service is temporarily unavailable. Please call our helpline.');
+      console.info('[PIO contact] Sending enquiry', { endpoint: base + '/api/pio/contact' });
       const response = await fetch(base + '/api/pio/contact', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
@@ -90,6 +94,11 @@ export function Contact() {
           inquiryType: form.type, message: form.message, website }),
       });
       const result = await response.json().catch(() => null);
+      console.info('[PIO contact] API response', { status: response.status, json: result !== null, accepted: result?.emailStatus === 'accepted' });
+      if (!result) {
+        console.error('[PIO contact] Expected JSON. Check Netlify VITE_CONTACT_API_BASE_URL, rebuild, and verify the Render API route.');
+        throw new Error('Contact service is temporarily unavailable. Please call our helpline.');
+      }
       if (response.status === 400 && result?.errors) {
         const errors: ContactErrors = {};
         for (const field of ['name', 'phone', 'email', 'type', 'message'] as const) {
@@ -108,6 +117,7 @@ export function Contact() {
       setForm({ name: '', email: '', phone: '', type: PARTNER_OPTIONS[0], message: '' });
       setWebsite('');
     } catch (failure) {
+      console.error('[PIO contact] Submission failed', { category: failure instanceof Error ? failure.name : 'UnknownError', hint: 'Check API status above. Network errors may indicate CORS, an unavailable backend, or an incorrect API URL.' });
       setError(failure instanceof Error && !['AbortError', 'TypeError'].includes(failure.name)
         ? failure.message
         : 'Unable to confirm submission. Please check your connection or call our helpline.');
