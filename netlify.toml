@@ -3,4 +3,4 @@
   publish = "dist"
 
 [build.environment]
-  VITE_CONTACT_API_BASE_URL = "https://mango-backend-1wwy.onrender.com"
+  VITE_CONTACT_API_BASE_URL = "https://celadon-griffin-9382dd.netlify.app"
