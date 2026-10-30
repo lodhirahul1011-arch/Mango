@@ -1,6 +1,22 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  functions = "netlify/functions"
 
 [build.environment]
-  VITE_CONTACT_API_BASE_URL = "https://celadon-griffin-9382dd.netlify.app"
+  VITE_CONTACT_API_BASE_URL = ""
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["express", "nodemailer"]
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

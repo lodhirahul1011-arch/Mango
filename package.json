@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
-    "test": "node --test backend-integration/app.test.cjs backend-integration/pio/contact.test.cjs",
-    "test:coverage": "node --test --experimental-test-coverage backend-integration/app.test.cjs backend-integration/pio/contact.test.cjs",
+    "test": "node --test backend-integration/app.test.cjs backend-integration/pio/contact.test.cjs backend-integration/netlify.test.cjs",
+    "test:coverage": "node --test --experimental-test-coverage backend-integration/app.test.cjs backend-integration/pio/contact.test.cjs backend-integration/netlify.test.cjs",
     "start": "node backend-integration/server.cjs",
     "mail:verify": "node backend-integration/pio/verify.cjs",
     "test:browser": "node --test backend-integration/browser.test.cjs"
@@ -31,6 +31,7 @@
     "nodemailer": "^6.9.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "serverless-http": "^4.0.0",
     "three": "^0.186.1"
   },
   "devDependencies": {

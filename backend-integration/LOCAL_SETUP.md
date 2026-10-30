@@ -1,10 +1,12 @@
-# Same-origin contact API (local and Node hosting)
+# Same-origin contact API (local, Netlify, and Node hosting)
 
 Run `npm install`, then `npm run dev`. Vite now serves `/api/pio/contact` inside the same process as the frontend. Restart Vite after changing `.env`.
 
 Root `.env` (beside package.json) is the server configuration. `VITE_CONTACT_API_BASE_URL=` uses the same origin. SMTP settings were migrated locally from src/.env; credentials remain ignored by Git. Existing deployment environment values take precedence over .env. Only public URLs should use the VITE_ prefix.
 
-For production on a Node host: `npm run build`, then `npm start` (PORT defaults to 5000). Set server mail variables on that host. A static-only upload of dist does not run the API; use a Node host or deploy the existing backend integration and configure VITE_CONTACT_API_BASE_URL before building.
+For Netlify, the root `netlify.toml` deploys the API as a function alongside the frontend and rewrites `/api/*` to it. Set the mail variables in Netlify's server-side environment settings and redeploy; no separate API base URL is needed.
+
+For production on a Node host: `npm run build`, then `npm start` (PORT defaults to 5000). Set server mail variables on that host. A static-only upload of `dist` does not run the API; use the Netlify function setup or a Node host.
 
 Required SMTP variables: CONTACT_MAIL_PROVIDER=smtp, CONTACT_EMAIL, MAIL_FROM, MAIL_HOST, MAIL_PORT, MAIL_SECURE, MAIL_USER, MAIL_PASS. Ports 587/false and 465/true are supported. `npm run mail:verify` checks connection/authentication without sending email.
 
