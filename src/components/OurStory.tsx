@@ -118,7 +118,7 @@ export function OurStory() {
                 <h3 id={`story-title-${index}`}>{chapter.title.split('\n').map(line => <span key={line}>{line}</span>)}</h3>
                 <p className="heritage-chapter__lead">{chapter.copy}</p>
                 <p className="heritage-chapter__detail">{chapter.detail}</p>
-                {index === 1 && <div className="heritage-stats" aria-label="Repose network"><div><strong>15,000<span>+</span></strong><p>Repose retail outlets across Assam</p></div><div><strong>16</strong><p>Repose bakery outlets in Guwahati</p></div></div>}
+                {index === 1 && <div className="heritage-stats" aria-label="Repose network"><div><strong>15,000<span>+</span></strong><p>Repose retailers across Assam</p></div><div><strong>16</strong><p>Repose bakery outlets in Guwahati</p></div></div>}
                 <span className="heritage-chapter__foot">{chapter.foot}</span>
                 <a className="heritage-stack__cta" href={index < 2 ? `#story-chapter-${index + 1}` : '#flavours'}>{index < 2 ? 'The next chapter' : 'Meet your next favourite'}<ArrowUpRight size={18} /></a>
               </div>
