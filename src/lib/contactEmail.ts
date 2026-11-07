@@ -1,13 +1,12 @@
 import type { ContactForm } from '../components/contactValidation';
 
 export async function sendContactEmail(form: ContactForm, signal: AbortSignal): Promise<void> {
-  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID?.trim();
-  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim();
-  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim();
-  const recipient = import.meta.env.VITE_CONTACT_EMAIL?.trim();
-  if (!serviceId || !templateId || !publicKey || !recipient) {
-    throw new Error('Contact email is not configured. Please call our helpline.');
-  }
+  // Public browser credentials: static deployments also work without build-time env vars.
+  // Never put an EmailJS private key or SMTP password here.
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID?.trim() || 'service_hhxvgjo';
+  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim() || 'template_rosujl5';
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim() || '4X8Tgms0rvCIcHcVh';
+  const recipient = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'lodhirahul7002@gmail.com';
   const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -4,7 +4,7 @@ Create a Render Static Site from this repository (or use the included render.yam
 
 - Build command: `npm ci && npm run build`
 - Publish directory: `dist`
-- Copy the four public VITE_ values from `.env.example` into Render Environment before building.
+- The verified public EmailJS settings are included in the frontend, so no environment variables are required. The four VITE_ values in `.env.example` can optionally override them; remove stale overrides from Render Environment.
 - For manual Static Site setup, add a rewrite from `/*` to `/index.html`.
 - Rebuild after changing any VITE_ environment variable.
 
