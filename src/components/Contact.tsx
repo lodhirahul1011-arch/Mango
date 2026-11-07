@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { sendContactEmail } from '../lib/contactEmail';
 import { validateContact, type ContactErrors, type ContactForm } from './contactValidation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, MapPin, Phone, Send, CheckCircle2, HelpCircle } from 'lucide-react';
@@ -39,16 +40,7 @@ export function Contact() {
   const [error, setError] = useState('');
   const [website, setWebsite] = useState('');
   const pending = useRef(false);
-  const warmed = useRef(false);
   const [fieldErrors, setFieldErrors] = useState<ContactErrors>({});
-  const base = (import.meta.env.VITE_CONTACT_API_BASE_URL || '').trim().replace(/\/+$/, '');
-  const warmBackend = () => {
-    if (warmed.current) return;
-    warmed.current = true;
-    void fetch(base + '/api/health', { signal: AbortSignal.timeout(60000) }).catch(() => {
-      warmed.current = false;
-    });
-  };
   const updateField = (field: keyof ContactForm, value: string) => {
     setForm(current => ({ ...current, [field]: value }));
     setFieldErrors(current => ({ ...current, [field]: undefined }));
@@ -82,42 +74,15 @@ export function Contact() {
     setSubmitting(true);
     setError('');
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 90000);
+    const timeout = window.setTimeout(() => controller.abort(), 20000);
     try {
-      if (!base) console.warn('[PIO contact] VITE_CONTACT_API_BASE_URL is missing. Using same-origin API; Netlify needs the Render URL and a rebuild.');
-      if (base && !/^https?:\/\//i.test(base)) throw new Error('Contact service is temporarily unavailable. Please call our helpline.');
-      console.info('[PIO contact] Sending enquiry', { endpoint: base + '/api/pio/contact' });
-      const response = await fetch(base + '/api/pio/contact', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({ name: form.name.trim(), phone: form.phone.trim(), email: form.email.trim(),
-          inquiryType: form.type, message: form.message, website }),
-      });
-      const result = await response.json().catch(() => null);
-      console.info('[PIO contact] API response', { status: response.status, json: result !== null, accepted: result?.emailStatus === 'accepted' });
-      if (!result) {
-        console.error('[PIO contact] Expected JSON. Check Netlify VITE_CONTACT_API_BASE_URL, rebuild, and verify the Render API route.');
-        throw new Error('Contact service is temporarily unavailable. Please call our helpline.');
-      }
-      if (response.status === 400 && result?.errors) {
-        const errors: ContactErrors = {};
-        for (const field of ['name', 'phone', 'email', 'type', 'message'] as const) {
-          const message = result.errors[field === 'type' ? 'inquiryType' : field];
-          if (typeof message === 'string') errors[field] = message;
-        }
-        setFieldErrors(errors);
-      }
-      if (!response.ok || result?.emailStatus !== 'accepted') {
-        throw new Error(response.status === 429
-          ? 'Too many enquiries. Please wait 15 minutes before trying again.'
-          : response.status === 400 ? 'Please correct the highlighted details.'
-          : 'Your enquiry could not be sent. Please try again or call our helpline.');
-      }
+      if (website) throw new Error('Your enquiry could not be sent. Please try again.');
+      await sendContactEmail(form, controller.signal);
       setSubmitted(true);
       setForm({ name: '', email: '', phone: '', type: PARTNER_OPTIONS[0], message: '' });
       setWebsite('');
     } catch (failure) {
-      console.error('[PIO contact] Submission failed', { category: failure instanceof Error ? failure.name : 'UnknownError', hint: 'Check API status above. Network errors may indicate CORS, an unavailable backend, or an incorrect API URL.' });
+      console.error('[PIO contact] Submission failed', { category: failure instanceof Error ? failure.name : 'UnknownError', hint: 'Check EmailJS service, template, public key and allowed origins.' });
       setError(failure instanceof Error && !['AbortError', 'TypeError'].includes(failure.name)
         ? failure.message
         : 'Unable to confirm submission. Please check your connection or call our helpline.');
@@ -253,7 +218,7 @@ export function Contact() {
                   <button type="button" onClick={() => setSubmitted(false)} className="text-sm font-bold text-[#07582f] underline">Send another enquiry</button>
                 </div>
               ) : (
-                <form noValidate onFocusCapture={warmBackend} onSubmit={handleSubmit} className="space-y-4" aria-busy={submitting}>
+                <form noValidate onSubmit={handleSubmit} className="space-y-4" aria-busy={submitting}>
                   <div hidden aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} /></label></div>
                   {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
                   <div className="grid sm:grid-cols-2 gap-4">

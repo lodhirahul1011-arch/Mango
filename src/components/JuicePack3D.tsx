@@ -95,7 +95,7 @@ export function JuicePack3D({ flavor, className = '' }: Props) {
               {/* Top: brand */}
               <div className="relative z-10 mt-3 text-center">
                 <p className="font-display text-2xl font-bold italic text-white drop-shadow-lg">Pio</p>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-white/80">Har Sip Jio</p>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-white/80">Har Sip. PIO.</p>
               </div>
 
               {/* Middle: flavor */}

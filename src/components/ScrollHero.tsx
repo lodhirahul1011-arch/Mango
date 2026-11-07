@@ -29,11 +29,10 @@ export function ScrollHero() {
         <div className="pio-hero__copy">
           <p className="pio-hero__eyebrow">BORN IN ASSAM</p>
           <h1 id="pio-hero-title"><span>Har Sip.</span><em>PIO.</em></h1>
-          <p className="pio-hero__intro">Real fruit refreshment in every sip.<br />Mango sunshine. Lychee freshness.</p>
+          <p className="pio-hero__intro">Real fruit refreshment in every sip.</p>
           <div className="pio-hero__actions">
             <div className="pio-hero__links">
               <a className="pio-hero__primary" href="#flavours">Explore flavours <ArrowRight size={18} /></a>
-              <a className="pio-hero__secondary" href="#map">Find near you <ArrowRight size={16} /></a>
             </div>
           </div>
         </div>

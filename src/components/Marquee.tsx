@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Leaf } from 'lucide-react';
 
 const PHRASES = [
-  'Har Sip Jio',
+  'Har Sip. PIO.',
   'Born in Assam',
   'No Preservatives',
   'Aseptically Packed',

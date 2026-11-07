@@ -283,12 +283,12 @@ export function WhereToBuy() {
                   placeholder="Enter Pincode or City (e.g. 784125, Guwahati)"
                   className="flex-1 rounded-full border border-emerald-900/20 bg-white px-5 py-3 text-sm font-semibold text-emerald-950 placeholder:text-slate-400 focus:outline-none focus:border-[#07582f]"
                 />
-                <button 
+                {/* <button 
                   onClick={() => setSearched(true)}
                   className="rounded-full bg-[#07582f] hover:bg-[#0a6d3b] text-white px-6 py-3 text-xs font-black uppercase tracking-wider shadow-sm transition-all shrink-0 hover:scale-105 active:scale-95"
                 >
                   FIND NEAR YOU →
-                </button>
+                </button> */}
               </div>
 
               {searched && (

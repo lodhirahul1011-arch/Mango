@@ -142,7 +142,7 @@ export function OurStory() {
 
       <div className="heritage-closing">
         <div className="heritage-closing__landscape" aria-hidden="true" />
-        <span className="heritage-closing__word" aria-hidden="true">Har Sip Jio.</span>
+        <span className="heritage-closing__word" aria-hidden="true">Har Sip. PIO.</span>
         <div className="heritage-closing__layout">
           <div className="heritage-closing__content">
             <p className="heritage-kicker">FROM ASSAM. FOR WHAT'S AHEAD.</p>

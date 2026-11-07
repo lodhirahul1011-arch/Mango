@@ -101,7 +101,7 @@ export function Footer() {
                 />
               </div>
               <p className="mt-2 max-w-[290px] text-xl font-black leading-tight text-[#0d3d2d]">
-                Har Sip Jio.
+                Har Sip. PIO.
               </p>
               <a
                 href={LOCATION_LINK}
