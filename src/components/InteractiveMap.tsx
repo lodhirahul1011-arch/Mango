@@ -57,6 +57,7 @@ export function InteractiveMap() {
   return (
     <section
       id="map"
+      data-local-motion="true"
       className="relative overflow-hidden border-t border-emerald-900/10 bg-[#f7f3df] py-10 text-[#0b2218] sm:py-14 lg:py-16"
     >
       <div className="pointer-events-none absolute -left-16 top-0 h-64 w-64 rounded-full bg-[#2f6d20]/25 blur-[80px]" />
