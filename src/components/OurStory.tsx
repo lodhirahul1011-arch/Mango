@@ -111,10 +111,10 @@ export function OurStory() {
         <span className="heritage-glow heritage-glow--peach" />
         <span className="heritage-glow heritage-glow--gold" />
       </div>
-      <div className="heritage-intro">
+      <div className="heritage-intro heritage-intro--banner">
         <div className="heritage-meta heritage-reveal"><span>OUR STORY / EST. 1931</span><span><MapPin size={12} /> MANGALDAI, ASSAM</span></div>
         <h2 id="heritage-heading" className="heritage-reveal">Rooted in Assam.<br /><em>Made for what's next.</em></h2>
-        <div className="heritage-intro__bottom heritage-reveal"><p>From a little tea stall to a new generation of beverages.<br />Some stories get better with every sip.</p><a href="#story-chapter-0">FOLLOW OUR JOURNEY <ArrowDown size={17} /></a></div>
+        <div className="heritage-intro__bottom heritage-reveal"><p>From a little tea stall to a new generation of beverages.<br /> Some stories get better with every sip.</p><a href="#story-chapter-0">FOLLOW OUR JOURNEY <ArrowDown size={17} /></a></div>
         <div className="heritage-intro__rule" />
       </div>
 
