@@ -82,7 +82,7 @@ export function Contact() {
       setForm({ name: '', email: '', phone: '', type: PARTNER_OPTIONS[0], message: '' });
       setWebsite('');
     } catch (failure) {
-      console.error('[PIO contact] Submission failed', { category: failure instanceof Error ? failure.name : 'UnknownError', hint: 'Check EmailJS service, template, public key and allowed origins.' });
+      console.error('[PIO contact] Submission failed', { category: failure instanceof Error ? failure.name : 'UnknownError', hint: 'Check the contact API and Resend configuration.' });
       setError(failure instanceof Error && !['AbortError', 'TypeError'].includes(failure.name)
         ? failure.message
         : 'Unable to confirm submission. Please check your connection or call our helpline.');

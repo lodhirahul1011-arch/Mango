@@ -1,19 +1,19 @@
 services:
   - type: web
-    name: pio-frontend
-    runtime: static
+    name: pio-web
+    runtime: node
+    plan: free
     buildCommand: npm ci && npm run build
-    staticPublishPath: ./dist
+    startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
-      - key: VITE_EMAILJS_SERVICE_ID
-        value: service_hhxvgjo
-      - key: VITE_EMAILJS_TEMPLATE_ID
-        value: template_rosujl5
-      - key: VITE_EMAILJS_PUBLIC_KEY
-        value: 4X8Tgms0rvCIcHcVh
-      - key: VITE_CONTACT_EMAIL
+      - key: NODE_ENV
+        value: production
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_TEMPLATE_ID
+        value: new-enquiry-notification
+      - key: RESEND_FROM_EMAIL
+        value: onboarding@resend.dev
+      - key: CONTACT_EMAIL
         value: lodhirahul7002@gmail.com
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html

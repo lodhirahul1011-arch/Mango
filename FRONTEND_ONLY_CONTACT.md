@@ -1,29 +1,15 @@
-# Frontend-only contact deployment
+# Resend contact form deployment
 
-Contact.tsx -> src/lib/contactEmail.ts -> https://api.emailjs.com/api/v1.0/email/send
+The contact form now sends to POST /api/contact. The Node server sends through the Resend HTTPS API using the published new-enquiry-notification template (name, phone, email, purpose, message). The same server serves dist. EmailJS is no longer used.
 
-The Contact Us form already uses EmailJS directly. No backend, SMTP server, database, or /api/contact route is needed for this form. Existing field validation, honeypot, duplicate-submit protection and 20-second timeout remain active. The existing local changes in contactEmail.ts have been preserved.
+## Local development
+Keep RESEND_API_KEY in the ignored root .env. Run npm run dev:server in one terminal and npm run dev in another. Vite proxies /api to port 3001. For production locally, run npm run build then npm start.
 
-## Deploy the correct project
+## Render deployment
+This setup requires a Node Web Service, not a Static Site. Create a Web Service connected to this repository/main, repository root as Root Directory, build command npm ci && npm run build, start command npm start, health path /api/health. render.yaml contains the equivalent Blueprint. A Static Site cannot run the contact endpoint.
 
-Use PIO_website_full_brand_updated (1) as the project root, not Mango-backend-pio.
-Build: npm ci && npm run build
-Publish: dist
-Render: create a Static Site using render.yaml. Do not use npm start for a static deployment.
-Netlify: netlify.toml now publishes dist and excludes the legacy backend functions using an empty functions directory. For manual upload, upload the built frontend folder.
+Set RESEND_API_KEY as a private Render environment variable, RESEND_TEMPLATE_ID=new-enquiry-notification, RESEND_FROM_EMAIL=onboarding@resend.dev, CONTACT_EMAIL=lodhirahul7002@gmail.com. Never use a VITE_ prefix for the key. Remove old VITE_EMAILJS_* values. Do not commit .env.
 
-## EmailJS account setup
+The resend.dev sender sends only to the Resend account email. Use a verified-domain sender for production. HTTPS is used because Render Free blocks SMTP ports 465/587. Publish template edits before sending. Maximum message length is 2000 characters (Resend variable limit).
 
-Service: service_hhxvgjo
-Template: template_rosujl5
-Recipient: lodhirahul7002@gmail.com
-Public configuration overrides: VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY, VITE_CONTACT_EMAIL. Rebuild after changing these.
-Vite reads the project-root .env; src/.env is not the frontend configuration file.
-
-In the EmailJS dashboard, ensure the service is connected and the template exists. Set To Email to the fixed owner address above (recommended), or {{to_email}}. Set Reply-To to {{reply_to}}. Include {{name}}, {{email}}, {{phone}}, {{inquiry_type}}, {{message}}, {{subject}}, and {{submitted_at}} in the template as needed. If origin restrictions are enabled, allow your deployed website origin and custom domain. Browser sends must not require a private key. Never add SMTP passwords or an EmailJS private key to a VITE_ variable.
-
-## Verification
-
-After deployment, submit a real enquiry and check the browser network response, EmailJS Email History, and recipient inbox/spam. A 200 response means EmailJS accepted the request; it does not prove inbox delivery. No live email was sent during this code review.
-
-Reference: https://www.emailjs.com/docs/rest-api/send/
+A successful response means Resend accepted the email, not guaranteed inbox delivery. Check Resend Email History and inbox/spam. Static-only Netlify deployment does not support this server configuration.

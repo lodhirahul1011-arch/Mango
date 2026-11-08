@@ -9,11 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
-    "test": "node --test backend-integration/app.test.cjs backend-integration/pio/contact.test.cjs backend-integration/netlify.test.cjs",
-    "test:coverage": "node --test --experimental-test-coverage backend-integration/app.test.cjs backend-integration/pio/contact.test.cjs backend-integration/netlify.test.cjs",
-    "start": "node backend-integration/server.cjs",
-    "mail:verify": "node backend-integration/pio/verify.cjs",
-    "test:browser": "node --test backend-integration/browser.test.cjs"
+    "test": "node --test server/*.test.mjs",
+    "test:coverage": "node --test --experimental-test-coverage server/*.test.mjs",
+    "start": "node server/index.mjs",
+    "dev:server": "node --watch server/index.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",

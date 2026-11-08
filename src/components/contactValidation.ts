@@ -20,6 +20,6 @@ export function validateContact(form: ContactForm): ContactErrors {
   if (!['Become a Distributor', 'Become a Retailer', 'B2B / Institutional', 'General Consumer Feedback'].includes(form.type)) {
     errors.type = 'Choose an enquiry purpose.';
   }
-  if (form.message.length > 5000 || /\0/.test(form.message)) errors.message = 'Use up to 5,000 characters without null characters.';
+  if (form.message.length > 2000 || /\0/.test(form.message)) errors.message = 'Use up to 2,000 characters without null characters.';
   return errors;
 }
