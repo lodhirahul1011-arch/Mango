@@ -28,7 +28,7 @@ export function ScrollHero() {
       <div className="pio-hero__shell">
         <div className="pio-hero__copy">
           <p className="pio-hero__eyebrow">BORN IN ASSAM</p>
-          <h1 id="pio-hero-title"><span>Har Sip.</span><em>PIO.</em></h1>
+          <h1 id="pio-hero-title"><span>Har Sip.</span><em>Jio.</em></h1>
           <p className="pio-hero__intro">Real fruit refreshment in every sip.</p>
           <div className="pio-hero__actions">
             <div className="pio-hero__links">

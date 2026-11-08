@@ -73,7 +73,18 @@ export function OurStory() {
     const context = gsap.context(() => {
       const chapters = gsap.utils.toArray<HTMLElement>('.heritage-chapter');
       chapters.forEach((chapter, index) => {
-        ScrollTrigger.create({ trigger: chapter, start: 'top 55%', end: 'bottom 55%', onEnter: () => setActiveChapter(index), onEnterBack: () => setActiveChapter(index) });
+        const readingLine = () => window.matchMedia('(max-width: 900px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)').matches ? '65%' : '55%';
+        ScrollTrigger.create({ trigger: chapter, start: () => `top ${readingLine()}`, end: () => `bottom ${readingLine()}`, invalidateOnRefresh: true, onEnter: () => setActiveChapter(index), onEnterBack: () => setActiveChapter(index) });
+      });
+      // On short screens the inline illustrations slide into view instead of
+      // using a sticky stage that would leave too little room for the story.
+      media.add('(max-width: 900px) and (max-height: 699px) and (prefers-reduced-motion: no-preference)', () => {
+        gsap.utils.toArray<HTMLElement>('.heritage-mobile-art').forEach(element => {
+          gsap.fromTo(element, { y: 36, opacity: 0, scale: 0.96 }, {
+            y: 0, opacity: 1, scale: 1, ease: 'none',
+            scrollTrigger: { trigger: element, start: 'top 95%', end: 'top 55%', scrub: 0.4 },
+          });
+        });
       });
       media.add('(prefers-reduced-motion: no-preference)', () => {
         gsap.utils.toArray<HTMLElement>('.heritage-reveal').forEach(element => {

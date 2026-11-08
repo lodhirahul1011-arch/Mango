@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Maximize2, Menu, Minimize2, Send, X } from 'lucide-react';
+import { ArrowRight, Menu, Send, X } from 'lucide-react';
 import { useActiveSection, useScrolled } from '@/hooks/useScrollReveal';
 import './Navbar.css';
 
@@ -17,7 +17,6 @@ export function Navbar() {
   const scrolled = useScrolled(20);
   const [open, setOpen] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const active = useActiveSection(NAV_IDS);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLElement>(null);
@@ -33,11 +32,6 @@ export function Navbar() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const handleFullscreenChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, []);
 
   useEffect(() => {
     const desktop = window.matchMedia('(min-width: 1280px)');
@@ -84,26 +78,17 @@ export function Navbar() {
     };
   }, [open]);
 
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-    } else {
-      document.exitFullscreen().catch(() => {});
-    }
-  };
 
   const go = (id: string) => {
     setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    // Wait until the mobile menu releases its scroll lock before navigating.
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new CustomEvent('pio:navigate', { detail: id }));
+    });
   };
 
   const openSendUsForm = () => {
-    setOpen(false);
-    const form = document.getElementById('send-us-form');
-    form?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    window.setTimeout(() => {
-      form?.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true });
-    }, 650);
+    go('send-us-form');
   };
 
   return (
@@ -134,14 +119,6 @@ export function Navbar() {
             </ul>
 
             <div className="pio-navbar__actions">
-              <button
-                onClick={toggleFullscreen}
-                title={isFullscreen ? 'Exit Fullscreen (F11)' : 'Enter Fullscreen (F11)'}
-                className="pio-navbar__utility"
-                aria-label={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
-              >
-                {isFullscreen ? <Minimize2 size={17} /> : <Maximize2 size={17} />}
-              </button>
               <button
                 onClick={openSendUsForm}
                 title="Open Send Us form"
@@ -212,10 +189,6 @@ export function Navbar() {
             <button onClick={openSendUsForm} className="pio-navbar__mobile-utility">
               <Send size={16} />
               <span>Open Send Us form</span>
-            </button>
-            <button onClick={toggleFullscreen} className="pio-navbar__mobile-utility">
-              {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-              <span>{isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}</span>
             </button>
             <p>PIO &bull; ₹10 Refreshment &bull; Made in Assam</p>
           </div>

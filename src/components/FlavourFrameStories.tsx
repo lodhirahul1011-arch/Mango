@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 
 const flavours = [
-  { id: 'mango', count: 89, number: '01', label: 'PIO MANGO', title: 'A little sip.\nA lot of sunshine.', description: 'Rich mango flavour. Golden moments. Take a slow scroll into your fruity favourite.', note: 'SUNSHINE, PACKED.', next: 'lychee-story', nextLabel: 'Meet lychee' },
+  { id: 'mango', count: 89, number: '01', label: 'PIO MANGO', title: 'A taste of summer.\nWhenever you want.', description: 'Rich mango flavour. Golden moments. Take a slow scroll into your fruity favourite.', note: 'SUNSHINE, PACKED.', next: 'lychee-story', nextLabel: 'Meet lychee' },
   { id: 'lychee', count: 57, number: '02', label: 'PIO LYCHEE', title: 'Sweet escape.\nFresh perspective.', description: 'Delicate lychee flavour with a refreshing finish. A little everyday escape, in every sip.', note: 'REFRESHINGLY YOURS.', next: null, nextLabel: null },
 ] as const;
 

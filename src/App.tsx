@@ -4,7 +4,6 @@ import { Navbar } from '@/components/Navbar';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { MouseProvider } from '@/components/MouseProvider';
 import { ScrollHero } from '@/components/ScrollHero';
-import { OrangeTraveller } from '@/components/OrangeTraveller';
 import { Flavours } from '@/components/BrandSections';
 import { FlavourFrameStories } from '@/components/FlavourFrameStories';
 import { InteractiveMap } from '@/components/InteractiveMap';
@@ -33,6 +32,21 @@ function App() {
 
     lenis.on('scroll', ScrollTrigger.update);
 
+    const navigate = (event: Event) => {
+      const id = (event as CustomEvent<string>).detail;
+      const target = document.getElementById(id);
+      if (!target) return;
+      ScrollTrigger.refresh();
+      const top = target.getBoundingClientRect().top + window.scrollY;
+      lenis.scrollTo(Math.max(0, top), { immediate: true, force: true });
+      ScrollTrigger.update();
+      window.history.replaceState(null, '', `#${id}`);
+      if (id === 'send-us-form') {
+        target.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true });
+      }
+    };
+    window.addEventListener('pio:navigate', navigate);
+
     let raf = 0;
     const tick = (time: number) => {
       lenis.raf(time);
@@ -46,6 +60,7 @@ function App() {
 
     return () => {
       clearTimeout(refreshTimer);
+      window.removeEventListener('pio:navigate', navigate);
       cancelAnimationFrame(raf);
       lenis.destroy();
     };
@@ -61,8 +76,6 @@ function App() {
       <div ref={appRef} className="relative min-h-screen bg-white text-[#10271b] selection:bg-emerald-200 selection:text-emerald-950">
         {/* Global Reading Scroll Progress */}
         <ScrollProgress />
-
-        <OrangeTraveller />
 
         {/* Sleek Navigation Bar */}
         <Navbar />

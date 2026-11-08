@@ -251,14 +251,13 @@ function ProductsShowcase() {
             <span className="h-0.5 w-16 bg-[#a3d7b4]" />
           </div>
 
-          <h2 className="mt-7 font-['Space_Grotesk',sans-serif] text-[clamp(4.25rem,18vw,6rem)] font-black uppercase leading-[0.82] tracking-tight text-[#064F32]">
-            Real Fruit,<br />
-            Ready To<br />
-            <span className="text-[#0F9A48]">Shine.</span>
+          <h2 className="mt-7 font-['Space_Grotesk',sans-serif] text-[clamp(2.6rem,13vw,5.5rem)] font-black uppercase leading-[0.95] tracking-tight text-[#064F32]">
+            <span className="block">Good Fruit.</span>
+            <span className="block text-[#0F9A48]">Good Mood.</span>
           </h2>
 
-          <p className="mt-5 text-[1.55rem] font-medium leading-tight text-[#073D2C]">
-            Two fruity favourites. One refreshing feeling.
+          <p className="mt-5 max-w-md text-[clamp(1.05rem,4.5vw,1.4rem)] font-medium leading-relaxed text-[#073D2C]">
+            Two delicious flavours. One little pack of happiness.
           </p>
         </div>
 
@@ -321,13 +320,12 @@ function ProductsShowcase() {
           </div>
 
           <h2 className="overflow-hidden font-['Space_Grotesk',sans-serif] text-[clamp(3.2rem,7vw,6.35rem)] font-black uppercase leading-[0.86] tracking-tight text-[#064F32]">
-            <span className="products-heading-line block">Real fruit,</span>
-            <span className="products-heading-line block">ready to</span>
-            <span className="products-heading-line block text-[#0F7A43]">shine.</span>
+            <span className="products-heading-line block">Good Fruit.</span>
+            <span className="products-heading-line block text-[#0F7A43]">Good Mood.</span>
           </h2>
 
           <p className="products-copy mt-6 max-w-md text-base font-semibold leading-relaxed text-[#315b47] sm:text-lg">
-            Mango brings golden tropical depth. Lychee adds a bright floral chill. Both arrive in premium 160ml cartons made for everyday refreshment.
+            Two delicious flavours. One little pack of happiness.
           </p>
 
           <FeatureBadges />
@@ -335,7 +333,6 @@ function ProductsShowcase() {
         </div>
 
         <div ref={visualRef} className="products-stage relative z-10 -mt-2 min-h-[330px] overflow-hidden rounded-[28px] sm:mt-0 sm:min-h-[620px] sm:overflow-visible sm:rounded-none lg:min-h-[760px]">
-          <div className="products-sip-seal" aria-hidden="true"><Sparkles size={22} /><span>GOOD MOOD</span><strong>on the go.</strong></div>
 
           <div className="depth-near pointer-events-none absolute inset-x-[12%] bottom-[18%] h-20 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(7,61,44,0.22),transparent_68%)] blur-2xl sm:bottom-[20%] sm:h-28" />
 
