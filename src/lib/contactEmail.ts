@@ -4,7 +4,10 @@ export async function sendContactEmail(form: ContactForm, signal: AbortSignal): 
   // Public browser credentials: static deployments also work without build-time env vars.
   // Never put an EmailJS private key or SMTP password here.
   const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID?.trim() || 'service_hhxvgjo';
-  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim() || 'template_rosujl5';
+  const configuredTemplate = import.meta.env.VITE_EMAILJS_TEMPLATE_ID?.trim();
+  // Older Render services still have this deleted template in their environment.
+  const templateId = !configuredTemplate || configuredTemplate === 'template_1d5ceon'
+    ? 'template_rosujl5' : configuredTemplate;
   const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY?.trim() || '4X8Tgms0rvCIcHcVh';
   const recipient = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'lodhirahul7002@gmail.com';
   const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
