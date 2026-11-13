@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import { Navbar } from '@/components/Navbar';
-import { ScrollProgress } from '@/components/ScrollProgress';
 import { MouseProvider } from '@/components/MouseProvider';
 import { ScrollHero } from '@/components/ScrollHero';
 import { Flavours } from '@/components/BrandSections';
@@ -75,7 +74,6 @@ function App() {
     <MouseProvider>
       <div ref={appRef} className="relative min-h-screen bg-white text-[#10271b] selection:bg-emerald-200 selection:text-emerald-950">
         {/* Global Reading Scroll Progress */}
-        <ScrollProgress />
 
         {/* Sleek Navigation Bar */}
         <Navbar />

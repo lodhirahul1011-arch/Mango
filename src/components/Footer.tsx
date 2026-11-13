@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Facebook, Instagram, MapPin, MessageCircle } from 'lucide-react';
+import { ArrowRight, Instagram, MapPin, Mail } from 'lucide-react';
 import gsap from 'gsap';
 
 const LINKS = {
@@ -18,7 +18,6 @@ const LINKS = {
 
 const SOCIALS = [
   { label: 'Instagram', icon: Instagram, href: '#' },
-  { label: 'Facebook', icon: Facebook, href: '#' },
 ];
 
 const LEGAL_LINKS = [
@@ -169,14 +168,12 @@ export function Footer() {
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#0d3d2d]/70">Connect</h4>
             <div className="mt-4 flex flex-col items-start gap-2.5">
               <a
-                href="https://wa.me/919971918470"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Chat with PIO on WhatsApp"
+                href="mailto:Sales@piobeverages.com?subject=Sales%20Inquiry"
+                aria-label="Email PIO for sales inquiries"
                 className="group inline-flex items-center gap-2 rounded-full bg-[#07582f] px-4 py-2.5 text-[12px] font-black uppercase tracking-[0.12em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#0a6d3b]"
               >
-                <MessageCircle className="h-4 w-4" />
-                <span>WhatsApp</span>
+                <Mail className="h-4 w-4" />
+                <span>Email Us</span>
               </a>
 
               {SOCIALS.map(({ label, icon: Icon, href }) => (

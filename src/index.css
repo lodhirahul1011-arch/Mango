@@ -380,6 +380,24 @@ button {
   outline-offset: 3px;
 }
 
+/* Keep the Contact & FAQs section crisp without the global hover glow. */
+#contact .pio-spotlight-card,
+#contact .pio-premium-control {
+  transform: none;
+}
+
+#contact .pio-spotlight-card::before,
+#contact .pio-spotlight-card::after,
+#contact .pio-premium-control::before {
+  display: none;
+}
+
+#contact .pio-spotlight-card:hover,
+#contact .pio-premium-control:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 .group:hover .brand-logo-lift,
 .brand-logo-lift:hover {
   filter: drop-shadow(0 14px 24px rgba(7, 61, 44, 0.2));

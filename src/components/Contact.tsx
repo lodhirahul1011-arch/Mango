@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { sendContactEmail } from '../lib/contactEmail';
 import { validateContact, type ContactErrors, type ContactForm } from './contactValidation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, MapPin, Phone, Send, CheckCircle2, HelpCircle } from 'lucide-react';
+import { ChevronDown, MapPin, Mail, Send, CheckCircle2, HelpCircle } from 'lucide-react';
 
 const FAQS = [
   {
@@ -85,7 +85,7 @@ export function Contact() {
       console.error('[PIO contact] Submission failed', { category: failure instanceof Error ? failure.name : 'UnknownError', hint: 'Check the contact API and Resend configuration.' });
       setError(failure instanceof Error && !['AbortError', 'TypeError'].includes(failure.name)
         ? failure.message
-        : 'Unable to confirm submission. Please check your connection or call our helpline.');
+        : 'Unable to confirm submission. Please check your connection or email Sales@piobeverages.com.');
     } finally {
       window.clearTimeout(timeout);
       pending.current = false;
@@ -178,15 +178,15 @@ export function Contact() {
               </a>
 
               <a
-                href="tel:+919971918470"
+                href="mailto:Sales@piobeverages.com?subject=Sales%20Inquiry"
                 className="p-4 rounded-2xl bg-[#eef8f1] border border-[#cbe8d3] flex items-start gap-3 transition-colors hover:bg-[#e4f4e9]"
-                aria-label="Call Direct Helpline +91 99719 18470"
+                aria-label="Email Sales@piobeverages.com for sales inquiries"
               >
-                <Phone className="w-5 h-5 text-[#07582f] shrink-0 mt-0.5" />
+                <Mail className="w-5 h-5 text-[#07582f] shrink-0 mt-0.5" />
                 <div className="text-xs">
-                  <div className="font-black text-[#083b20]">Direct Helpline</div>
+                <div className="font-black text-[#083b20]">For Sales Inquiries</div>
                   <span className="text-[#07582f] font-bold mt-0.5 block hover:underline">
-                    +91 99719 18470
+                    Sales@piobeverages.com
                   </span>
                 </div>
               </a>

@@ -88,6 +88,7 @@ function revealCards(root: HTMLElement, isMobile: boolean) {
       const className = el.className.toString();
       const rect = el.getBoundingClientRect();
       return (
+        !el.closest('#contact') &&
         !inLocalMotion(el) &&
         rect.height > 42 &&
         rect.width > 90 &&
@@ -214,7 +215,7 @@ function installPointerSpotlight(root: HTMLElement): Cleanup {
 
 function enhanceButtons(root: HTMLElement): Cleanup {
   const buttons = Array.from(root.querySelectorAll<HTMLElement>('button, a[href]')).filter((el) => {
-    if (inLocalMotion(el)) return false;
+    if (el.closest('#contact') || inLocalMotion(el)) return false;
     const rect = el.getBoundingClientRect();
     return rect.width > 38 && rect.height > 30 && el.className.toString().includes('rounded');
   });

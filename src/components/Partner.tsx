@@ -1,4 +1,4 @@
-import { Store, Truck, Building2, ArrowRight, Check } from 'lucide-react';
+import { Store, Truck, Building2, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const reveal = {
@@ -39,7 +39,7 @@ const PARTNER_TYPES: PartnerType[] = [
     title: 'B2B & Canteens',
     icon: Building2,
     description: 'Bulk supply for school canteens, college campuses, corporate dining, and events.',
-    benefits: ['Aseptic shelf-stability (no chillers required for storage)', 'Dedicated account manager'],
+    benefits: ['Aseptic shelf-stability (no chillers required for storage)'],
     badge: 'Institutional',
   },
 ];
@@ -63,9 +63,6 @@ export function Partner() {
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         
         <motion.div {...reveal} className="mb-14 text-center max-w-2xl mx-auto">
-          <span className="text-xs font-black uppercase tracking-[0.25em] text-[#0b8043] bg-[#eef8f1] px-4 py-1.5 rounded-full">
-            Grow With PIO
-          </span>
           <h2 className="mt-4 font-['Space_Grotesk',sans-serif] text-[clamp(2.2rem,6vw,3.75rem)] font-black text-[#083b20] tracking-tight">
             Partner With Us
           </h2>
@@ -104,7 +101,6 @@ export function Partner() {
                 <ul className="mt-4 space-y-2 border-t border-slate-100 pt-4">
                   {p.benefits.map((b) => (
                     <li key={b} className="flex items-start gap-2 text-xs font-bold text-slate-700">
-                      <Check className="h-3.5 w-3.5 text-[#0b8043] mt-0.5 shrink-0" />
                       <span>{b}</span>
                     </li>
                   ))}
